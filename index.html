@@ -101,22 +101,26 @@
       display:flex;flex-direction:column;
       min-height: 250px;
     }
+    
 .cardTop{
-  height:160px;
+  height:160px;              /* stessa altezza per tutti */
   background: rgba(0,0,0,.15);
   border-bottom:1px solid var(--border);
   position:relative;
   overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .cardTop img{
-  position:absolute;
-  inset:0;
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit: contain;       /* MOSTRA TUTTA l’immagine */
   display:block;
+  background: rgba(0,0,0,.12); /* “letterbox” quando l’immagine non riempie */
 }
+
 
 .cardBody{
   position:relative;
