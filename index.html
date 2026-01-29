@@ -1,767 +1,715 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IB BookLoop · MYP & DP Used Books (Pickup Only)</title>
-  <meta name="description" content="Vinted-style school marketplace for IB MYP & DP textbooks. Books priced by condition. Reserve online, pick up at school. No online payments." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>IB BookLoop</title>
   <style>
     :root{
-      --red:#B30000;
-      --red-strong:#8e0000;
-      --bg:#ffffff;
-      --muted:#f7f7f8;
-      --text:#0f0f10;
-      --text-2:#4b4b50;
-      --border:#e6e7eb;
-      --focus:#B30000;
-      --card:#ffffff;
-      --shadow:0 8px 20px rgba(0,0,0,.06);
+      --bg:#0b1220; --panel:#0f1a2e; --panel2:#12213a;
+      --text:#eaf0ff; --muted:#a8b4d6;
+      --brand:#4f7cff; --brand2:#2ed3b7;
+      --danger:#ff4d4d; --ok:#2ed3b7; --warn:#ffcc66;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    a{color:var(--red);text-decoration:none}
-    a:focus,button:focus,input:focus,select:focus,textarea:focus{outline:3px solid var(--focus);outline-offset:2px}
-    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);backdrop-filter:saturate(180%) blur(8px)}
-    .container{max-width:1200px;margin:0 auto;padding:0 16px}
-    .topbar{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:28px;height:28px;border-radius:12px;background:var(--red);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:var(--shadow)}
-    .brand h1{font-size:18px;line-height:1;margin:0}
-    nav{display:flex;gap:14px;align-items:center}
-    nav a{padding:8px 10px;border-radius:10px}
-    nav a[aria-current="page"], nav a:hover{background:var(--muted)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#fff;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;transition:transform .04s ease, box-shadow .2s}
-    .btn.primary{background:var(--red);border-color:var(--red);color:#fff;box-shadow:var(--shadow)}
-    .btn.primary:hover{background:var(--red-strong)}
-    .btn:active{transform:translateY(1px)}
-    .hero{padding:28px 0}
-    .panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
-    .hero h2{margin:0 0 6px 0;font-size:24px}
-    .hero p{margin:0 0 14px 0;color:var(--text-2)}
-    .section{padding:28px 0}
-    .layout{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:980px){.layout{grid-template-columns:300px 1fr}}
-    .sidebar{position:static;height:fit-content}
-    @media(min-width:980px){.sidebar{position:sticky;top:84px}}
-    .filters .row{display:grid;grid-template-columns:1fr;gap:10px}
-    .filters label{font-size:12px;color:var(--text-2);display:block;margin-bottom:4px}
-    .input, .select{width:100%;border:1px solid var(--border);border-radius:12px;padding:10px 12px;background:#fff}
-    .grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:14px}
-    @media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:980px){.grid{grid-template-columns:repeat(3,1fr)}}
-    .card{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-    .imgwrap{aspect-ratio:4/3;background:#fafafa;display:flex;align-items:center;justify-content:center}
-    .imgwrap img{max-width:100%;max-height:100%;object-fit:cover;width:100%;height:100%}
-    .card .info{padding:12px}
-    .title{font-weight:700;margin:0 0 6px 0}
-    .meta{font-size:13px;color:var(--text-2);display:flex;flex-wrap:wrap;gap:8px}
-    .price{margin-top:10px;font-weight:700}
-    .tag{display:inline-flex;align-items:center;gap:6px;background:var(--muted);border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px}
-    .tag.cond{background:#fff4f4;border-color:#ffd4d4}
-    .empty{border:1px dashed var(--border);border-radius:16px;padding:22px;text-align:center;color:var(--text-2)}
-    footer{margin-top:32px;border-top:1px solid var(--border);padding:18px 0;color:var(--text-2)}
-    dialog{border:none;border-radius:18px;padding:0;max-width:720px;width:calc(100% - 24px);}
-    dialog::backdrop{background:rgba(0,0,0,.35)}
-    .modal{padding:18px}
-    .modal header{position:sticky;top:0;border-bottom:1px solid var(--border);background:#fff}
-    .modal h3{margin:0}
-    .modal .content{padding:14px 0}
-    .admin-grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:900px){.admin-grid{grid-template-columns:1.2fr .8fr}}
-    .table{width:100%;border-collapse:collapse}
-    .table th,.table td{border-bottom:1px solid var(--border);text-align:left;padding:8px;font-size:14px}
-    .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--muted);font-size:12px}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .quick-add{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;display:none}
-    .quick-add h4{margin:0 0 8px 0}
-    .quick-add form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .quick-add .full{grid-column:1/-1}
-    .thumb{width:100%;height:160px;object-fit:cover;border:1px solid var(--border);border-radius:10px}
-    .hint{font-size:12px;color:var(--text-2)}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 0%, #14254a 0%, var(--bg) 55%);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    header{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      padding:14px 16px; background: rgba(15,26,46,.75); border:1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(10px);
+      position: sticky; top: 10px; z-index: 10;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:42px;height:42px;border-radius:12px;
+      background: linear-gradient(135deg,var(--brand),var(--brand2));
+      display:grid;place-items:center;font-weight:800;
+      box-shadow: 0 8px 20px rgba(79,124,255,.25);
+    }
+    h1{font-size:18px;margin:0}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      padding:10px 12px;border-radius:999px;
+      color:var(--text);
+      outline:none;
+    }
+    .pill::placeholder{color: rgba(234,240,255,.55)}
+    select.pill{cursor:pointer}
+    button{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.07);
+      color:var(--text);
+      padding:10px 12px;border-radius:12px;
+      cursor:pointer;
+      transition: transform .05s ease, background .15s ease;
+    }
+    button:hover{background: rgba(255,255,255,.11)}
+    button:active{transform: translateY(1px)}
+    .primary{
+      background: linear-gradient(135deg,var(--brand),#6a8bff);
+      border-color: rgba(255,255,255,.15);
+    }
+    .danger{
+      background: rgba(255,77,77,.12);
+      border-color: rgba(255,77,77,.35);
+    }
+    .ok{
+      background: rgba(46,211,183,.12);
+      border-color: rgba(46,211,183,.35);
+    }
+    .panel{
+      margin-top:16px;
+      background: rgba(15,26,46,.75);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+    }
+    .panelHead .meta{color:var(--muted);font-size:12px}
+    .panelBody{padding:16px}
+    .status{font-size:13px;color:var(--muted)}
+    .status b{color:var(--text)}
+    .grid{
+      display:grid;gap:12px;
+      grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
+    }
+    .card{
+      background: rgba(18,33,58,.65);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      overflow:hidden;
+      display:flex;flex-direction:column;
+      min-height: 250px;
+    }
+    .cardTop{
+      height:140px;
+      background: rgba(0,0,0,.15);
+      border-bottom:1px solid var(--border);
+      display:grid;place-items:center;
+      position:relative;
+    }
+    .cardTop img{
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    .badge{
+      position:absolute;top:10px;left:10px;
+      font-size:12px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+    }
+    .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
+    .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
+    .badge.danger{background: rgba(255,77,77,.18); border-color: rgba(255,77,77,.35)}
+    .cardBody{padding:12px 12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+    .title{font-weight:800;line-height:1.2}
+    .muted{color:var(--muted);font-size:13px}
+    .kv{display:grid;grid-template-columns: 90px 1fr;gap:6px 10px;font-size:13px;color:var(--muted)}
+    .kv b{color:var(--text);font-weight:700}
+    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+    .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
+    .footerNote{
+      margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35
+    }
+    .hr{height:1px;background:var(--border);margin:14px 0}
+    .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    input, textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
+    .hidden{display:none !important}
+    .toast{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      font-size:13px;
+    }
+    .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
+    .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
   </style>
 </head>
 <body>
-  <header aria-label="Primary">
-    <div class="container topbar" role="navigation" aria-label="Main">
+  <div class="wrap">
+    <header>
       <div class="brand">
-        <span class="logo" aria-hidden="true">↻</span>
-        <h1>IB BookLoop</h1>
+        <div class="logo">IB</div>
+        <div>
+          <h1>IB BookLoop</h1>
+          <div class="sub">Catalogo libri condiviso (Google Sheets)</div>
+        </div>
       </div>
-      <nav>
-        <a href="#home" aria-current="page">Home</a>
-        <a href="#browse">Browse</a>
-        <a href="#faq">FAQ</a>
-        <a href="#admin" id="adminLink" aria-label="Admin (password required)">Admin</a>
-      </nav>
-    </div>
-  </header>
 
-  <main id="home" class="container" tabindex="-1">
-    <section class="hero" aria-label="Intro">
-      <div class="panel">
-        <h2>Give Books. Help Others. Support Your IB Community.</h2>
-        <p>Vinted-style marketplace for <strong>IB MYP & DP</strong> textbooks. Books are priced by condition (<strong>Like new 70%</strong>, <strong>Very good 50%</strong>, <strong>Fair 30%</strong> of the new price). Reserve online, <strong>pick up at school</strong>. No online payments.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn primary" href="#browse">Browse Books</a>
-          <a class="btn" href="#faq">How it works</a>
+      <div class="row">
+        <input id="q" class="pill" style="min-width:260px" placeholder="Cerca titolo / autore / materia..." />
+        <select id="fProgram" class="pill">
+          <option value="">Tutti i programmi</option>
+          <option>IBDP</option>
+          <option>IGCSE</option>
+          <option>MYP</option>
+          <option>Altro</option>
+        </select>
+        <select id="fAvail" class="pill">
+          <option value="">Tutte le disponibilità</option>
+          <option value="Available">Available</option>
+          <option value="Reserved">Reserved</option>
+          <option value="Sold">Sold</option>
+        </select>
+
+        <button id="btnRefresh">Aggiorna</button>
+        <button id="btnAdmin" class="primary">Admin</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panelHead">
+        <div class="status" id="status">
+          Stato: <b>in attesa…</b>
+        </div>
+        <div class="meta" id="meta"></div>
+      </div>
+      <div class="panelBody">
+        <div id="grid" class="grid"></div>
+        <div class="footerNote">
+          *I dati arrivano da Google Sheets tramite Sheet.best. Se non vedi aggiornamenti, premi “Aggiorna” o ricarica la pagina.
         </div>
       </div>
     </section>
 
-    <section class="section" aria-label="Bring books notice">
-      <div class="panel">
-        <h2 style="margin:0">Bring your IB books to the <strong>MYP Building</strong> – BookLoop Box (Ground Floor)</h2>
+    <section id="adminPanel" class="panel hidden">
+      <div class="panelHead">
+        <div><b>Admin</b> <span class="meta">— aggiungi/modifica libri</span></div>
+        <div class="row">
+          <button id="btnLogout" class="danger">Logout</button>
+        </div>
       </div>
-    </section>
+      <div class="panelBody">
+        <div class="twoCol">
+          <div>
+            <b>Aggiungi / Modifica libro</b>
+            <div class="hint">Per modificare: clicca “Edit” su una card (serve login admin).</div>
 
-    <section id="browse" class="section" aria-label="Browse catalog">
-      <div class="layout">
-        <aside class="sidebar">
-          <div class="panel filters" role="region" aria-label="Filters">
-            <div class="row">
-              <div>
-                <label for="q">Search</label>
-                <input id="q" class="input" type="search" placeholder="Title or author" />
-              </div>
-              <div>
-                <label for="programme">Programme</label>
-                <select id="programme" class="select">
-                  <option value="">Any</option><option>MYP</option><option>DP</option>
-                </select>
-              </div>
-              <div>
-                <label for="subject">Subject</label>
-                <select id="subject" class="select">
-                  <option value="">Any</option>
-                  <option>Mathematics</option><option>Sciences</option><option>Language & Literature</option><option>Language Acquisition</option><option>Individuals & Societies</option><option>Arts</option><option>PE</option>
-                </select>
-              </div>
-              <div>
-                <label for="year">Year level</label>
-                <select id="year" class="select">
-                  <option value="">Any</option>
-                  <option>MYP1</option><option>MYP2</option><option>MYP3</option><option>MYP4</option><option>MYP5</option><option>DP1</option><option>DP2</option>
-                </select>
-              </div>
-              <div>
-                <label for="maxPrice">Max price (€)</label>
-                <input id="maxPrice" class="input" type="number" inputmode="numeric" placeholder="e.g. 30" min="0" step="1" />
-              </div>
-              <div>
-                <button class="btn" id="clearFilters" title="Clear filters" style="width:100%">Clear</button>
-              </div>
-            </div>
-          </div>
+            <form id="bookForm">
+              <label>ID (unico)</label>
+              <input id="id" required placeholder="es. ENG-AA-SL-2026-001" />
+              <div class="hint">Usa un formato stabile e unico. L’ID è la chiave per edit/delete.</div>
 
-          <!-- Quick Add (shown after admin login) -->
-          <div id="quickAdd" class="quick-add panel" role="region" aria-label="Quick add book">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-              <h4 style="margin:0">Quick Add (Admin)</h4>
-              <button id="logoutQuickBtn" class="btn" type="button">Logout Admin</button>
-            </div>
-            <form id="quickAddForm">
-              <input id="qa_title" class="input" placeholder="Title" required />
-              <input id="qa_author" class="input" placeholder="Author" />
-              <select id="qa_prog" class="select" required>
-                <option value="">Programme</option>
-                <option>MYP</option><option>DP</option>
-              </select>
-              <select id="qa_subj" class="select" required>
-                <option value="">Subject</option>
-                <option>Mathematics</option><option>Sciences</option><option>Language & Literature</option><option>Language Acquisition</option><option>Individuals & Societies</option><option>Arts</option><option>PE</option>
-              </select>
-              <select id="qa_year" class="select" required>
-                <option value="">Year</option>
-                <option>MYP1</option><option>MYP2</option><option>MYP3</option><option>MYP4</option><option>MYP5</option><option>DP1</option><option>DP2</option>
-              </select>
-              <select id="qa_condition" class="select" required>
-                <option value="">Condition</option>
-                <option>Like new</option>
-                <option>Very good</option>
-                <option>Fair</option>
-              </select>
-              <input id="qa_new" class="input" type="number" min="0" step="1" placeholder="New price (€)" required />
-              <div class="full">
-                <label class="hint">Cover image (optional)</label>
-                <input id="qa_img_file" class="input" type="file" accept="image/*" />
-                <img id="qa_preview" class="thumb" alt="" style="display:none" />
+              <label>Titolo</label>
+              <input id="title" required />
+
+              <label>Autore</label>
+              <input id="author" />
+
+              <label>Programma</label>
+              <input id="programme" placeholder="IBDP / MYP / ..." />
+
+              <label>Materia</label>
+              <input id="subject" placeholder="English A / Math AA / ..." />
+
+              <label>Anno</label>
+              <input id="year" placeholder="2024 / 2025 / ..." />
+
+              <label>Condizione</label>
+              <input id="condition" placeholder="Like new / Good / ..." />
+
+              <div class="twoCol">
+                <div>
+                  <label>Prezzo nuovo (€)</label>
+                  <input id="newPrice" inputmode="decimal" placeholder="es. 45" />
+                </div>
+                <div>
+                  <label>Prezzo BookLoop (€)</label>
+                  <input id="loopPrice" inputmode="decimal" placeholder="es. 20" />
+                </div>
               </div>
-              <div class="full" style="display:flex;gap:8px">
-                <button class="btn primary" type="submit">Add book</button>
-                <span id="qa_status" class="hint"></span>
+
+              <label>Disponibilità</label>
+              <select id="availability" class="pill" style="width:100%">
+                <option>Available</option>
+                <option>Reserved</option>
+                <option>Sold</option>
+              </select>
+
+              <label>Immagine (URL)</label>
+              <input id="img" placeholder="https://..." />
+              <div class="hint">Consigliato: usa un URL immagine (non base64) per non appesantire il foglio.</div>
+
+              <div class="row" style="margin-top:12px">
+                <button type="submit" class="primary" id="btnSave">Save</button>
+                <button type="button" id="btnClear">Clear</button>
+                <button type="button" id="btnDelete" class="danger hidden">Delete selected</button>
               </div>
+
+              <div id="toast" class="toast hidden"></div>
             </form>
           </div>
-        </aside>
 
-        <div>
-          <div id="catalog" class="grid" aria-live="polite"></div>
-          <div id="emptyState" class="empty panel" hidden>No books found. Try adjusting filters.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq" class="section" aria-label="FAQ & Contact">
-      <div class="panel">
-        <h3>FAQ & Contact</h3>
-        <p><strong>How it works:</strong> families leave IB books in the BookLoop Box at the <strong>MYP Building</strong>. We add them to the catalog. Price depends on condition (<em>Like new 70%, Very good 50%, Fair 30%</em> of new price). You reserve online and pick up at the school desk during available slots.</p>
-        <p><strong>Pickup & payment:</strong> pickup happens at the school location shown at booking; bring the exact amount (charity pricing). No online payments.</p>
-        <p><strong>GDPR:</strong> we collect only your <strong>name</strong> to manage the reservation. Data are not shared with third parties.</p>
-        <p><strong>Contact:</strong> <a href="mailto:bookloop@school.local">bookloop@school.local</a></p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>IB BookLoop — Student-led project. Pickup only. No email required for booking.</p>
-    </div>
-  </footer>
-
-  <!-- Book modal -->
-  <dialog id="bookModal" aria-labelledby="bookTitleLabel">
-    <div class="modal">
-      <header class="topbar" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
-        <h3 id="bookTitleLabel" style="font-size:18px">Book</h3>
-        <button class="btn" type="button" onclick="bookModal.close()" aria-label="Close">Close</button>
-      </header>
-      <div class="content">
-        <div style="display:grid;grid-template-columns:1fr;gap:16px">
-          <div class="imgwrap" style="background:#fff;border:1px solid var(--border);border-radius:12px">
-            <img id="bookImg" alt="Book cover" />
-          </div>
           <div>
-            <p class="muted" id="bookMeta"></p>
-            <p class="price" id="bookPrice"></p>
-            <p id="bookCond" class="muted"></p>
-            <button id="reserveBtn" class="btn primary" type="button">Reserve Book</button>
+            <b>Note operative</b>
+            <div class="hr"></div>
+            <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
+              <li>Il catalogo è condiviso: ogni modifica scrive su Google Sheets.</li>
+              <li>Se “Add/Save” non scrive, il foglio probabilmente non è condiviso come <b>Editor</b>.</li>
+              <li>Per sicurezza reale serve backend; qui è una soluzione semplice per un gruppo piccolo.</li>
+            </ul>
+            <div class="hr"></div>
+            <div class="muted">
+              <b>Consiglio</b>: crea un ID standard (es. <code>SUBJECT-YEAR-XXX</code>).
+              Così edit/delete funzionano sempre.
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </dialog>
+    </section>
+  </div>
 
-  <!-- Reservation modal (Calendar-only) -->
-  <dialog id="reserveModal" aria-labelledby="reserveTitle">
-    <div class="modal">
-      <header class="topbar" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
-        <h3 id="reserveTitle" style="font-size:18px">Reserve pickup</h3>
-        <button class="btn" type="button" onclick="reserveModal.close()" aria-label="Close">Close</button>
-      </header>
-      <div class="content">
-        <div style="display:grid;grid-template-columns:1fr;gap:12px">
-          <a class="btn primary" href="https://calendar.app.google/AphKbShRvHjqcTev5" target="_blank" rel="noopener">Open Google Calendar booking page</a>
-          <p class="muted" style="margin:0">Appointments are scheduled on Google Calendar (limited to <strong>before 16:15</strong>).</p>
-          <div style="margin-top:10px;display:flex;gap:10px">
-            <button class="btn" type="button" onclick="reserveModal.close()">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
+<script>
+  /*************************************************************
+   * CONFIG
+   *************************************************************/
+  // Il tuo endpoint base (dato dall'utente)
+  const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
 
-  <!-- Admin modal -->
-  <dialog id="adminModal" aria-labelledby="adminTitle">
-    <div class="modal">
-      <header class="topbar" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
-        <h3 id="adminTitle" style="font-size:18px">Admin</h3>
-        <div style="display:flex;gap:8px">
-          <button id="logoutInAdmin" class="btn" type="button">Logout Admin</button>
-          <button class="btn" type="button" onclick="adminModal.close()" aria-label="Close">Close</button>
-        </div>
-      </header>
-      <div class="content">
-        <div id="adminGate">
-          <p class="muted">Enter admin password to manage inventory and reservations.</p>
-          <form id="adminLogin" style="display:flex;gap:8px;flex-wrap:wrap">
-            <input id="adminPass" type="password" placeholder="Password" class="input" />
-            <button class="btn primary" type="submit">Enter</button>
-          </form>
-          <p id="adminMsg" class="muted" role="alert"></p>
-        </div>
-        <div id="adminBody" hidden>
-          <div class="admin-grid">
-            <section>
-              <h4>Add / Edit Book</h4>
-              <form id="bookForm" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                <input type="hidden" id="bookId" />
-                <input id="title" class="input" placeholder="Title" required />
-                <input id="author" class="input" placeholder="Author" />
-                <select id="prog" class="select" required>
-                  <option value="">Programme</option>
-                  <option>MYP</option>
-                  <option>DP</option>
-                </select>
-                <select id="subj" class="select" required>
-                  <option value="">Subject</option>
-                  <option>Mathematics</option>
-                  <option>Sciences</option>
-                  <option>Language & Literature</option>
-                  <option>Language Acquisition</option>
-                  <option>Individuals & Societies</option>
-                  <option>Arts</option>
-                  <option>PE</option>
-                </select>
-                <select id="yearLevel" class="select" required>
-                  <option value="">Year</option>
-                  <option>MYP1</option><option>MYP2</option><option>MYP3</option><option>MYP4</option><option>MYP5</option>
-                  <option>DP1</option><option>DP2</option>
-                </select>
-                <select id="condition" class="select" required>
-                  <option value="">Condition</option>
-                  <option>Like new</option>
-                  <option>Very good</option>
-                  <option>Fair</option>
-                </select>
-                <input id="newPrice" class="input" type="number" min="0" step="1" placeholder="New price (€)" required />
-                <input id="loopPrice" class="input" type="number" min="0" step="1" placeholder="BookLoop price (€)" required readonly />
-                <select id="availability" class="select" required>
-                  <option>Available</option>
-                  <option>Reserved</option>
-                  <option>Picked Up</option>
-                </select>
-                <div class="full">
-                  <label class="hint">Cover image (optional)</label>
-                  <input id="img_file" class="input" type="file" accept="image/*" />
-                  <img id="img_preview" class="thumb" alt="" style="display:none" />
-                </div>
-                <div style="grid-column:1/-1;display:flex;gap:8px;align-items:center">
-                  <button class="btn primary" type="submit">Save</button>
-                  <button class="btn" type="button" id="resetForm">Reset</button>
-                  <button class="btn" type="button" id="deleteBookBtn" hidden style="border-color:#ffd4d4;background:#fff4f4;color:#8e0000">Delete book</button>
-                </div>
-              </form>
-            </section>
-            <section>
-              <h4>Quick Stats</h4>
-              <p><span class="chip">Total books: <span id="statBooks">0</span></span></p>
-              <p><span class="chip">Available: <span id="statAvail">0</span></span></p>
-              <p><span class="chip">Reserved: <span id="statRes">0</span></span></p>
-              <p><span class="chip">Picked Up: <span id="statDone">0</span></span></p>
-              <h4 style="margin-top:14px">Reservations</h4>
-              <table class="table" aria-label="Reservations table">
-                <thead><tr><th>Book</th><th>Student</th><th>Slot</th></tr></thead>
-                <tbody id="resTable"></tbody>
-              </table>
-            </section>
-          </div>
-          <h4 style="margin-top:16px">Inventory</h4>
-          <table class="table" aria-label="Inventory table">
-            <thead>
-              <tr><th>Title</th><th>Programme</th><th>Subject</th><th>Year</th><th>New</th><th>Price</th><th>Condition</th><th>Status</th><th></th></tr>
-            </thead>
-            <tbody id="invTable"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </dialog>
+  // Nel tuo screenshot il tab si chiama "Foglio1"
+  const TAB_NAME = "Foglio1";
 
-  <script>
+  // API tab-specific
+  const API = `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}`;
 
-    
-    // ---- Shared data layer (Google Sheet via Sheet.best)
-    // This replaces localStorage: everyone sees the same catalog.
-    const store = {
-      books: [],
-      reservations: [],
-      adminLoggedIn: false,
+  // Password admin (NON è sicurezza reale: è solo per evitare modifiche accidentali)
+  // Cambiala subito.
+  const ADMIN_PASSWORD = "mazz";
+
+  /*************************************************************
+   * STATE
+   *************************************************************/
+  let books = [];
+  let admin = false;
+  let editingId = null;
+
+  /*************************************************************
+   * DOM
+   *************************************************************/
+  const elGrid = document.getElementById("grid");
+  const elStatus = document.getElementById("status");
+  const elMeta = document.getElementById("meta");
+
+  const elQ = document.getElementById("q");
+  const elFProgram = document.getElementById("fProgram");
+  const elFAvail = document.getElementById("fAvail");
+
+  const btnRefresh = document.getElementById("btnRefresh");
+  const btnAdmin = document.getElementById("btnAdmin");
+
+  const adminPanel = document.getElementById("adminPanel");
+  const btnLogout = document.getElementById("btnLogout");
+
+  // form
+  const form = document.getElementById("bookForm");
+  const f = {
+    id: document.getElementById("id"),
+    title: document.getElementById("title"),
+    author: document.getElementById("author"),
+    programme: document.getElementById("programme"),
+    subject: document.getElementById("subject"),
+    year: document.getElementById("year"),
+    condition: document.getElementById("condition"),
+    newPrice: document.getElementById("newPrice"),
+    loopPrice: document.getElementById("loopPrice"),
+    availability: document.getElementById("availability"),
+    img: document.getElementById("img"),
+  };
+  const btnSave = document.getElementById("btnSave");
+  const btnClear = document.getElementById("btnClear");
+  const btnDelete = document.getElementById("btnDelete");
+  const toast = document.getElementById("toast");
+
+  /*************************************************************
+   * HELPERS
+   *************************************************************/
+  function setStatus(text, strong = "") {
+    elStatus.innerHTML = `Stato: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  }
+  function showToast(msg, type="ok") {
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    setTimeout(()=> toast.classList.add("hidden"), 3000);
+  }
+  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function norm(s){ return String(s ?? "").trim(); }
+
+  function badgeClass(av){
+    const v = (av||"").toLowerCase();
+    if(v === "available") return "ok";
+    if(v === "reserved") return "warn";
+    if(v === "sold") return "danger";
+    return "";
+  }
+
+  function parsePrice(x){
+    const s = String(x ?? "").replace(",", ".").trim();
+    const n = Number(s);
+    return Number.isFinite(n) ? n : "";
+  }
+
+  function bookFromForm(){
+    const now = new Date().toISOString();
+    return {
+      id: norm(f.id.value),
+      title: norm(f.title.value),
+      author: norm(f.author.value),
+      programme: norm(f.programme.value),
+      subject: norm(f.subject.value),
+      year: norm(f.year.value),
+      condition: norm(f.condition.value),
+      newPrice: parsePrice(f.newPrice.value),
+      loopPrice: parsePrice(f.loopPrice.value),
+      availability: norm(f.availability.value) || "Available",
+      img: norm(f.img.value),
+      updatedAt: now,
     };
+  }
 
-    // 1) Create a Sheet.best connection and paste its URL here.
-    // Example: https://api.sheetbest.com/sheets/<YOUR_API_ID>
-    const API_URL = "https://api.sheetbest.com/sheets/b9b10078-eebe-4c3f-b80a-ec807092c07c";
+  function fillForm(b){
+    editingId = b?.id || null;
+    f.id.value = b?.id || "";
+    f.title.value = b?.title || "";
+    f.author.value = b?.author || "";
+    f.programme.value = b?.programme || "";
+    f.subject.value = b?.subject || "";
+    f.year.value = b?.year || "";
+    f.condition.value = b?.condition || "";
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
+    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
+    f.availability.value = b?.availability || "Available";
+    f.img.value = b?.img || "";
 
-    // Keep these as no-ops for compatibility with the rest of the file.
-    const persist = () => {};
-    const restore = () => { store.adminLoggedIn = false; };
+    // id non modificabile durante edit (evita disastri)
+    f.id.disabled = !!editingId;
+    btnDelete.classList.toggle("hidden", !editingId);
+  }
 
-    async function apiGetBooks(){
-      const r = await fetch(API_URL, { method: "GET", mode: "cors" });
-      if (!r.ok) throw new Error("GET books failed: " + r.status);
-      const rows = await r.json();
-      const list = Array.isArray(rows) ? rows : [];
-      // Normalize types + defaults
-      return list
-        .filter(x => x && (x.title || x.Title))
-        .map((x) => ({
-          id: (x.id ?? x.Id ?? crypto.randomUUID()).toString(),
-          title: (x.title ?? x.Title ?? "").toString(),
-          author: (x.author ?? x.Author ?? "").toString(),
-          programme: (x.programme ?? x.Programme ?? "").toString(),
-          subject: (x.subject ?? x.Subject ?? "").toString(),
-          year: (x.year ?? x.Year ?? "").toString(),
-          condition: (x.condition ?? x.Condition ?? "").toString(),
-          newPrice: parseInt(x.newPrice ?? x["newPrice"] ?? x["NewPrice"] ?? x["New Price"] ?? x.NewPrice ?? x["New price"] ?? x.new_price ?? x.New ?? x.new ?? 0, 10) || 0,
-          loopPrice: parseInt(x.loopPrice ?? x["loopPrice"] ?? x["LoopPrice"] ?? x["Loop Price"] ?? x.LoopPrice ?? x["Loop price"] ?? x.loop_price ?? x.Loop ?? x.loop ?? 0, 10) || 0,
-          availability: (x.availability ?? x.Availability ?? "Available").toString(),
-          img: (x.img ?? x.Img ?? x.image ?? x.Image ?? "").toString(),
-        }));
-    }
+  function clearForm(){
+    editingId = null;
+    f.id.disabled = false;
+    form.reset();
+    f.availability.value = "Available";
+    btnDelete.classList.add("hidden");
+  }
 
-    async function apiUpsertBook(book){
-      // Update by id (filtered update). If it doesn't exist, insert.
-      const filteredUrl = `${API_URL}/id/${encodeURIComponent(book.id)}`;
-      const patchResp = await fetch(filteredUrl, {
-        method: "PATCH",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(book),
-      });
-      // If nothing matched, Sheet.best typically returns [].
-      let patched = [];
-      try { patched = await patchResp.json(); } catch(e) {}
-      if (Array.isArray(patched) && patched.length > 0) return patched;
+  /*************************************************************
+   * API CALLS (Sheet.best)
+   *************************************************************/
+  async function apiGetAll(){
+    const r = await fetch(API, { method:"GET", mode:"cors" });
+    if(!r.ok) throw new Error(`GET failed: ${r.status}`);
+    const data = await r.json();
+    if(!Array.isArray(data)) return [];
+    // normalizza numeri
+    return data.map(x => ({
+      ...x,
+      newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
+      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
+    }));
+  }
 
-      const postResp = await fetch(API_URL, {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(book),
-      });
-      if (!postResp.ok) throw new Error("POST book failed: " + postResp.status);
-      return await postResp.json();
-    }
+  // Upsert: prova PATCH filtrato per id; se non aggiorna nulla -> POST
+  // Sheet.best supporta update filtrato: /<Column>/<Value> (e con tabs: /tabs/<Tab>/<Column>/<Value>) :contentReference[oaicite:1]{index=1}
+  async function apiUpsert(book){
+    const id = encodeURIComponent(book.id);
+    const patchUrl = `${API}/id/${id}`;
 
-    async function apiDeleteBook(id){
-      const filteredUrl = `${API_URL}/id/${encodeURIComponent(id)}`;
-      const r = await fetch(filteredUrl, { method: "DELETE", mode: "cors" });
-      if (!r.ok) throw new Error("DELETE book failed: " + r.status);
-      return await r.json().catch(() => ({}));
-    }
-
-    async function refreshBooks(){
-      // Minimal "eventual consistency" for small groups:
-      // read from server and re-render.
-      try{
-        store.books = await apiGetBooks();
-      }catch(e){
-        console.error(e);
-        store.books = [];
-        alert("Unable to load shared catalog. Check API_URL and permissions.");
-      }
-      renderCatalog();
-      if (store.adminLoggedIn) renderAdminTables();
-    }
-
-    // Elements// Elements
-    const catalogEl = document.getElementById('catalog');
-    const emptyEl = document.getElementById('emptyState');
-    const qEl = document.getElementById('q');
-    const programmeEl = document.getElementById('programme');
-    const subjectEl = document.getElementById('subject');
-    const yearEl = document.getElementById('year');
-    const maxPriceEl = document.getElementById('maxPrice');
-    const quickAddBox = document.getElementById('quickAdd');
-    const qaForm = document.getElementById('quickAddForm');
-    const qaStatus = document.getElementById('qa_status');
-    const qaFile = document.getElementById('qa_img_file');
-    const qaPrev = document.getElementById('qa_preview');
-
-    const bookModal = document.getElementById('bookModal');
-    const reserveModal = document.getElementById('reserveModal');
-    const adminModal = document.getElementById('adminModal');
-
-    // Init
-    restore();
-    refreshBooks();
-    syncQuickAddVisibility();
-
-    // Filters
-    [qEl, programmeEl, subjectEl, yearEl, maxPriceEl].forEach(el => el && el.addEventListener('input', renderCatalog));
-    const clearBtn = document.getElementById('clearFilters');
-    if (clearBtn) clearBtn.addEventListener('click', () => {
-      if(qEl) qEl.value = ''; if(programmeEl) programmeEl.value=''; if(subjectEl) subjectEl.value=''; if(yearEl) yearEl.value=''; if(maxPriceEl) maxPriceEl.value=''; renderCatalog();
+    // 1) PATCH (update se esiste)
+    const r1 = await fetch(patchUrl, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(book)
     });
 
-    function renderCatalog(){
-      const q = (qEl?.value || '').trim().toLowerCase();
-      const prog = programmeEl?.value || '';
-      const subj = subjectEl?.value || '';
-      const year = yearEl?.value || '';
-      const max = parseInt(maxPriceEl?.value || '0',10);
-      const list = store.books.filter(b => {
-        if (prog && b.programme!==prog) return false;
-        if (subj && b.subject!==subj) return false;
-        if (year && b.year!==year) return false;
-        if (max && b.loopPrice>max) return false;
-        if (!q) return true;
-        const hay = (b.title+" "+(b.author||'')).toLowerCase();
-        return hay.includes(q);
-      });
-      catalogEl.innerHTML = '';
-      if (list.length===0){ emptyEl.hidden=false; return; } else emptyEl.hidden=true;
-      for (const b of list){
-        const card = document.createElement('article');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="imgwrap">${b.img?`<img src="${b.img}" alt="${b.title} cover"/>`:'<span class="muted" style="padding:8px">No image</span>'}</div>
-          <div class="info">
-            <p class="title">${b.title}</p>
-            <div class="meta">
-              <span class="tag">${b.programme}</span>
-              <span class="tag">${b.subject}</span>
-              <span class="tag">${b.year}</span>
-              <span class="tag cond" title="Condition">${b.condition||'—'}</span>
+    // alcuni casi ritornano 200 con [] se non trova match; gestiamo entrambi
+    if(r1.ok){
+      const d1 = await r1.json().catch(()=>[]);
+      if(Array.isArray(d1) && d1.length > 0) return { mode:"patch", updated:true };
+      // se 200 ma nessuna riga aggiornata -> facciamo POST
+    } else {
+      // se PATCH fallisce per permessi, fermati qui con errore chiaro
+      const t = await r1.text().catch(()=> "");
+      throw new Error(`PATCH failed (${r1.status}). ${t}`);
+    }
+
+    // 2) POST (insert)
+    const r2 = await fetch(API, {
+      method:"POST",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(book)
+    });
+    if(!r2.ok){
+      const t = await r2.text().catch(()=> "");
+      throw new Error(`POST failed (${r2.status}). ${t}`);
+    }
+    await r2.json().catch(()=>null);
+    return { mode:"post", inserted:true };
+  }
+
+  async function apiDeleteById(idVal){
+    const url = `${API}/id/${encodeURIComponent(idVal)}`;
+    const r = await fetch(url, { method:"DELETE", mode:"cors" });
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`DELETE failed (${r.status}). ${t}`);
+    }
+    await r.json().catch(()=>null);
+    return true;
+  }
+
+  /*************************************************************
+   * RENDER
+   *************************************************************/
+  function applyFilters(list){
+    const q = norm(elQ.value).toLowerCase();
+    const p = norm(elFProgram.value).toLowerCase();
+    const a = norm(elFAvail.value).toLowerCase();
+
+    return list.filter(b=>{
+      const hay = `${b.title||""} ${b.author||""} ${b.subject||""} ${b.programme||""} ${b.id||""}`.toLowerCase();
+      if(q && !hay.includes(q)) return false;
+      if(p && String(b.programme||"").toLowerCase() !== p) return false;
+      if(a && String(b.availability||"").toLowerCase() !== a) return false;
+      return true;
+    });
+  }
+
+  function render(){
+    const list = applyFilters(books);
+
+    elMeta.textContent = `${list.length} / ${books.length} libri`;
+
+    elGrid.innerHTML = list.map(b=>{
+      const av = b.availability || "Available";
+      const bc = badgeClass(av);
+      const img = norm(b.img);
+      const hasImg = !!img;
+
+      const np = (b.newPrice === "" || !Number.isFinite(b.newPrice)) ? "" : `€ ${b.newPrice.toFixed(0)}`;
+      const lp = (b.loopPrice === "" || !Number.isFinite(b.loopPrice)) ? "" : `€ ${b.loopPrice.toFixed(0)}`;
+
+      return `
+        <div class="card">
+          <div class="cardTop">
+            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+            <div class="badge ${bc}">${esc(av)}</div>
+          </div>
+          <div class="cardBody">
+            <div class="title">${esc(b.title || "(Senza titolo)")}</div>
+            <div class="muted">${esc(b.author || "")}</div>
+
+            <div class="kv">
+              <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
+              <div>Materia</div><div><b>${esc(b.subject||"-")}</b></div>
+              <div>Anno</div><div><b>${esc(b.year||"-")}</b></div>
+              <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
             </div>
-            <p class="price">€ ${b.loopPrice} <span class="muted" style="font-weight:400">(new €${b.newPrice})</span></p>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <button class="btn primary" ${b.availability!=='Available'?'disabled':''} aria-disabled="${b.availability!=='Available'}">${b.availability==='Available'?'Reserve':'Not available'}</button>
-              <button class="btn">Details</button>
+
+            <div class="cardActions">
+              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
             </div>
-          </div>`;
-        const [reserveBtn, detailsBtn] = card.querySelectorAll('button');
-        reserveBtn.addEventListener('click', () => openReserve(b.id));
-        detailsBtn.addEventListener('click', () => openBook(b.id));
-        catalogEl.appendChild(card);
-      }
-    }
 
-    function openBook(id){
-      const b = store.books.find(x=>x.id===id); if(!b) return;
-      document.getElementById('bookTitleLabel').textContent=b.title;
-      document.getElementById('bookMeta').textContent=`${b.author||''} · ${b.programme} · ${b.subject} · ${b.year}`;
-      document.getElementById('bookPrice').textContent=`€ ${b.loopPrice} (new €${b.newPrice})`;
-      document.getElementById('bookCond').textContent=`Condition: ${b.condition||'—'}`;
-      document.getElementById('bookImg').src=b.img||'';
-      document.getElementById('reserveBtn').onclick=()=>openReserve(id);
-      bookModal.showModal();
-    }
+            <div class="muted" style="margin-top:6px;font-size:12px">
+              ID: <b>${esc(b.id||"-")}</b>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
 
-    function openReserve(id){
-      const b = store.books.find(x=>x.id===id); if(!b) return;
-      document.getElementById('reserveTitle').textContent = `Reserve: ${b.title}`;
-      reserveModal.showModal();
-    }
-
-    // Admin link opens login gate each time
-    document.getElementById('adminLink').addEventListener('click', (e)=>{
-      e.preventDefault();
-      document.getElementById('adminGate').hidden=false;
-      document.getElementById('adminBody').hidden=true;
-      adminModal.showModal();
-    });
-
-    // Password
-    const ADMIN_PASSWORD = '18!02!2OO9'; // last two are capital 'O'
-    document.getElementById('adminLogin').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const pass = document.getElementById('adminPass').value;
-      if (pass===ADMIN_PASSWORD){
-        document.getElementById('adminGate').hidden=true;
-        document.getElementById('adminBody').hidden=false;
-        store.adminLoggedIn = true;
-        persist();
-        syncQuickAddVisibility();
-        renderAdminTables();
-        syncDeleteVisibility();
-      } else {
-        document.getElementById('adminMsg').textContent='Incorrect password';
-      }
-    });
-
-    // Logout buttons
-    document.getElementById('logoutInAdmin').addEventListener('click', logoutAdmin);
-    document.getElementById('logoutQuickBtn').addEventListener('click', logoutAdmin);
-
-    // Pricing by condition helper
-    function priceFromCondition(newPrice, condition){
-      const p = parseFloat(newPrice||0);
-      const map = {'Like new':0.7, 'Very good':0.5, 'Fair':0.3};
-      const f = map[condition] || 0.5;
-      return Math.round(p*f);
-    }
-
-    // Admin form
-    const bookForm = document.getElementById('bookForm');
-    const np = document.getElementById('newPrice');
-    const lp = document.getElementById('loopPrice');
-    const condSel = document.getElementById('condition');
-    const imgFile = document.getElementById('img_file');
-    const imgPrev = document.getElementById('img_preview');
-
-    function recalcPrice(){ lp.value = priceFromCondition(np.value, condSel.value); }
-    np.addEventListener('input', recalcPrice);
-    condSel.addEventListener('change', recalcPrice);
-
-    imgFile.addEventListener('change', ()=>{
-      const f = imgFile.files?.[0];
-      if(!f){ imgPrev.style.display='none'; imgPrev.src=''; return; }
-      const reader = new FileReader();
-      reader.onload = e => { imgPrev.src = e.target.result; imgPrev.style.display='block'; };
-      reader.readAsDataURL(f);
-    });
-
-    if (bookForm) bookForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      let dataUrl = '';
-      const file = imgFile.files?.[0];
-      if (file){
-        dataUrl = await fileToDataURL(file);
-      }
-      const data = {
-        id: document.getElementById('bookId').value || crypto.randomUUID(),
-        title: document.getElementById('title').value.trim(),
-        author: document.getElementById('author').value.trim(),
-        programme: document.getElementById('prog').value,
-        subject: document.getElementById('subj').value,
-        year: document.getElementById('yearLevel').value,
-        condition: condSel.value,
-        newPrice: parseInt(np.value,10),
-        loopPrice: parseInt(lp.value,10),
-        availability: document.getElementById('availability').value,
-        img: dataUrl || imgPrev.src || ''
-      };
-      if(!store.adminLoggedIn){ alert('Admin only. Open Admin and login first.'); return; }
-      data.updatedAt = new Date().toISOString();
-      await apiUpsertBook(data);
-      await refreshBooks();
-      resetBookForm();
-    });
-
-    // Admin: reset/delete helpers
-    const deleteBookBtn = document.getElementById('deleteBookBtn');
-    const resetBtn = document.getElementById('resetForm');
-
-    function syncDeleteVisibility(){
-      if(!deleteBookBtn) return;
-      const hasId = !!document.getElementById('bookId').value;
-      deleteBookBtn.hidden = !hasId;
-    }
-
-    function resetBookForm(){
-      if(bookForm) bookForm.reset();
-      document.getElementById('bookId').value='';
-      lp.value='';
-      imgPrev.src='';
-      imgPrev.style.display='none';
-      if (imgFile) imgFile.value='';
-      syncDeleteVisibility();
-    }
-
-    if (resetBtn) resetBtn.addEventListener('click', resetBookForm);
-
-    if (deleteBookBtn) deleteBookBtn.addEventListener('click', async ()=>{
-      if(!store.adminLoggedIn){ alert('Admin not logged in'); return; }
-      const id = document.getElementById('bookId').value;
-      if(!id) return;
-      const b = store.books.find(x=>x.id===id);
-      const title = b ? b.title : 'this book';
-      if(!confirm(`Delete "${title}" permanently? This cannot be undone.`)) return;
-
-      if(!store.adminLoggedIn){ alert('Admin only.'); return; }
-      await apiDeleteBook(id);
-      await refreshBooks();
-      resetBookForm();
-    });
-
-    // Quick Add handlers (with file upload)
-    function syncQuickAddVisibility(){
-      quickAddBox.style.display = store.adminLoggedIn ? 'block' : 'none';
-    }
-    qaFile.addEventListener('change', ()=>{
-      const f = qaFile.files?.[0];
-      if(!f){ qaPrev.style.display='none'; qaPrev.src=''; return; }
-      const reader = new FileReader();
-      reader.onload = e => { qaPrev.src = e.target.result; qaPrev.style.display='block'; };
-      reader.readAsDataURL(f);
-    });
-
-    async function fileToDataURL(file){
-      return await new Promise((resolve,reject)=>{
-        const r = new FileReader();
-        r.onload = e => resolve(e.target.result);
-        r.onerror = reject;
-        r.readAsDataURL(file);
+    // bind actions
+    elGrid.querySelectorAll("[data-copy]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-copy");
+        navigator.clipboard?.writeText(id).catch(()=>{});
+        showToast(`ID copiato: ${id}`, "ok");
       });
-    }
+    });
 
-    document.getElementById('quickAddForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      if(!store.adminLoggedIn){ alert('Admin not logged in'); return; }
-      let dataUrl='';
-      const f = qaFile.files?.[0];
-      if (f){ dataUrl = await fileToDataURL(f); }
-      const title = document.getElementById('qa_title').value.trim();
-      const prog = document.getElementById('qa_prog').value;
-      const subj = document.getElementById('qa_subj').value;
-      const year = document.getElementById('qa_year').value;
-      const cond = document.getElementById('qa_condition').value;
-      const newP = parseInt(document.getElementById('qa_new').value,10);
-      if(!title || !prog || !subj || !year || !cond || !isFinite(newP)){
-        qaStatus.textContent = 'Please fill all required fields.'; return;
-      }
-      const book = {
-        id: crypto.randomUUID(),
-        title,
-        author: document.getElementById('qa_author').value.trim(),
-        programme: prog,
-        subject: subj,
-        year,
-        condition: cond,
-        newPrice: newP,
-        loopPrice: priceFromCondition(newP, cond),
-        availability: 'Available',
-        img: dataUrl
-      };
-      if(!store.adminLoggedIn){ alert('Admin only.'); return; }
-      book.updatedAt = new Date().toISOString();
-      await apiUpsertBook(book);
-      await refreshBooks();
-      e.target.reset(); qaPrev.src=''; qaPrev.style.display='none';
-      qaStatus.textContent = 'Book added to the shared catalog.';
-      setTimeout(()=>qaStatus.textContent='', 1500);
-      window.scrollTo({top: document.getElementById('browse').offsetTop, behavior:'smooth'});
-});
-
-    function renderAdminTables(){
-      const invT = document.getElementById('invTable');
-      if (!invT) return;
-      invT.innerHTML='';
-      for (const b of store.books){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${b.title}</td><td>${b.programme}</td><td>${b.subject}</td><td>${b.year}</td><td>€${b.newPrice}</td><td>€${b.loopPrice}</td><td>${b.condition||'—'}</td><td>${b.availability}</td><td><button class="btn" data-id="${b.id}">Edit</button></td>`;
-        tr.querySelector('button').addEventListener('click', ()=>{
-          document.getElementById('bookId').value=b.id;
-          document.getElementById('title').value=b.title;
-          document.getElementById('author').value=b.author||'';
-          document.getElementById('prog').value=b.programme;
-          document.getElementById('subj').value=b.subject;
-          document.getElementById('yearLevel').value=b.year;
-          document.getElementById('condition').value=b.condition||'';
-          document.getElementById('newPrice').value=b.newPrice;
-          document.getElementById('loopPrice').value=b.loopPrice;
-          document.getElementById('availability').value=b.availability;
-          imgPrev.src=b.img||'';
-          imgPrev.style.display=b.img?'block':'none';
-          syncDeleteVisibility();
-          adminModal.scrollTop=0;
+    if(admin){
+      elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.getAttribute("data-edit");
+          const b = books.find(x => String(x.id) === String(id));
+          if(!b) return;
+          adminPanel.scrollIntoView({behavior:"smooth", block:"start"});
+          fillForm(b);
+          showToast("Modalità modifica attiva", "ok");
         });
-        invT.appendChild(tr);
-      }
-      document.getElementById('statBooks').textContent = store.books.length;
-      document.getElementById('statAvail').textContent = store.books.filter(b=>b.availability==='Available').length;
-      document.getElementById('statRes').textContent = store.books.filter(b=>b.availability==='Reserved').length;
-      document.getElementById('statDone').textContent = store.books.filter(b=>b.availability==='Picked Up').length;
+      });
+      elGrid.querySelectorAll("[data-del]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-del");
+          if(!confirm(`Eliminare il libro con ID "${id}"?`)) return;
+          try{
+            setStatus("Eliminazione…", "working");
+            await apiDeleteById(id);
+            await refresh();
+            showToast("Libro eliminato", "ok");
+          }catch(e){
+            console.error(e);
+            showToast(`Errore delete: ${e.message}`, "danger");
+            setStatus("Errore", "error");
+          }
+        });
+      });
+    }
+  }
 
-      const resT = document.getElementById('resTable');
-      resT.innerHTML='';
-      for (const r of store.reservations){
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.bookTitle}</td><td>${r.studentName}</td><td>${r.pickupSlot}</td>`;
-        resT.appendChild(tr);
-      }
+  /*************************************************************
+   * FLOW
+   *************************************************************/
+  async function refresh(){
+    setStatus("Caricamento dal Google Sheet…", "loading");
+    try{
+      const data = await apiGetAll();
+      // ordina: disponibili prima, poi titolo
+      books = data.sort((a,b)=>{
+        const av = (x)=> (String(x.availability||"").toLowerCase()==="available") ? 0 : 1;
+        const d = av(a)-av(b);
+        if(d!==0) return d;
+        return String(a.title||"").localeCompare(String(b.title||""), "it");
+      });
+      setStatus("OK", "ready");
+      render();
+    }catch(e){
+      console.error(e);
+      setStatus("Errore nel caricamento (controlla API/permessi).", "error");
+      showToast(`Errore GET: ${e.message}`, "danger");
+    }
+  }
+
+  /*************************************************************
+   * EVENTS
+   *************************************************************/
+  btnRefresh.addEventListener("click", refresh);
+  elQ.addEventListener("input", render);
+  elFProgram.addEventListener("change", render);
+  elFAvail.addEventListener("change", render);
+
+  btnAdmin.addEventListener("click", ()=>{
+    if(admin){
+      adminPanel.classList.toggle("hidden");
+      return;
+    }
+    const pwd = prompt("Password admin:");
+    if(pwd == null) return;
+    if(pwd !== ADMIN_PASSWORD){
+      alert("Password errata.");
+      return;
+    }
+    admin = true;
+    adminPanel.classList.remove("hidden");
+    showToast("Admin attivo", "ok");
+  });
+
+  btnLogout.addEventListener("click", ()=>{
+    admin = false;
+    adminPanel.classList.add("hidden");
+    clearForm();
+    showToast("Logout", "ok");
+  });
+
+  btnClear.addEventListener("click", clearForm);
+
+  btnDelete.addEventListener("click", async ()=>{
+    if(!editingId) return;
+    if(!confirm(`Eliminare il libro con ID "${editingId}"?`)) return;
+    try{
+      setStatus("Eliminazione…", "working");
+      await apiDeleteById(editingId);
+      clearForm();
+      await refresh();
+      showToast("Libro eliminato", "ok");
+    }catch(e){
+      console.error(e);
+      showToast(`Errore delete: ${e.message}`, "danger");
+      setStatus("Errore", "error");
+    }
+  });
+
+  form.addEventListener("submit", async (ev)=>{
+    ev.preventDefault();
+    if(!admin){ alert("Devi fare login admin."); return; }
+
+    const book = bookFromForm();
+    if(!book.id || !book.title){
+      showToast("ID e Titolo sono obbligatori.", "danger");
+      return;
     }
 
-    // Keyboard quick search
-    document.addEventListener('keydown',(e)=>{
-      if(e.key==='/' && document.activeElement.tagName!=='INPUT'){ e.preventDefault(); qEl.focus(); }
-    });
-  
+    btnSave.disabled = true;
+    setStatus("Salvataggio su Google Sheet…", "saving");
+
+    try{
+      const res = await apiUpsert(book);
+      await refresh();
+      if(res.mode === "post"){
+        showToast("Libro aggiunto (POST).", "ok");
+      } else {
+        showToast("Libro aggiornato (PATCH).", "ok");
+      }
+      clearForm();
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      showToast(
+        `Errore salvataggio: ${e.message}\n` +
+        `Controlla: (1) Sheet condiviso come Editor, (2) TAB "${TAB_NAME}", (3) colonne ok.`,
+        "danger"
+      );
+      setStatus("Errore", "error");
+    } finally {
+      btnSave.disabled = false;
+    }
+  });
+
+  /*************************************************************
+   * START
+   *************************************************************/
+  refresh();
 </script>
 </body>
 </html>
