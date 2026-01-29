@@ -93,45 +93,63 @@
       display:grid;gap:12px;
       grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
     }
-    .card{
-      background: rgba(18,33,58,.65);
-      border:1px solid var(--border);
-      border-radius: 14px;
-      overflow:hidden;
-      display:flex;flex-direction:column;
-      min-height: 250px;
-    }
-    
-.cardTop{
-  height:160px;              /* stessa altezza per tutti */
-  background: rgba(0,0,0,.15);
-  border-bottom:1px solid var(--border);
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+/* Card a 2 colonne: info (sinistra) + immagine (destra) */
+.cardRow{
+  display:grid;
+  grid-template-columns: 340px 1fr;  /* sinistra “quadrato” fisso, destra grande */
+  gap:0;
+  min-height: 260px;               /* dimensione stabile */
 }
 
-.cardTop img{
-  width:100%;
-  height:100%;
-  object-fit: contain;       /* MOSTRA TUTTA l’immagine */
-  display:block;
-  background: rgba(0,0,0,.12); /* “letterbox” quando l’immagine non riempie */
-}
-
-
-.cardBody{
-  position:relative;
-  z-index:1;
-  padding:12px 12px 14px;
+/* Colonna info: dimensione stabile come nel tuo evidenziato */
+.infoCol{
+  padding:14px;
+  border-right:1px solid var(--border);
+  background: rgba(18,33,58,.65);
   display:flex;
   flex-direction:column;
   gap:8px;
-  flex:1;
-  background: rgba(18,33,58,.65); /* ensures text stays readable */
 }
+
+/* Badge dentro info */
+.infoCol .badge{
+  position:static;
+  align-self:flex-start;
+}
+
+/* Colonna immagine: stessa altezza per tutti e immagine intera */
+.imgCol{
+  background: rgba(0,0,0,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* immagine sempre “intera” e ben visibile */
+.imgCol img{
+  width:100%;
+  height:100%;
+  max-height: 260px;     /* uguale al min-height della card */
+  object-fit: contain;   /* mostra tutta l’immagine */
+  display:block;
+}
+
+/* Mobile: va in colonna */
+@media (max-width: 860px){
+  .cardRow{
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+  .infoCol{
+    border-right:0;
+    border-bottom:1px solid var(--border);
+  }
+  .imgCol img{
+    max-height: 240px;
+  }
+}
+
 
     .badge{
       position:absolute;top:10px;left:10px;
@@ -550,35 +568,37 @@
       const np = (b.newPrice === "" || !Number.isFinite(b.newPrice)) ? "" : `€ ${b.newPrice.toFixed(0)}`;
       const lp = (b.loopPrice === "" || !Number.isFinite(b.loopPrice)) ? "" : `€ ${b.loopPrice.toFixed(0)}`;
 
-      return `
-        <div class="card">
-          <div class="cardTop">
-            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
-            <div class="badge ${bc}">${esc(av)}</div>
-          </div>
-          <div class="cardBody">
-            <div class="title">${esc(b.title || "(Senza titolo)")}</div>
-            <div class="muted">${esc(b.author || "")}</div>
+return `
+  <div class="card cardRow">
+    <div class="infoCol">
+      <div class="badge ${bc}">${esc(av)}</div>
 
-            <div class="kv">
-              <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
-              <div>Materia</div><div><b>${esc(b.subject||"-")}</b></div>
-              <div>Anno</div><div><b>${esc(b.year||"-")}</b></div>
-              <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
-            </div>
+      <div class="title">${esc(b.title || "(Senza titolo)")}</div>
+      <div class="muted">${esc(b.author || "")}</div>
 
-            <div class="cardActions">
-              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
-              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
-              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
-            </div>
+      <div class="kv">
+        <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
+        <div>Materia</div><div><b>${esc(b.subject||"-")}</b></div>
+        <div>Anno</div><div><b>${esc(b.year||"-")}</b></div>
+        <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
+      </div>
 
-            <div class="muted" style="margin-top:6px;font-size:12px">
-              ID: <b>${esc(b.id||"-")}</b>
-            </div>
-          </div>
-        </div>
-      `;
+      <div class="cardActions">
+        ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+        ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+        <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
+      </div>
+
+      <div class="muted" style="margin-top:6px;font-size:12px">
+        ID: <b>${esc(b.id||"-")}</b>
+      </div>
+    </div>
+
+    <div class="imgCol">
+      ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+    </div>
+  </div>
+`;
     }).join("");
 
     // bind actions
