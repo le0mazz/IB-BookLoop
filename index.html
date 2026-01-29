@@ -650,6 +650,7 @@
 btnAdmin.addEventListener("click", ()=>{
   if(admin){
     adminPanel.classList.toggle("hidden");
+    render(); // <-- ridisegna le card per mostrare Edit/Delete
     return;
   }
   const pwd = prompt("Password admin:");
@@ -660,7 +661,7 @@ btnAdmin.addEventListener("click", ()=>{
   }
   admin = true;
   adminPanel.classList.remove("hidden");
-  render(); // <-- IMPORTANT
+  render();   // <-- IMPORTANTISSIMO
   showToast("Admin attivo", "ok");
 });
 
@@ -669,7 +670,7 @@ btnLogout.addEventListener("click", ()=>{
   admin = false;
   adminPanel.classList.add("hidden");
   clearForm();
-  render(); // <-- IMPORTANT
+  render(); // <-- toglie Edit/Delete dalle card
   showToast("Logout", "ok");
 });
 
