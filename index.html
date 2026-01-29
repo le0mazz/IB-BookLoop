@@ -101,16 +101,34 @@
       display:flex;flex-direction:column;
       min-height: 250px;
     }
-    .cardTop{
-      height:140px;
-      background: rgba(0,0,0,.15);
-      border-bottom:1px solid var(--border);
-      display:grid;place-items:center;
-      position:relative;
-    }
-    .cardTop img{
-      width:100%;height:100%;object-fit:cover;display:block;
-    }
+.cardTop{
+  height:160px;
+  background: rgba(0,0,0,.15);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+
+.cardTop img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.cardBody{
+  position:relative;
+  z-index:1;
+  padding:12px 12px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1;
+  background: rgba(18,33,58,.65); /* ensures text stays readable */
+}
+
     .badge{
       position:absolute;top:10px;left:10px;
       font-size:12px;
@@ -629,28 +647,31 @@
   elFProgram.addEventListener("change", render);
   elFAvail.addEventListener("change", render);
 
-  btnAdmin.addEventListener("click", ()=>{
-    if(admin){
-      adminPanel.classList.toggle("hidden");
-      return;
-    }
-    const pwd = prompt("Password admin:");
-    if(pwd == null) return;
-    if(pwd !== ADMIN_PASSWORD){
-      alert("Password errata.");
-      return;
-    }
-    admin = true;
-    adminPanel.classList.remove("hidden");
-    showToast("Admin attivo", "ok");
-  });
+btnAdmin.addEventListener("click", ()=>{
+  if(admin){
+    adminPanel.classList.toggle("hidden");
+    return;
+  }
+  const pwd = prompt("Password admin:");
+  if(pwd == null) return;
+  if(pwd !== ADMIN_PASSWORD){
+    alert("Password errata.");
+    return;
+  }
+  admin = true;
+  adminPanel.classList.remove("hidden");
+  render(); // <-- IMPORTANT
+  showToast("Admin attivo", "ok");
+});
 
-  btnLogout.addEventListener("click", ()=>{
-    admin = false;
-    adminPanel.classList.add("hidden");
-    clearForm();
-    showToast("Logout", "ok");
-  });
+
+btnLogout.addEventListener("click", ()=>{
+  admin = false;
+  adminPanel.classList.add("hidden");
+  clearForm();
+  render(); // <-- IMPORTANT
+  showToast("Logout", "ok");
+});
 
   btnClear.addEventListener("click", clearForm);
 
