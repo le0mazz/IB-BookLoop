@@ -48,16 +48,25 @@
     }
     .pill::placeholder{color: rgba(234,240,255,.55)}
     select.pill{cursor:pointer}
-    button{
+    button, .btnLink{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
       color:var(--text);
       padding:10px 12px;border-radius:12px;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
-    button:hover{background: rgba(255,255,255,.11)}
-    button:active{transform: translateY(1px)}
+    button:hover, .btnLink:hover{background: rgba(255,255,255,.11)}
+    button:active, .btnLink:active{transform: translateY(1px)}
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
     .primary{
       background: linear-gradient(135deg,var(--brand),#6a8bff);
       border-color: rgba(255,255,255,.15);
@@ -93,88 +102,86 @@
       display:grid;gap:12px;
       grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
     }
-/* Card a 2 colonne: info (sinistra) + immagine (destra) */
-.cardRow{
-  display:grid;
-  grid-template-columns: 340px 1fr;  /* sinistra “quadrato” fisso, destra grande */
-  gap:0;
-  min-height: 260px;               /* dimensione stabile */
-}
 
-/* Colonna info: dimensione stabile come nel tuo evidenziato */
-.infoCol{
-  padding:14px;
-  border-right:1px solid var(--border);
-  background: rgba(18,33,58,.65);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
+    /* Card a 2 colonne: info (sinistra) + immagine (destra) */
+    .cardRow{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:0;
+      min-height: 260px;
+      border:1px solid var(--border);
+      border-radius: 16px;
+      overflow:hidden;
+      background: rgba(255,255,255,.03);
+    }
+    .infoCol{
+      padding:14px;
+      border-right:1px solid var(--border);
+      background: rgba(18,33,58,.65);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .imgCol{
+      background: rgba(0,0,0,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      padding:12px;
+    }
+    .imgCol img{
+      width:100%;
+      height:100%;
+      max-height: 236px;
+      object-fit: contain;
+      display:block;
+      border-radius:12px;
+      background: rgba(0,0,0,.10);
+      border:1px solid var(--border);
+    }
 
-/* Badge dentro info */
-.infoCol .badge{
-  position:static;
-  align-self:flex-start;
-}
-
-/* Colonna immagine: stessa altezza per tutti e immagine intera */
-.imgCol{
-  background: rgba(0,0,0,.12);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-/* immagine sempre “intera” e ben visibile */
-.imgCol img{
-  width:100%;
-  height:100%;
-  max-height: 260px;     /* uguale al min-height della card */
-  object-fit: contain;   /* mostra tutta l’immagine */
-  display:block;
-}
-
-/* Mobile: va in colonna */
-@media (max-width: 860px){
-  .cardRow{
-    grid-template-columns: 1fr;
-    min-height: unset;
-  }
-  .infoCol{
-    border-right:0;
-    border-bottom:1px solid var(--border);
-  }
-  .imgCol img{
-    max-height: 240px;
-  }
-}
-
+    @media (max-width: 860px){
+      .cardRow{
+        grid-template-columns: 1fr;
+        min-height: unset;
+      }
+      .infoCol{
+        border-right:0;
+        border-bottom:1px solid var(--border);
+      }
+      .imgCol img{
+        max-height: 240px;
+      }
+    }
 
     .badge{
-      position:absolute;top:10px;left:10px;
       font-size:12px;
       padding:6px 10px;border-radius:999px;
       border:1px solid var(--border);
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
+      align-self:flex-start;
     }
     .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
     .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
     .badge.danger{background: rgba(255,77,77,.18); border-color: rgba(255,77,77,.35)}
-    .cardBody{padding:12px 12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
-    .title{font-weight:800;line-height:1.2}
+
+    .title{font-weight:800;line-height:1.2;font-size:16px}
     .muted{color:var(--muted);font-size:13px}
     .kv{display:grid;grid-template-columns: 90px 1fr;gap:6px 10px;font-size:13px;color:var(--muted)}
     .kv b{color:var(--text);font-weight:700}
+
     .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
     .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
+
     .footerNote{
       margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35
     }
     .hr{height:1px;background:var(--border);margin:14px 0}
     .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
     @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
+
     label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     input, textarea{
       width:100%;
@@ -188,6 +195,7 @@
     textarea{min-height:90px;resize:vertical}
     .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
     .hidden{display:none !important}
+
     .toast{
       margin-top:10px;
       padding:10px 12px;
@@ -196,11 +204,38 @@
       background: rgba(0,0,0,.18);
       color:var(--text);
       font-size:13px;
+      white-space:pre-line;
     }
     .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
     .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
+
+    /* Reserve modal */
+    .modalOverlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      padding:16px;
+      z-index:9999;
+    }
+    .modalCard{
+      width:min(560px, 100%);
+      background: rgba(15,26,46,.92);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:12px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border-bottom:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+    }
+    .modalBody{ padding:14px; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
@@ -304,7 +339,7 @@
 
               <label>Immagine (URL)</label>
               <input id="img" placeholder="https://..." />
-              <div class="hint">Consigliato: usa un URL immagine (non base64) per non appesantire il foglio.</div>
+              <div class="hint">Inserisci un URL diretto immagine (meglio .jpg/.png). Evita base64.</div>
 
               <div class="row" style="margin-top:12px">
                 <button type="submit" class="primary" id="btnSave">Save</button>
@@ -321,13 +356,12 @@
             <div class="hr"></div>
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
               <li>Il catalogo è condiviso: ogni modifica scrive su Google Sheets.</li>
-              <li>Se “Add/Save” non scrive, il foglio probabilmente non è condiviso come <b>Editor</b>.</li>
-              <li>Per sicurezza reale serve backend; qui è una soluzione semplice per un gruppo piccolo.</li>
+              <li>Per protezione reale serve un backend: qui è una soluzione semplice per un gruppo piccolo.</li>
+              <li>Per prenotazioni: gli utenti aprono il link di Google Calendar e poi confermano la prenotazione sul sito (setta “Reserved”).</li>
             </ul>
             <div class="hr"></div>
             <div class="muted">
-              <b>Consiglio</b>: crea un ID standard (es. <code>SUBJECT-YEAR-XXX</code>).
-              Così edit/delete funzionano sempre.
+              <b>Consiglio</b>: crea un ID standard (es. <code>SUBJECT-YEAR-XXX</code>) così edit/delete funzionano sempre.
             </div>
           </div>
         </div>
@@ -335,22 +369,51 @@
     </section>
   </div>
 
+  <!-- Reserve Modal -->
+  <div id="reserveModal" class="modalOverlay hidden" role="dialog" aria-modal="true" aria-labelledby="reserveTitle">
+    <div class="modalCard">
+      <div class="modalHead">
+        <div>
+          <div id="reserveTitle" style="font-weight:800">Reserve</div>
+          <div class="muted" id="reserveSubtitle" style="font-size:13px;margin-top:2px"></div>
+        </div>
+        <button type="button" id="reserveClose" class="tiny">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <label>Nome (obbligatorio)</label>
+        <input id="reserveName" placeholder="es. Leonardo M." />
+
+        <div class="hint">
+          1) Apri Google Calendar e scegli uno slot.<br/>
+          2) Torna qui e premi <b>Conferma prenotazione</b> (il libro diventa “Reserved” nel catalogo).
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <a id="reserveCalendarLink" class="btnLink tiny primary" target="_blank" rel="noopener">Apri Google Calendar</a>
+          <button type="button" id="reserveConfirm" class="tiny ok">Conferma prenotazione</button>
+          <button type="button" id="reserveCancel" class="tiny danger">Annulla</button>
+        </div>
+
+        <div id="reserveMsg" class="toast hidden" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
 <script>
   /*************************************************************
    * CONFIG
    *************************************************************/
-  // Il tuo endpoint base (dato dall'utente)
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
-
-  // Nel tuo screenshot il tab si chiama "Foglio1"
   const TAB_NAME = "Foglio1";
-
-  // API tab-specific
   const API = `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}`;
 
-  // Password admin (NON è sicurezza reale: è solo per evitare modifiche accidentali)
-  // Cambiala subito.
+  // Cambiala.
   const ADMIN_PASSWORD = "mazz";
+
+  // Link del tuo Google Calendar "appointment schedule" / booking.
+  // Se ne hai uno diverso, sostituiscilo qui.
+  const CAL_BOOKING_URL = "https://calendar.app.google/AphKbShRvHjqcTev5";
 
   /*************************************************************
    * STATE
@@ -358,6 +421,9 @@
   let books = [];
   let admin = false;
   let editingId = null;
+
+  // reservation modal state
+  let reservingId = null;
 
   /*************************************************************
    * DOM
@@ -396,6 +462,17 @@
   const btnDelete = document.getElementById("btnDelete");
   const toast = document.getElementById("toast");
 
+  // reserve modal
+  const reserveModal = document.getElementById("reserveModal");
+  const reserveTitle = document.getElementById("reserveTitle");
+  const reserveSubtitle = document.getElementById("reserveSubtitle");
+  const reserveName = document.getElementById("reserveName");
+  const reserveCalendarLink = document.getElementById("reserveCalendarLink");
+  const reserveConfirm = document.getElementById("reserveConfirm");
+  const reserveCancel = document.getElementById("reserveCancel");
+  const reserveClose = document.getElementById("reserveClose");
+  const reserveMsg = document.getElementById("reserveMsg");
+
   /*************************************************************
    * HELPERS
    *************************************************************/
@@ -406,13 +483,13 @@
     toast.className = `toast ${type}`;
     toast.textContent = msg;
     toast.classList.remove("hidden");
-    setTimeout(()=> toast.classList.add("hidden"), 3000);
+    setTimeout(()=> toast.classList.add("hidden"), 3200);
   }
   function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function norm(s){ return String(s ?? "").trim(); }
 
   function badgeClass(av){
-    const v = (av||"").toLowerCase();
+    const v = String(av||"").toLowerCase();
     if(v === "available") return "ok";
     if(v === "reserved") return "warn";
     if(v === "sold") return "danger";
@@ -421,12 +498,21 @@
 
   function parsePrice(x){
     const s = String(x ?? "").replace(",", ".").trim();
+    if(!s) return "";
     const n = Number(s);
     return Number.isFinite(n) ? n : "";
   }
 
+  function fmtEUR(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    const v = Number(n);
+    // niente decimali in UI (se vuoi decimali, cambia 0 in 2)
+    return `€ ${v.toFixed(0).replace(".", ",")}`;
+  }
+
+  function nowISO(){ return new Date().toISOString(); }
+
   function bookFromForm(){
-    const now = new Date().toISOString();
     return {
       id: norm(f.id.value),
       title: norm(f.title.value),
@@ -439,12 +525,15 @@
       loopPrice: parsePrice(f.loopPrice.value),
       availability: norm(f.availability.value) || "Available",
       img: norm(f.img.value),
-      updatedAt: now,
+      updatedAt: nowISO(),
+      // optional fields (if present in sheet)
+      reservedBy: "", reservedAt: ""
     };
   }
 
   function fillForm(b){
     editingId = b?.id || null;
+
     f.id.value = b?.id || "";
     f.title.value = b?.title || "";
     f.author.value = b?.author || "";
@@ -452,12 +541,18 @@
     f.subject.value = b?.subject || "";
     f.year.value = b?.year || "";
     f.condition.value = b?.condition || "";
-    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
-    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
+
+    f.newPrice.value = (b?.newPrice ?? "") !== "" && Number.isFinite(Number(b.newPrice))
+      ? String(b.newPrice).replace(".", ",")
+      : "";
+    f.loopPrice.value = (b?.loopPrice ?? "") !== "" && Number.isFinite(Number(b.loopPrice))
+      ? String(b.loopPrice).replace(".", ",")
+      : "";
+
     f.availability.value = b?.availability || "Available";
     f.img.value = b?.img || "";
 
-    // id non modificabile durante edit (evita disastri)
+    // id non modificabile durante edit
     f.id.disabled = !!editingId;
     btnDelete.classList.toggle("hidden", !editingId);
   }
@@ -470,6 +565,28 @@
     btnDelete.classList.add("hidden");
   }
 
+  // Reserve modal helpers
+  function showReserveMsg(msg, type="ok"){
+    reserveMsg.className = `toast ${type}`;
+    reserveMsg.textContent = msg;
+    reserveMsg.classList.remove("hidden");
+  }
+  function openReserveModal(book){
+    reservingId = book.id;
+    reserveTitle.textContent = `Prenota: ${book.title || book.id}`;
+    reserveSubtitle.textContent = `${book.author || ""}${book.subject ? " · " + book.subject : ""}`.trim();
+    reserveName.value = "";
+    reserveCalendarLink.href = CAL_BOOKING_URL;
+    reserveMsg.className = "toast hidden";
+    reserveMsg.textContent = "";
+    reserveModal.classList.remove("hidden");
+    setTimeout(()=> reserveName.focus(), 50);
+  }
+  function closeReserveModal(){
+    reservingId = null;
+    reserveModal.classList.add("hidden");
+  }
+
   /*************************************************************
    * API CALLS (Sheet.best)
    *************************************************************/
@@ -478,7 +595,6 @@
     if(!r.ok) throw new Error(`GET failed: ${r.status}`);
     const data = await r.json();
     if(!Array.isArray(data)) return [];
-    // normalizza numeri
     return data.map(x => ({
       ...x,
       newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
@@ -486,13 +602,11 @@
     }));
   }
 
-  // Upsert: prova PATCH filtrato per id; se non aggiorna nulla -> POST
-  // Sheet.best supporta update filtrato: /<Column>/<Value> (e con tabs: /tabs/<Tab>/<Column>/<Value>) :contentReference[oaicite:1]{index=1}
+  // Upsert: PATCH per id, se non aggiorna nulla => POST
   async function apiUpsert(book){
     const id = encodeURIComponent(book.id);
     const patchUrl = `${API}/id/${id}`;
 
-    // 1) PATCH (update se esiste)
     const r1 = await fetch(patchUrl, {
       method:"PATCH",
       mode:"cors",
@@ -500,28 +614,28 @@
       body: JSON.stringify(book)
     });
 
-    // alcuni casi ritornano 200 con [] se non trova match; gestiamo entrambi
-    if(r1.ok){
-      const d1 = await r1.json().catch(()=>[]);
-      if(Array.isArray(d1) && d1.length > 0) return { mode:"patch", updated:true };
-      // se 200 ma nessuna riga aggiornata -> facciamo POST
-    } else {
-      // se PATCH fallisce per permessi, fermati qui con errore chiaro
+    if(!r1.ok){
       const t = await r1.text().catch(()=> "");
       throw new Error(`PATCH failed (${r1.status}). ${t}`);
     }
 
-    // 2) POST (insert)
+    const d1 = await r1.json().catch(()=>[]);
+    if(Array.isArray(d1) && d1.length > 0){
+      return { mode:"patch", updated:true };
+    }
+
     const r2 = await fetch(API, {
       method:"POST",
       mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(book)
     });
+
     if(!r2.ok){
       const t = await r2.text().catch(()=> "");
       throw new Error(`POST failed (${r2.status}). ${t}`);
     }
+
     await r2.json().catch(()=>null);
     return { mode:"post", inserted:true };
   }
@@ -556,7 +670,6 @@
 
   function render(){
     const list = applyFilters(books);
-
     elMeta.textContent = `${list.length} / ${books.length} libri`;
 
     elGrid.innerHTML = list.map(b=>{
@@ -565,40 +678,64 @@
       const img = norm(b.img);
       const hasImg = !!img;
 
-      const np = (b.newPrice === "" || !Number.isFinite(b.newPrice)) ? "" : `€ ${b.newPrice.toFixed(0)}`;
-      const lp = (b.loopPrice === "" || !Number.isFinite(b.loopPrice)) ? "" : `€ ${b.loopPrice.toFixed(0)}`;
+      const np = fmtEUR(b.newPrice);
+      const lp = fmtEUR(b.loopPrice);
 
-return `
-  <div class="card cardRow">
-    <div class="infoCol">
-      <div class="badge ${bc}">${esc(av)}</div>
+      const reservedBy = norm(b.reservedBy);
+      const reservedAt = norm(b.reservedAt);
 
-      <div class="title">${esc(b.title || "(Senza titolo)")}</div>
-      <div class="muted">${esc(b.author || "")}</div>
+      const reserveDisabled = String(av).toLowerCase() !== "available";
 
-      <div class="kv">
-        <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
-        <div>Materia</div><div><b>${esc(b.subject||"-")}</b></div>
-        <div>Anno</div><div><b>${esc(b.year||"-")}</b></div>
-        <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
-      </div>
+      return `
+        <div class="cardRow">
+          <div class="infoCol">
+            <div class="badge ${bc}">${esc(av)}</div>
 
-      <div class="cardActions">
-        ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
-        ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
-        <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
-      </div>
+            <div>
+              <div class="title">${esc(b.title || "(Senza titolo)")}</div>
+              <div class="muted">${esc(b.author || "")}</div>
+            </div>
 
-      <div class="muted" style="margin-top:6px;font-size:12px">
-        ID: <b>${esc(b.id||"-")}</b>
-      </div>
-    </div>
+            <div class="kv">
+              <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
+              <div>Materia</div><div><b>${esc(b.subject||"-")}</b></div>
+              <div>Anno</div><div><b>${esc(b.year||"-")}</b></div>
+              <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
+            </div>
 
-    <div class="imgCol">
-      ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
-    </div>
-  </div>
-`;
+            ${
+              String(av).toLowerCase() === "reserved" && (reservedBy || reservedAt)
+              ? `<div class="muted" style="font-size:12px">
+                   <b>Reserved</b>${reservedBy ? ` · by ${esc(reservedBy)}` : ``}${reservedAt ? ` · ${esc(reservedAt).slice(0,10)}` : ``}
+                 </div>`
+              : ``
+            }
+
+            <div class="cardActions">
+              ${
+                !admin
+                  ? (reserveDisabled
+                      ? `<button class="tiny" disabled>Not available</button>`
+                      : `<button class="tiny primary" data-reserve="${esc(b.id)}">Reserve</button>`
+                    )
+                  : ``
+              }
+
+              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
+            </div>
+
+            <div class="muted" style="margin-top:4px;font-size:12px">
+              ID: <b>${esc(b.id||"-")}</b>
+            </div>
+          </div>
+
+          <div class="imgCol">
+            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+          </div>
+        </div>
+      `;
     }).join("");
 
     // bind actions
@@ -610,6 +747,17 @@ return `
       });
     });
 
+    // reserve buttons
+    elGrid.querySelectorAll("[data-reserve]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-reserve");
+        const b = books.find(x => String(x.id) === String(id));
+        if(!b) return;
+        openReserveModal(b);
+      });
+    });
+
+    // admin buttons
     if(admin){
       elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
         btn.addEventListener("click", ()=>{
@@ -621,6 +769,7 @@ return `
           showToast("Modalità modifica attiva", "ok");
         });
       });
+
       elGrid.querySelectorAll("[data-del]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-del");
@@ -647,13 +796,22 @@ return `
     setStatus("Caricamento dal Google Sheet…", "loading");
     try{
       const data = await apiGetAll();
-      // ordina: disponibili prima, poi titolo
+
+      // sort: Available -> Reserved -> Sold, poi titolo
+      const rank = (x)=>{
+        const v = String(x.availability||"").toLowerCase();
+        if(v==="available") return 0;
+        if(v==="reserved") return 1;
+        if(v==="sold") return 2;
+        return 3;
+      };
+
       books = data.sort((a,b)=>{
-        const av = (x)=> (String(x.availability||"").toLowerCase()==="available") ? 0 : 1;
-        const d = av(a)-av(b);
+        const d = rank(a) - rank(b);
         if(d!==0) return d;
         return String(a.title||"").localeCompare(String(b.title||""), "it");
       });
+
       setStatus("OK", "ready");
       render();
     }catch(e){
@@ -671,32 +829,31 @@ return `
   elFProgram.addEventListener("change", render);
   elFAvail.addEventListener("change", render);
 
-btnAdmin.addEventListener("click", ()=>{
-  if(admin){
-    adminPanel.classList.toggle("hidden");
-    render(); // <-- ridisegna le card per mostrare Edit/Delete
-    return;
-  }
-  const pwd = prompt("Password admin:");
-  if(pwd == null) return;
-  if(pwd !== ADMIN_PASSWORD){
-    alert("Password errata.");
-    return;
-  }
-  admin = true;
-  adminPanel.classList.remove("hidden");
-  render();   // <-- IMPORTANTISSIMO
-  showToast("Admin attivo", "ok");
-});
+  btnAdmin.addEventListener("click", ()=>{
+    if(admin){
+      adminPanel.classList.toggle("hidden");
+      render();
+      return;
+    }
+    const pwd = prompt("Password admin:");
+    if(pwd == null) return;
+    if(pwd !== ADMIN_PASSWORD){
+      alert("Password errata.");
+      return;
+    }
+    admin = true;
+    adminPanel.classList.remove("hidden");
+    render();
+    showToast("Admin attivo", "ok");
+  });
 
-
-btnLogout.addEventListener("click", ()=>{
-  admin = false;
-  adminPanel.classList.add("hidden");
-  clearForm();
-  render(); // <-- toglie Edit/Delete dalle card
-  showToast("Logout", "ok");
-});
+  btnLogout.addEventListener("click", ()=>{
+    admin = false;
+    adminPanel.classList.add("hidden");
+    clearForm();
+    render();
+    showToast("Logout", "ok");
+  });
 
   btnClear.addEventListener("click", clearForm);
 
@@ -732,11 +889,7 @@ btnLogout.addEventListener("click", ()=>{
     try{
       const res = await apiUpsert(book);
       await refresh();
-      if(res.mode === "post"){
-        showToast("Libro aggiunto (POST).", "ok");
-      } else {
-        showToast("Libro aggiornato (PATCH).", "ok");
-      }
+      showToast(res.mode === "post" ? "Libro aggiunto." : "Libro aggiornato.", "ok");
       clearForm();
       setStatus("OK", "ready");
     }catch(e){
@@ -749,6 +902,58 @@ btnLogout.addEventListener("click", ()=>{
       setStatus("Errore", "error");
     } finally {
       btnSave.disabled = false;
+    }
+  });
+
+  // Reserve modal events
+  reserveCancel.addEventListener("click", closeReserveModal);
+  reserveClose.addEventListener("click", closeReserveModal);
+  reserveModal.addEventListener("click", (e)=>{
+    if(e.target === reserveModal) closeReserveModal();
+  });
+
+  reserveConfirm.addEventListener("click", async ()=>{
+    if(!reservingId) return;
+
+    const name = norm(reserveName.value);
+    if(!name){
+      showReserveMsg("Inserisci il nome.", "danger");
+      return;
+    }
+
+    const b = books.find(x => String(x.id) === String(reservingId));
+    if(!b){
+      showReserveMsg("Libro non trovato. Premi Aggiorna e riprova.", "danger");
+      return;
+    }
+
+    if(String(b.availability||"").toLowerCase() !== "available"){
+      showReserveMsg("Questo libro non è più disponibile. Premi Aggiorna.", "danger");
+      return;
+    }
+
+    try{
+      setStatus("Salvataggio prenotazione…", "saving");
+
+      const t = nowISO();
+      const updated = {
+        ...b,
+        availability: "Reserved",
+        reservedBy: name,
+        reservedAt: t,
+        updatedAt: t
+      };
+
+      await apiUpsert(updated);
+      await refresh();
+
+      showToast("Prenotazione salvata ✅", "ok");
+      closeReserveModal();
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      showReserveMsg(`Errore: ${e.message}`, "danger");
+      setStatus("Errore", "error");
     }
   });
 
