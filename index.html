@@ -48,25 +48,17 @@
     }
     .pill::placeholder{color: rgba(234,240,255,.55)}
     select.pill{cursor:pointer}
-    button, .btnLink{
+    button{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
       color:var(--text);
       padding:10px 12px;border-radius:12px;
       cursor:pointer;
-      transition: transform .05s ease, background .15s ease;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
+      transition: transform .05s ease, background .15s ease, opacity .15s ease;
     }
-    button:hover, .btnLink:hover{background: rgba(255,255,255,.11)}
-    button:active, .btnLink:active{transform: translateY(1px)}
-    button:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-    }
+    button:hover{background: rgba(255,255,255,.11)}
+    button:active{transform: translateY(1px)}
+    button:disabled{opacity:.45;cursor:not-allowed}
     .primary{
       background: linear-gradient(135deg,var(--brand),#6a8bff);
       border-color: rgba(255,255,255,.15);
@@ -79,6 +71,11 @@
       background: rgba(46,211,183,.12);
       border-color: rgba(46,211,183,.35);
     }
+    .warn{
+      background: rgba(255,204,102,.12);
+      border-color: rgba(255,204,102,.35);
+    }
+
     .panel{
       margin-top:16px;
       background: rgba(15,26,46,.75);
@@ -100,19 +97,20 @@
     .status b{color:var(--text)}
     .grid{
       display:grid;gap:12px;
-      grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
+      grid-template-columns: repeat( auto-fit, minmax(280px, 1fr) );
     }
 
-    /* Card a 2 colonne: info (sinistra) + immagine (destra) */
+    /* CARD layout: fixed left block + image area */
     .cardRow{
       display:grid;
-      grid-template-columns: 340px 1fr;
+      grid-template-columns: 340px 1fr; /* stable left */
       gap:0;
-      min-height: 260px;
+      min-height: 280px;
       border:1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow:hidden;
-      background: rgba(255,255,255,.03);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
     }
     .infoCol{
       padding:14px;
@@ -128,40 +126,31 @@
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      padding:12px;
+      padding: 10px;
     }
     .imgCol img{
       width:100%;
       height:100%;
-      max-height: 236px;
-      object-fit: contain;
+      max-height: 260px;     /* stable */
+      object-fit: contain;   /* show full image */
       display:block;
-      border-radius:12px;
-      background: rgba(0,0,0,.10);
-      border:1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
     }
 
     @media (max-width: 860px){
-      .cardRow{
-        grid-template-columns: 1fr;
-        min-height: unset;
-      }
-      .infoCol{
-        border-right:0;
-        border-bottom:1px solid var(--border);
-      }
-      .imgCol img{
-        max-height: 240px;
-      }
+      .cardRow{ grid-template-columns: 1fr; min-height: unset; }
+      .infoCol{ border-right:0; border-bottom:1px solid var(--border); }
+      .imgCol img{ max-height: 240px; }
     }
 
     .badge{
+      align-self:flex-start;
       font-size:12px;
       padding:6px 10px;border-radius:999px;
       border:1px solid var(--border);
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
-      align-self:flex-start;
     }
     .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
     .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
@@ -171,7 +160,6 @@
     .muted{color:var(--muted);font-size:13px}
     .kv{display:grid;grid-template-columns: 90px 1fr;gap:6px 10px;font-size:13px;color:var(--muted)}
     .kv b{color:var(--text);font-weight:700}
-
     .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
     .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
 
@@ -195,7 +183,6 @@
     textarea{min-height:90px;resize:vertical}
     .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
     .hidden{display:none !important}
-
     .toast{
       margin-top:10px;
       padding:10px 12px;
@@ -204,35 +191,39 @@
       background: rgba(0,0,0,.18);
       color:var(--text);
       font-size:13px;
-      white-space:pre-line;
+      white-space: pre-line;
     }
     .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
     .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
 
-    /* Reserve modal */
+    /* Modal */
     .modalOverlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
-      display:flex; align-items:center; justify-content:center;
+      display:none;
+      align-items:center;
+      justify-content:center;
       padding:16px;
-      z-index:9999;
+      z-index: 999;
     }
-    .modalCard{
-      width:min(560px, 100%);
+    .modalOverlay.show{display:flex}
+    .modal{
+      width: min(720px, 100%);
       background: rgba(15,26,46,.92);
       border:1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 18px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
       overflow:hidden;
+      backdrop-filter: blur(12px);
     }
     .modalHead{
-      padding:12px 14px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
-    .modalBody{ padding:14px; }
+    .modalBody{padding:16px}
+    .modalTitle{font-weight:800}
   </style>
 </head>
 
@@ -270,9 +261,7 @@
 
     <section class="panel">
       <div class="panelHead">
-        <div class="status" id="status">
-          Stato: <b>in attesa…</b>
-        </div>
+        <div class="status" id="status">Stato: <b>in attesa…</b></div>
         <div class="meta" id="meta"></div>
       </div>
       <div class="panelBody">
@@ -299,7 +288,7 @@
             <form id="bookForm">
               <label>ID (unico)</label>
               <input id="id" required placeholder="es. ENG-AA-SL-2026-001" />
-              <div class="hint">Usa un formato stabile e unico. L’ID è la chiave per edit/delete.</div>
+              <div class="hint">L’ID è la chiave per edit/delete.</div>
 
               <label>Titolo</label>
               <input id="title" required />
@@ -339,7 +328,7 @@
 
               <label>Immagine (URL)</label>
               <input id="img" placeholder="https://..." />
-              <div class="hint">Inserisci un URL diretto immagine (meglio .jpg/.png). Evita base64.</div>
+              <div class="hint">Suggerito: URL diretto dell’immagine (JPG/PNG).</div>
 
               <div class="row" style="margin-top:12px">
                 <button type="submit" class="primary" id="btnSave">Save</button>
@@ -356,64 +345,51 @@
             <div class="hr"></div>
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
               <li>Il catalogo è condiviso: ogni modifica scrive su Google Sheets.</li>
-              <li>Per protezione reale serve un backend: qui è una soluzione semplice per un gruppo piccolo.</li>
-              <li>Per prenotazioni: gli utenti aprono il link di Google Calendar e poi confermano la prenotazione sul sito (setta “Reserved”).</li>
+              <li>“Reserve” cambia lo stato a <b>Reserved</b> e poi apre il link calendario.</li>
+              <li>Per sicurezza reale serve backend; qui è una soluzione semplice per un gruppo piccolo.</li>
             </ul>
-            <div class="hr"></div>
-            <div class="muted">
-              <b>Consiglio</b>: crea un ID standard (es. <code>SUBJECT-YEAR-XXX</code>) così edit/delete funzionano sempre.
-            </div>
           </div>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Reserve Modal -->
-  <div id="reserveModal" class="modalOverlay hidden" role="dialog" aria-modal="true" aria-labelledby="reserveTitle">
-    <div class="modalCard">
+  <!-- Reserve modal -->
+  <div id="reserveOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-label="Reserva libro">
+    <div class="modal">
       <div class="modalHead">
-        <div>
-          <div id="reserveTitle" style="font-weight:800">Reserve</div>
-          <div class="muted" id="reserveSubtitle" style="font-size:13px;margin-top:2px"></div>
-        </div>
-        <button type="button" id="reserveClose" class="tiny">✕</button>
+        <div class="modalTitle" id="reserveTitle">Reserve</div>
+        <button id="reserveClose">Chiudi</button>
       </div>
-
       <div class="modalBody">
-        <label>Nome (obbligatorio)</label>
-        <input id="reserveName" placeholder="es. Leonardo M." />
-
-        <div class="hint">
-          1) Apri Google Calendar e scegli uno slot.<br/>
-          2) Torna qui e premi <b>Conferma prenotazione</b> (il libro diventa “Reserved” nel catalogo).
+        <div class="muted" id="reserveText" style="line-height:1.5"></div>
+        <div class="hr"></div>
+        <div class="row">
+          <a id="calLink" class="primary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" target="_blank" rel="noopener">
+            <button class="primary" type="button">Apri Google Calendar (prenota ritiro)</button>
+          </a>
+          <button id="reserveDone" class="ok" type="button">Ho prenotato</button>
         </div>
-
-        <div class="row" style="margin-top:12px">
-          <a id="reserveCalendarLink" class="btnLink tiny primary" target="_blank" rel="noopener">Apri Google Calendar</a>
-          <button type="button" id="reserveConfirm" class="tiny ok">Conferma prenotazione</button>
-          <button type="button" id="reserveCancel" class="tiny danger">Annulla</button>
+        <div class="hint" style="margin-top:10px">
+          Nota: lo slot si gestisce su Google Calendar. Lo stato del libro è già impostato a <b>Reserved</b> per evitare doppie prenotazioni.
         </div>
-
-        <div id="reserveMsg" class="toast hidden" style="margin-top:12px"></div>
       </div>
     </div>
   </div>
 
 <script>
   /*************************************************************
-   * CONFIG
+   * CONFIG (Sheet.best + Calendar)
    *************************************************************/
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
   const TAB_NAME = "Foglio1";
   const API = `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}`;
 
-  // Cambiala.
-  const ADMIN_PASSWORD = "mazz";
+  // CHANGE THIS if your booking link is different:
+  const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/AphKbShRvHjqcTev5";
 
-  // Link del tuo Google Calendar "appointment schedule" / booking.
-  // Se ne hai uno diverso, sostituiscilo qui.
-  const CAL_BOOKING_URL = "https://calendar.app.google/AphKbShRvHjqcTev5";
+  // Admin password (client-side only)
+  const ADMIN_PASSWORD = "mazz";
 
   /*************************************************************
    * STATE
@@ -422,7 +398,7 @@
   let admin = false;
   let editingId = null;
 
-  // reservation modal state
+  // reserve modal state
   let reservingId = null;
 
   /*************************************************************
@@ -463,15 +439,12 @@
   const toast = document.getElementById("toast");
 
   // reserve modal
-  const reserveModal = document.getElementById("reserveModal");
+  const reserveOverlay = document.getElementById("reserveOverlay");
   const reserveTitle = document.getElementById("reserveTitle");
-  const reserveSubtitle = document.getElementById("reserveSubtitle");
-  const reserveName = document.getElementById("reserveName");
-  const reserveCalendarLink = document.getElementById("reserveCalendarLink");
-  const reserveConfirm = document.getElementById("reserveConfirm");
-  const reserveCancel = document.getElementById("reserveCancel");
+  const reserveText = document.getElementById("reserveText");
   const reserveClose = document.getElementById("reserveClose");
-  const reserveMsg = document.getElementById("reserveMsg");
+  const reserveDone = document.getElementById("reserveDone");
+  const calLink = document.getElementById("calLink");
 
   /*************************************************************
    * HELPERS
@@ -483,13 +456,17 @@
     toast.className = `toast ${type}`;
     toast.textContent = msg;
     toast.classList.remove("hidden");
-    setTimeout(()=> toast.classList.add("hidden"), 3200);
+    setTimeout(()=> toast.classList.add("hidden"), 3500);
   }
-  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
   function norm(s){ return String(s ?? "").trim(); }
 
   function badgeClass(av){
-    const v = String(av||"").toLowerCase();
+    const v = (av||"").toLowerCase();
     if(v === "available") return "ok";
     if(v === "reserved") return "warn";
     if(v === "sold") return "danger";
@@ -498,21 +475,12 @@
 
   function parsePrice(x){
     const s = String(x ?? "").replace(",", ".").trim();
-    if(!s) return "";
     const n = Number(s);
     return Number.isFinite(n) ? n : "";
   }
 
-  function fmtEUR(n){
-    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
-    const v = Number(n);
-    // niente decimali in UI (se vuoi decimali, cambia 0 in 2)
-    return `€ ${v.toFixed(0).replace(".", ",")}`;
-  }
-
-  function nowISO(){ return new Date().toISOString(); }
-
   function bookFromForm(){
+    const now = new Date().toISOString();
     return {
       id: norm(f.id.value),
       title: norm(f.title.value),
@@ -525,15 +493,12 @@
       loopPrice: parsePrice(f.loopPrice.value),
       availability: norm(f.availability.value) || "Available",
       img: norm(f.img.value),
-      updatedAt: nowISO(),
-      // optional fields (if present in sheet)
-      reservedBy: "", reservedAt: ""
+      updatedAt: now,
     };
   }
 
   function fillForm(b){
     editingId = b?.id || null;
-
     f.id.value = b?.id || "";
     f.title.value = b?.title || "";
     f.author.value = b?.author || "";
@@ -541,18 +506,11 @@
     f.subject.value = b?.subject || "";
     f.year.value = b?.year || "";
     f.condition.value = b?.condition || "";
-
-    f.newPrice.value = (b?.newPrice ?? "") !== "" && Number.isFinite(Number(b.newPrice))
-      ? String(b.newPrice).replace(".", ",")
-      : "";
-    f.loopPrice.value = (b?.loopPrice ?? "") !== "" && Number.isFinite(Number(b.loopPrice))
-      ? String(b.loopPrice).replace(".", ",")
-      : "";
-
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
+    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
     f.availability.value = b?.availability || "Available";
     f.img.value = b?.img || "";
 
-    // id non modificabile durante edit
     f.id.disabled = !!editingId;
     btnDelete.classList.toggle("hidden", !editingId);
   }
@@ -565,26 +523,8 @@
     btnDelete.classList.add("hidden");
   }
 
-  // Reserve modal helpers
-  function showReserveMsg(msg, type="ok"){
-    reserveMsg.className = `toast ${type}`;
-    reserveMsg.textContent = msg;
-    reserveMsg.classList.remove("hidden");
-  }
-  function openReserveModal(book){
-    reservingId = book.id;
-    reserveTitle.textContent = `Prenota: ${book.title || book.id}`;
-    reserveSubtitle.textContent = `${book.author || ""}${book.subject ? " · " + book.subject : ""}`.trim();
-    reserveName.value = "";
-    reserveCalendarLink.href = CAL_BOOKING_URL;
-    reserveMsg.className = "toast hidden";
-    reserveMsg.textContent = "";
-    reserveModal.classList.remove("hidden");
-    setTimeout(()=> reserveName.focus(), 50);
-  }
-  function closeReserveModal(){
-    reservingId = null;
-    reserveModal.classList.add("hidden");
+  function isAvailable(b){
+    return String(b?.availability || "").toLowerCase() === "available";
   }
 
   /*************************************************************
@@ -602,7 +542,6 @@
     }));
   }
 
-  // Upsert: PATCH per id, se non aggiorna nulla => POST
   async function apiUpsert(book){
     const id = encodeURIComponent(book.id);
     const patchUrl = `${API}/id/${id}`;
@@ -614,14 +553,12 @@
       body: JSON.stringify(book)
     });
 
-    if(!r1.ok){
+    if(r1.ok){
+      const d1 = await r1.json().catch(()=>[]);
+      if(Array.isArray(d1) && d1.length > 0) return { mode:"patch", updated:true };
+    } else {
       const t = await r1.text().catch(()=> "");
       throw new Error(`PATCH failed (${r1.status}). ${t}`);
-    }
-
-    const d1 = await r1.json().catch(()=>[]);
-    if(Array.isArray(d1) && d1.length > 0){
-      return { mode:"patch", updated:true };
     }
 
     const r2 = await fetch(API, {
@@ -630,12 +567,10 @@
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(book)
     });
-
     if(!r2.ok){
       const t = await r2.text().catch(()=> "");
       throw new Error(`POST failed (${r2.status}). ${t}`);
     }
-
     await r2.json().catch(()=>null);
     return { mode:"post", inserted:true };
   }
@@ -651,8 +586,29 @@
     return true;
   }
 
+  async function apiSetAvailability(idVal, availability){
+    const now = new Date().toISOString();
+    const url = `${API}/id/${encodeURIComponent(idVal)}`;
+    const r = await fetch(url, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ availability, updatedAt: now })
+    });
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`Reserve PATCH failed (${r.status}). ${t}`);
+    }
+    const d = await r.json().catch(()=>[]);
+    // if it returns [] it means it didn't match -> treat as error
+    if(Array.isArray(d) && d.length === 0){
+      throw new Error("Reserve failed: book not found by id (check the 'id' column).");
+    }
+    return true;
+  }
+
   /*************************************************************
-   * RENDER
+   * FILTERS + RENDER
    *************************************************************/
   function applyFilters(list){
     const q = norm(elQ.value).toLowerCase();
@@ -678,23 +634,18 @@
       const img = norm(b.img);
       const hasImg = !!img;
 
-      const np = fmtEUR(b.newPrice);
-      const lp = fmtEUR(b.loopPrice);
+      const np = (b.newPrice === "" || !Number.isFinite(b.newPrice)) ? "" : `€ ${b.newPrice.toFixed(0)}`;
+      const lp = (b.loopPrice === "" || !Number.isFinite(b.loopPrice)) ? "" : `€ ${b.loopPrice.toFixed(0)}`;
 
-      const reservedBy = norm(b.reservedBy);
-      const reservedAt = norm(b.reservedAt);
-
-      const reserveDisabled = String(av).toLowerCase() !== "available";
+      const reserveDisabled = !isAvailable(b);
 
       return `
         <div class="cardRow">
           <div class="infoCol">
             <div class="badge ${bc}">${esc(av)}</div>
 
-            <div>
-              <div class="title">${esc(b.title || "(Senza titolo)")}</div>
-              <div class="muted">${esc(b.author || "")}</div>
-            </div>
+            <div class="title">${esc(b.title || "(Senza titolo)")}</div>
+            <div class="muted">${esc(b.author || "")}</div>
 
             <div class="kv">
               <div>Programma</div><div><b>${esc(b.programme||"-")}</b></div>
@@ -703,23 +654,10 @@
               <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
             </div>
 
-            ${
-              String(av).toLowerCase() === "reserved" && (reservedBy || reservedAt)
-              ? `<div class="muted" style="font-size:12px">
-                   <b>Reserved</b>${reservedBy ? ` · by ${esc(reservedBy)}` : ``}${reservedAt ? ` · ${esc(reservedAt).slice(0,10)}` : ``}
-                 </div>`
-              : ``
-            }
-
             <div class="cardActions">
-              ${
-                !admin
-                  ? (reserveDisabled
-                      ? `<button class="tiny" disabled>Not available</button>`
-                      : `<button class="tiny primary" data-reserve="${esc(b.id)}">Reserve</button>`
-                    )
-                  : ``
-              }
+              <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
+                ${reserveDisabled ? "Not available" : "Reserve"}
+              </button>
 
               ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
               ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
@@ -738,7 +676,7 @@
       `;
     }).join("");
 
-    // bind actions
+    // bind copy
     elGrid.querySelectorAll("[data-copy]").forEach(btn=>{
       btn.addEventListener("click", ()=>{
         const id = btn.getAttribute("data-copy");
@@ -747,17 +685,48 @@
       });
     });
 
-    // reserve buttons
+    // bind reserve
     elGrid.querySelectorAll("[data-reserve]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      btn.addEventListener("click", async ()=>{
         const id = btn.getAttribute("data-reserve");
         const b = books.find(x => String(x.id) === String(id));
         if(!b) return;
-        openReserveModal(b);
+
+        // double-check fresh availability (avoid stale UI)
+        if(!isAvailable(b)){
+          showToast("Questo libro non è più disponibile.", "danger");
+          await refresh();
+          return;
+        }
+
+        // 1) set Reserved on Sheet
+        try{
+          btn.disabled = true;
+          setStatus("Prenotazione…", "working");
+          await apiSetAvailability(id, "Reserved");
+          await refresh();
+
+          // 2) open modal with calendar link
+          reservingId = id;
+          reserveTitle.textContent = `Reserve: ${b.title || id}`;
+          reserveText.textContent =
+            "1) Il libro è stato impostato a 'Reserved' nel catalogo.\n" +
+            "2) Ora prenota uno slot di ritiro su Google Calendar.\n" +
+            "3) Dopo la prenotazione, premi 'Ho prenotato'.";
+          calLink.href = GOOGLE_CAL_BOOKING_URL;
+
+          reserveOverlay.classList.add("show");
+          setStatus("OK", "ready");
+        }catch(e){
+          console.error(e);
+          showToast(`Errore prenotazione: ${e.message}`, "danger");
+          setStatus("Errore", "error");
+          btn.disabled = false;
+        }
       });
     });
 
-    // admin buttons
+    // admin bindings
     if(admin){
       elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
         btn.addEventListener("click", ()=>{
@@ -797,7 +766,7 @@
     try{
       const data = await apiGetAll();
 
-      // sort: Available -> Reserved -> Sold, poi titolo
+      // Sort: Available first, then Reserved, then Sold, then title
       const rank = (x)=>{
         const v = String(x.availability||"").toLowerCase();
         if(v==="available") return 0;
@@ -807,7 +776,7 @@
       };
 
       books = data.sort((a,b)=>{
-        const d = rank(a) - rank(b);
+        const d = rank(a)-rank(b);
         if(d!==0) return d;
         return String(a.title||"").localeCompare(String(b.title||""), "it");
       });
@@ -889,14 +858,14 @@
     try{
       const res = await apiUpsert(book);
       await refresh();
-      showToast(res.mode === "post" ? "Libro aggiunto." : "Libro aggiornato.", "ok");
+      showToast(res.mode === "post" ? "Libro aggiunto (POST)." : "Libro aggiornato (PATCH).", "ok");
       clearForm();
       setStatus("OK", "ready");
     }catch(e){
       console.error(e);
       showToast(
         `Errore salvataggio: ${e.message}\n` +
-        `Controlla: (1) Sheet condiviso come Editor, (2) TAB "${TAB_NAME}", (3) colonne ok.`,
+        `Controlla: (1) Sheet condiviso come Editor, (2) TAB "${TAB_NAME}", (3) colonna "id" presente.`,
         "danger"
       );
       setStatus("Errore", "error");
@@ -906,54 +875,23 @@
   });
 
   // Reserve modal events
-  reserveCancel.addEventListener("click", closeReserveModal);
+  function closeReserveModal(){
+    reserveOverlay.classList.remove("show");
+    reservingId = null;
+  }
   reserveClose.addEventListener("click", closeReserveModal);
-  reserveModal.addEventListener("click", (e)=>{
-    if(e.target === reserveModal) closeReserveModal();
+  reserveOverlay.addEventListener("click", (e)=>{
+    if(e.target === reserveOverlay) closeReserveModal();
+  });
+  reserveDone.addEventListener("click", ()=>{
+    closeReserveModal();
+    showToast("Perfetto. Prenotazione completata su Calendar.", "ok");
   });
 
-  reserveConfirm.addEventListener("click", async ()=>{
-    if(!reservingId) return;
-
-    const name = norm(reserveName.value);
-    if(!name){
-      showReserveMsg("Inserisci il nome.", "danger");
-      return;
-    }
-
-    const b = books.find(x => String(x.id) === String(reservingId));
-    if(!b){
-      showReserveMsg("Libro non trovato. Premi Aggiorna e riprova.", "danger");
-      return;
-    }
-
-    if(String(b.availability||"").toLowerCase() !== "available"){
-      showReserveMsg("Questo libro non è più disponibile. Premi Aggiorna.", "danger");
-      return;
-    }
-
-    try{
-      setStatus("Salvataggio prenotazione…", "saving");
-
-      const t = nowISO();
-      const updated = {
-        ...b,
-        availability: "Reserved",
-        reservedBy: name,
-        reservedAt: t,
-        updatedAt: t
-      };
-
-      await apiUpsert(updated);
-      await refresh();
-
-      showToast("Prenotazione salvata ✅", "ok");
+  // ESC closes modal
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && reserveOverlay.classList.contains("show")){
       closeReserveModal();
-      setStatus("OK", "ready");
-    }catch(e){
-      console.error(e);
-      showReserveMsg(`Errore: ${e.message}`, "danger");
-      setStatus("Errore", "error");
     }
   });
 
