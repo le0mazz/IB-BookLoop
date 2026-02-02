@@ -240,20 +240,6 @@
 
       <div class="row">
         <input id="q" class="pill" style="min-width:260px" placeholder="Cerca titolo / autore / materia..." />
-        <select id="fProgram" class="pill">
-          <option value="">Tutti i programmi</option>
-          <option>IBDP</option>
-          <option>IGCSE</option>
-          <option>MYP</option>
-          <option>Altro</option>
-        </select>
-        <select id="fAvail" class="pill">
-          <option value="">Tutte le disponibilità</option>
-          <option value="Available">Available</option>
-          <option value="Reserved">Reserved</option>
-          <option value="Sold">Sold</option>
-        </select>
-
         <button id="btnRefresh">Aggiorna</button>
         <button id="btnAdmin" class="primary">Admin</button>
       </div>
@@ -409,9 +395,7 @@
   const elMeta = document.getElementById("meta");
 
   const elQ = document.getElementById("q");
-  const elFProgram = document.getElementById("fProgram");
-  const elFAvail = document.getElementById("fAvail");
-
+  
   const btnRefresh = document.getElementById("btnRefresh");
   const btnAdmin = document.getElementById("btnAdmin");
 
