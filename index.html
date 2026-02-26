@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,7 @@
       --radius:16px;
     }
 
-    *{box-sizing:border-box}
+    * { box-sizing: border-box; }
 
     body{
       margin:0;
@@ -24,7 +24,7 @@
       color:var(--text);
     }
 
-    a{color:inherit}
+    a{ color:inherit; }
 
     .wrap{
       max-width:1100px;
@@ -211,16 +211,16 @@
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      padding: 10px;
+      padding:10px;
     }
 
     .imgCol img{
       width:100%;
       height:100%;
-      max-height: 260px;
-      object-fit: contain;
+      max-height:260px;
+      object-fit:contain;
       display:block;
-      border-radius: 12px;
+      border-radius:12px;
       background: rgba(255,255,255,.03);
     }
 
@@ -234,7 +234,7 @@
         border-bottom:1px solid var(--border);
       }
       .imgCol img{
-        max-height: 240px;
+        max-height:240px;
       }
     }
 
@@ -386,7 +386,7 @@
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index: 999;
+      z-index:999;
     }
 
     .modalOverlay.show{
@@ -394,10 +394,10 @@
     }
 
     .modal{
-      width: min(720px, 100%);
+      width:min(720px, 100%);
       background: rgba(15,26,46,.92);
       border:1px solid var(--border);
-      border-radius: 18px;
+      border-radius:18px;
       box-shadow: var(--shadow);
       overflow:hidden;
       backdrop-filter: blur(12px);
@@ -430,33 +430,33 @@
         <div class="logo">IB</div>
         <div>
           <h1>IB BookLoop</h1>
-          <div class="sub">Catalogo libri condiviso (Google Sheets)</div>
+          <div class="sub">Shared book catalog (Google Sheets)</div>
         </div>
       </div>
 
       <div class="row">
-        <input id="q" class="pill" style="min-width:260px" placeholder="Cerca titolo / autore / materia..." />
-        <button id="btnRefresh">Aggiorna</button>
+        <input id="q" class="pill" style="min-width:260px" placeholder="Search title / author / subject..." />
+        <button id="btnRefresh">Refresh</button>
         <button id="btnAdmin" class="primary">Admin</button>
       </div>
     </header>
 
     <section class="panel">
       <div class="panelHead">
-        <div class="status" id="status">Stato: <b>in attesa…</b></div>
+        <div class="status" id="status">Status: <b>waiting…</b></div>
         <div class="meta" id="meta"></div>
       </div>
       <div class="panelBody">
         <div id="grid" class="grid"></div>
         <div class="footerNote">
-          *I dati arrivano da Google Sheets tramite Sheet.best. Se non vedi aggiornamenti, premi “Aggiorna” o ricarica la pagina.
+          *Data comes from Google Sheets through Sheet.best. If you do not see updates, press “Refresh” or reload the page.
         </div>
       </div>
     </section>
 
     <section id="adminPanel" class="panel hidden">
       <div class="panelHead">
-        <div><b>Admin</b> <span class="meta">— aggiungi/modifica libri</span></div>
+        <div><b>Admin</b> <span class="meta">— add / edit books</span></div>
         <div class="row">
           <button id="btnLogout" class="danger">Logout</button>
         </div>
@@ -464,53 +464,53 @@
       <div class="panelBody">
         <div class="twoCol">
           <div>
-            <b>Aggiungi / Modifica libro</b>
-            <div class="hint">Per modificare: clicca “Edit” su una card (serve login admin).</div>
+            <b>Add / Edit book</b>
+            <div class="hint">To edit, click “Edit” on a card (admin login required).</div>
 
             <form id="bookForm">
-              <label>ID (unico)</label>
-              <input id="id" required placeholder="es. ENG-AA-SL-2026-001" />
-              <div class="hint">L’ID è la chiave per edit/delete.</div>
+              <label>Unique ID</label>
+              <input id="id" required placeholder="e.g. ENG-AA-SL-2026-001" />
+              <div class="hint">The ID is the key used for edit and delete.</div>
 
-              <label>Titolo</label>
+              <label>Title</label>
               <input id="title" required />
 
-              <label>Autore</label>
+              <label>Author</label>
               <input id="author" />
 
-              <label>Programma</label>
+              <label>Programme</label>
               <input id="programme" placeholder="IBDP / MYP / ..." />
 
-              <label>Materia</label>
+              <label>Subject</label>
               <input id="subject" placeholder="English A / Math AA / ..." />
 
-              <label>Anno</label>
+              <label>Year</label>
               <input id="year" placeholder="2024 / 2025 / ..." />
 
-              <label>Condizione</label>
+              <label>Condition</label>
               <input id="condition" placeholder="Like new / Good / ..." />
 
               <div class="twoCol">
                 <div>
-                  <label>Prezzo nuovo (€)</label>
-                  <input id="newPrice" inputmode="decimal" placeholder="es. 45" />
+                  <label>New price (€)</label>
+                  <input id="newPrice" inputmode="decimal" placeholder="e.g. 45" />
                 </div>
                 <div>
-                  <label>Prezzo BookLoop (€)</label>
-                  <input id="loopPrice" inputmode="decimal" placeholder="es. 20" />
+                  <label>BookLoop price (€)</label>
+                  <input id="loopPrice" inputmode="decimal" placeholder="e.g. 20" />
                 </div>
               </div>
 
-              <label>Disponibilità</label>
+              <label>Availability</label>
               <select id="availability">
                 <option>Available</option>
                 <option>Reserved</option>
                 <option>Sold</option>
               </select>
 
-              <label>Immagine (URL)</label>
+              <label>Image (URL)</label>
               <input id="img" placeholder="https://..." />
-              <div class="hint">Suggerito: URL diretto dell’immagine (JPG/PNG).</div>
+              <div class="hint">Recommended: use a direct image URL (JPG/PNG).</div>
 
               <div class="row" style="margin-top:12px">
                 <button type="submit" class="primary" id="btnSave">Save</button>
@@ -523,12 +523,12 @@
           </div>
 
           <div>
-            <b>Note operative</b>
+            <b>Operational notes</b>
             <div class="hr"></div>
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
-              <li>Il catalogo è condiviso: ogni modifica scrive su Google Sheets.</li>
-              <li>“Reserve” cambia lo stato a <b>Reserved</b> e poi apre il link calendario.</li>
-              <li>Per sicurezza reale serve backend; qui è una soluzione semplice per un gruppo piccolo.</li>
+              <li>The catalog is shared: every change writes to Google Sheets.</li>
+              <li>“Reserve” opens the Google Calendar flow, but the book becomes <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
+              <li>For real security you would need a backend; this is a simple solution for a small group.</li>
             </ul>
           </div>
         </div>
@@ -537,23 +537,23 @@
   </div>
 
   <!-- Reserve modal -->
-  <div id="reserveOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-label="Reserva libro">
+  <div id="reserveOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-label="Reserve book">
     <div class="modal">
       <div class="modalHead">
         <div class="modalTitle" id="reserveTitle">Reserve</div>
-        <button id="reserveClose">Chiudi</button>
+        <button id="reserveClose">Close</button>
       </div>
       <div class="modalBody">
         <div class="muted" id="reserveText" style="line-height:1.5"></div>
         <div class="hr"></div>
         <div class="row">
           <a id="calLink" href="#" target="_blank" rel="noopener" style="text-decoration:none;">
-            <button class="primary" type="button">Apri Google Calendar (prenota ritiro)</button>
+            <button class="primary" type="button">Open Google Calendar (book pickup)</button>
           </a>
-          <button id="reserveDone" class="ok" type="button">Ho prenotato</button>
+          <button id="reserveDone" class="ok" type="button">I booked it</button>
         </div>
         <div class="hint" style="margin-top:10px">
-          Nota: lo slot si gestisce su Google Calendar. Lo stato del libro è già impostato a <b>Reserved</b> per evitare doppie prenotazioni.
+          Note: the time slot is handled on Google Calendar. The book will become <b>Reserved</b> only after you click <b>I booked it</b>.
         </div>
       </div>
     </div>
@@ -622,10 +622,10 @@
      * HELPERS
      *************************************************************/
     function setStatus(text, strong = "") {
-      elStatus.innerHTML = `Stato: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+      elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
     }
 
-    function showToast(msg, type="ok") {
+    function showToast(msg, type = "ok") {
       toast.className = `toast ${type}`;
       toast.textContent = msg;
       toast.classList.remove("hidden");
@@ -820,7 +820,7 @@
      *************************************************************/
     function render() {
       const list = applyFilters(books);
-      elMeta.textContent = `${list.length} / ${books.length} libri`;
+      elMeta.textContent = `${list.length} / ${books.length} books`;
 
       elGrid.innerHTML = list.map(b => {
         const av = b.availability || "Available";
@@ -837,14 +837,14 @@
             <div class="infoCol">
               <div class="badge ${bc}">${esc(av)}</div>
 
-              <div class="title">${esc(b.title || "(Senza titolo)")}</div>
+              <div class="title">${esc(b.title || "(Untitled)")}</div>
               <div class="muted">${esc(b.author || "")}</div>
 
               <div class="kv">
-                <div>Programma</div><div><b>${esc(b.programme || "-")}</b></div>
-                <div>Materia</div><div><b>${esc(b.subject || "-")}</b></div>
-                <div>Anno</div><div><b>${esc(b.year || "-")}</b></div>
-                <div>Prezzi</div><div><b>${esc(lp || "-")}</b> <span class="muted">(nuovo: ${esc(np || "-")})</span></div>
+                <div>Programme</div><div><b>${esc(b.programme || "-")}</b></div>
+                <div>Subject</div><div><b>${esc(b.subject || "-")}</b></div>
+                <div>Year</div><div><b>${esc(b.year || "-")}</b></div>
+                <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
               </div>
 
               <div class="cardActions">
@@ -873,7 +873,7 @@
         btn.addEventListener("click", () => {
           const id = btn.getAttribute("data-copy");
           navigator.clipboard?.writeText(id).catch(() => {});
-          showToast(`ID copiato: ${id}`, "ok");
+          showToast(`Copied ID: ${id}`, "ok");
         });
       });
 
@@ -884,33 +884,20 @@
           if (!b) return;
 
           if (!isAvailable(b)) {
-            showToast("Questo libro non è più disponibile.", "danger");
+            showToast("This book is no longer available.", "danger");
             await refresh();
             return;
           }
 
-          try {
-            btn.disabled = true;
-            setStatus("Prenotazione…", "working");
-            await apiSetAvailability(id, "Reserved");
-            await refresh();
+          reservingId = id;
+          reserveTitle.textContent = `Reserve: ${b.title || id}`;
+          reserveText.textContent =
+            "1) Book a pickup slot on Google Calendar.\n" +
+            "2) Come back here and click 'I booked it'.\n" +
+            "3) Only then will the book be marked as 'Reserved'.";
+          calLink.href = GOOGLE_CAL_BOOKING_URL;
 
-            reservingId = id;
-            reserveTitle.textContent = `Reserve: ${b.title || id}`;
-            reserveText.textContent =
-              "1) Il libro è stato impostato a 'Reserved' nel catalogo.\n" +
-              "2) Ora prenota uno slot di ritiro su Google Calendar.\n" +
-              "3) Dopo la prenotazione, premi 'Ho prenotato'.";
-            calLink.href = GOOGLE_CAL_BOOKING_URL;
-
-            reserveOverlay.classList.add("show");
-            setStatus("OK", "ready");
-          } catch (e) {
-            console.error(e);
-            showToast(`Errore prenotazione: ${e.message}`, "danger");
-            setStatus("Errore", "error");
-            btn.disabled = false;
-          }
+          reserveOverlay.classList.add("show");
         });
       });
 
@@ -922,23 +909,23 @@
             if (!b) return;
             adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
             fillForm(b);
-            showToast("Modalità modifica attiva", "ok");
+            showToast("Edit mode enabled.", "ok");
           });
         });
 
         elGrid.querySelectorAll("[data-del]").forEach(btn => {
           btn.addEventListener("click", async () => {
             const id = btn.getAttribute("data-del");
-            if (!confirm(`Eliminare il libro con ID "${id}"?`)) return;
+            if (!confirm(`Delete the book with ID "${id}"?`)) return;
             try {
-              setStatus("Eliminazione…", "working");
+              setStatus("Deleting…", "working");
               await apiDeleteById(id);
               await refresh();
-              showToast("Libro eliminato", "ok");
+              showToast("Book deleted.", "ok");
             } catch (e) {
               console.error(e);
-              showToast(`Errore delete: ${e.message}`, "danger");
-              setStatus("Errore", "error");
+              showToast(`Delete error: ${e.message}`, "danger");
+              setStatus("Error", "error");
             }
           });
         });
@@ -949,7 +936,7 @@
      * FLOW
      *************************************************************/
     async function refresh() {
-      setStatus("Caricamento dal Google Sheet…", "loading");
+      setStatus("Loading from Google Sheet…", "loading");
       try {
         const data = await apiGetAll();
 
@@ -964,15 +951,15 @@
         books = data.sort((a, b) => {
           const d = rank(a) - rank(b);
           if (d !== 0) return d;
-          return String(a.title || "").localeCompare(String(b.title || ""), "it");
+          return String(a.title || "").localeCompare(String(b.title || ""), "en");
         });
 
         setStatus("OK", "ready");
         render();
       } catch (e) {
         console.error(e);
-        setStatus("Errore nel caricamento (controlla API/permessi).", "error");
-        showToast(`Errore GET: ${e.message}`, "danger");
+        setStatus("Error loading data (check API/permissions).", "error");
+        showToast(`GET error: ${e.message}`, "danger");
       }
     }
 
@@ -988,16 +975,18 @@
         render();
         return;
       }
-      const pwd = prompt("Password admin:");
+
+      const pwd = prompt("Admin password:");
       if (pwd == null) return;
       if (pwd !== ADMIN_PASSWORD) {
-        alert("Password errata.");
+        alert("Wrong password.");
         return;
       }
+
       admin = true;
       adminPanel.classList.remove("hidden");
       render();
-      showToast("Admin attivo", "ok");
+      showToast("Admin mode enabled.", "ok");
     });
 
     btnLogout.addEventListener("click", () => {
@@ -1005,57 +994,59 @@
       adminPanel.classList.add("hidden");
       clearForm();
       render();
-      showToast("Logout", "ok");
+      showToast("Logged out.", "ok");
     });
 
     btnClear.addEventListener("click", clearForm);
 
     btnDelete.addEventListener("click", async () => {
       if (!editingId) return;
-      if (!confirm(`Eliminare il libro con ID "${editingId}"?`)) return;
+      if (!confirm(`Delete the book with ID "${editingId}"?`)) return;
+
       try {
-        setStatus("Eliminazione…", "working");
+        setStatus("Deleting…", "working");
         await apiDeleteById(editingId);
         clearForm();
         await refresh();
-        showToast("Libro eliminato", "ok");
+        showToast("Book deleted.", "ok");
       } catch (e) {
         console.error(e);
-        showToast(`Errore delete: ${e.message}`, "danger");
-        setStatus("Errore", "error");
+        showToast(`Delete error: ${e.message}`, "danger");
+        setStatus("Error", "error");
       }
     });
 
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
+
       if (!admin) {
-        alert("Devi fare login admin.");
+        alert("You must be logged in as admin.");
         return;
       }
 
       const book = bookFromForm();
       if (!book.id || !book.title) {
-        showToast("ID e Titolo sono obbligatori.", "danger");
+        showToast("ID and Title are required.", "danger");
         return;
       }
 
       btnSave.disabled = true;
-      setStatus("Salvataggio su Google Sheet…", "saving");
+      setStatus("Saving to Google Sheet…", "saving");
 
       try {
         const res = await apiUpsert(book);
         await refresh();
-        showToast(res.mode === "post" ? "Libro aggiunto (POST)." : "Libro aggiornato (PATCH).", "ok");
+        showToast(res.mode === "post" ? "Book added (POST)." : "Book updated (PATCH).", "ok");
         clearForm();
         setStatus("OK", "ready");
       } catch (e) {
         console.error(e);
         showToast(
-          `Errore salvataggio: ${e.message}\n` +
-          `Controlla: (1) Sheet condiviso come Editor, (2) TAB "${TAB_NAME}", (3) colonna "id" presente.`,
+          `Save error: ${e.message}\n` +
+          `Check: (1) Sheet shared as Editor, (2) TAB "${TAB_NAME}", (3) "id" column exists.`,
           "danger"
         );
-        setStatus("Errore", "error");
+        setStatus("Error", "error");
       } finally {
         btnSave.disabled = false;
       }
@@ -1067,9 +1058,35 @@
       if (e.target === reserveOverlay) closeReserveModal();
     });
 
-    reserveDone.addEventListener("click", () => {
-      closeReserveModal();
-      showToast("Perfetto. Prenotazione completata su Calendar.", "ok");
+    reserveDone.addEventListener("click", async () => {
+      if (!reservingId) return;
+
+      const b = books.find(x => String(x.id) === String(reservingId));
+      if (!b) {
+        closeReserveModal();
+        showToast("Book not found. Please refresh and try again.", "danger");
+        return;
+      }
+
+      if (!isAvailable(b)) {
+        closeReserveModal();
+        showToast("This book is no longer available.", "danger");
+        await refresh();
+        return;
+      }
+
+      try {
+        setStatus("Reserving…", "working");
+        await apiSetAvailability(reservingId, "Reserved");
+        await refresh();
+        closeReserveModal();
+        showToast("Great. The book is now marked as Reserved.", "ok");
+        setStatus("OK", "ready");
+      } catch (e) {
+        console.error(e);
+        showToast(`Reservation error: ${e.message}`, "danger");
+        setStatus("Error", "error");
+      }
     });
 
     document.addEventListener("keydown", (e) => {
