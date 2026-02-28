@@ -560,545 +560,576 @@
   </div>
 
   <script>
-    /*************************************************************
-     * CONFIG
-     *************************************************************/
-    const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
-    const TAB_NAME = "Foglio1";
-    const API = `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}`;
+  /*************************************************************
+   * CONFIG
+   *************************************************************/
+  const API_URL = "https://script.google.com/macros/s/AKfycbxOOJkO7alBT-BeyhWboxYVwWk71z0PN11cY1AZe65WimhepPLJlRKfXaGKhcfVbs4c/exec";
+  const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
+  const ADMIN_PASSWORD = "mazz";
 
-    const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
-    const ADMIN_PASSWORD = "mazz";
+  /*************************************************************
+   * STATE
+   *************************************************************/
+  let books = [];
+  let admin = false;
+  let editingId = null;
+  let reservingId = null;
 
-    /*************************************************************
-     * STATE
-     *************************************************************/
-    let books = [];
-    let admin = false;
-    let editingId = null;
-    let reservingId = null;
+  /*************************************************************
+   * DOM
+   *************************************************************/
+  const elGrid = document.getElementById("grid");
+  const elStatus = document.getElementById("status");
+  const elMeta = document.getElementById("meta");
+  const elQ = document.getElementById("q");
 
-    /*************************************************************
-     * DOM
-     *************************************************************/
-    const elGrid = document.getElementById("grid");
-    const elStatus = document.getElementById("status");
-    const elMeta = document.getElementById("meta");
-    const elQ = document.getElementById("q");
+  const btnRefresh = document.getElementById("btnRefresh");
+  const btnAdmin = document.getElementById("btnAdmin");
+  const adminPanel = document.getElementById("adminPanel");
+  const btnLogout = document.getElementById("btnLogout");
 
-    const btnRefresh = document.getElementById("btnRefresh");
-    const btnAdmin = document.getElementById("btnAdmin");
-    const adminPanel = document.getElementById("adminPanel");
-    const btnLogout = document.getElementById("btnLogout");
+  const form = document.getElementById("bookForm");
+  const f = {
+    id: document.getElementById("id"),
+    title: document.getElementById("title"),
+    author: document.getElementById("author"),
+    programme: document.getElementById("programme"),
+    subject: document.getElementById("subject"),
+    year: document.getElementById("year"),
+    condition: document.getElementById("condition"),
+    newPrice: document.getElementById("newPrice"),
+    loopPrice: document.getElementById("loopPrice"),
+    availability: document.getElementById("availability"),
+    img: document.getElementById("img"),
+  };
 
-    const form = document.getElementById("bookForm");
-    const f = {
-      id: document.getElementById("id"),
-      title: document.getElementById("title"),
-      author: document.getElementById("author"),
-      programme: document.getElementById("programme"),
-      subject: document.getElementById("subject"),
-      year: document.getElementById("year"),
-      condition: document.getElementById("condition"),
-      newPrice: document.getElementById("newPrice"),
-      loopPrice: document.getElementById("loopPrice"),
-      availability: document.getElementById("availability"),
-      img: document.getElementById("img"),
+  const btnSave = document.getElementById("btnSave");
+  const btnClear = document.getElementById("btnClear");
+  const btnDelete = document.getElementById("btnDelete");
+  const toast = document.getElementById("toast");
+
+  const reserveOverlay = document.getElementById("reserveOverlay");
+  const reserveTitle = document.getElementById("reserveTitle");
+  const reserveText = document.getElementById("reserveText");
+  const reserveClose = document.getElementById("reserveClose");
+  const reserveDone = document.getElementById("reserveDone");
+  const calLink = document.getElementById("calLink");
+
+  /*************************************************************
+   * HELPERS
+   *************************************************************/
+  function setStatus(text, strong = "") {
+    elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  }
+
+  function showToast(msg, type = "ok") {
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 3500);
+  }
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#39;"
+    }[m]));
+  }
+
+  function norm(s) {
+    return String(s ?? "").trim();
+  }
+
+  function badgeClass(av) {
+    const v = String(av || "").toLowerCase();
+    if (v === "available") return "ok";
+    if (v === "reserved") return "warn";
+    if (v === "sold") return "danger";
+    return "";
+  }
+
+  function parsePrice(x) {
+    const s = String(x ?? "").replace(",", ".").trim();
+    if (!s) return "";
+    const n = Number(s);
+    return Number.isFinite(n) ? n : "";
+  }
+
+  function formatPrice(n) {
+    if (n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return `€ ${Number(n).toFixed(0)}`;
+  }
+
+  function isAvailable(b) {
+    return String(b?.availability || "").toLowerCase() === "available";
+  }
+
+  function bookFromForm() {
+    const now = new Date().toISOString();
+    return {
+      id: norm(f.id.value),
+      title: norm(f.title.value),
+      author: norm(f.author.value),
+      programme: norm(f.programme.value),
+      subject: norm(f.subject.value),
+      year: norm(f.year.value),
+      condition: norm(f.condition.value),
+      newPrice: parsePrice(f.newPrice.value),
+      loopPrice: parsePrice(f.loopPrice.value),
+      availability: norm(f.availability.value) || "Available",
+      img: norm(f.img.value),
+      updatedAt: now,
     };
+  }
 
-    const btnSave = document.getElementById("btnSave");
-    const btnClear = document.getElementById("btnClear");
-    const btnDelete = document.getElementById("btnDelete");
-    const toast = document.getElementById("toast");
+  function fillForm(b) {
+    editingId = b?.id || null;
+    f.id.value = b?.id || "";
+    f.title.value = b?.title || "";
+    f.author.value = b?.author || "";
+    f.programme.value = b?.programme || "";
+    f.subject.value = b?.subject || "";
+    f.year.value = b?.year || "";
+    f.condition.value = b?.condition || "";
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
+    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
+    f.availability.value = b?.availability || "Available";
+    f.img.value = b?.img || "";
 
-    const reserveOverlay = document.getElementById("reserveOverlay");
-    const reserveTitle = document.getElementById("reserveTitle");
-    const reserveText = document.getElementById("reserveText");
-    const reserveClose = document.getElementById("reserveClose");
-    const reserveDone = document.getElementById("reserveDone");
-    const calLink = document.getElementById("calLink");
+    f.id.disabled = !!editingId;
+    btnDelete.classList.toggle("hidden", !editingId);
+  }
 
-    /*************************************************************
-     * HELPERS
-     *************************************************************/
-    function setStatus(text, strong = "") {
-      elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  function clearForm() {
+    editingId = null;
+    f.id.disabled = false;
+    form.reset();
+    f.availability.value = "Available";
+    btnDelete.classList.add("hidden");
+  }
+
+  function closeReserveModal() {
+    reserveOverlay.classList.remove("show");
+    reservingId = null;
+  }
+
+  /*************************************************************
+   * API CALLS (Apps Script)
+   *************************************************************/
+  async function apiGetAll() {
+    const r = await fetch(API_URL, {
+      method: "GET"
+    });
+
+    if (!r.ok) {
+      throw new Error(`GET failed: ${r.status}`);
     }
 
-    function showToast(msg, type = "ok") {
-      toast.className = `toast ${type}`;
-      toast.textContent = msg;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 3500);
+    const data = await r.json();
+
+    if (!data.ok) {
+      throw new Error(data.error || "Unknown GET error");
     }
 
-    function esc(s) {
-      return String(s ?? "").replace(/[&<>"']/g, m => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#39;"
-      }[m]));
+    return (data.books || []).map(x => ({
+      ...x,
+      newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
+      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
+    }));
+  }
+
+  async function apiAddBook(book) {
+    const r = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "add",
+        book
+      })
+    });
+
+    if (!r.ok) {
+      throw new Error(`POST failed: ${r.status}`);
     }
 
-    function norm(s) {
-      return String(s ?? "").trim();
+    const data = await r.json();
+    if (!data.ok) {
+      throw new Error(data.error || "Add failed");
     }
 
-    function badgeClass(av) {
-      const v = String(av || "").toLowerCase();
-      if (v === "available") return "ok";
-      if (v === "reserved") return "warn";
-      if (v === "sold") return "danger";
-      return "";
+    return data;
+  }
+
+  async function apiUpdateBook(book) {
+    const r = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "update",
+        book
+      })
+    });
+
+    if (!r.ok) {
+      throw new Error(`POST failed: ${r.status}`);
     }
 
-    function parsePrice(x) {
-      const s = String(x ?? "").replace(",", ".").trim();
-      if (!s) return "";
-      const n = Number(s);
-      return Number.isFinite(n) ? n : "";
+    const data = await r.json();
+    if (!data.ok) {
+      throw new Error(data.error || "Update failed");
     }
 
-    function formatPrice(n) {
-      if (n === "" || n == null || !Number.isFinite(Number(n))) return "";
-      return `€ ${Number(n).toFixed(0)}`;
+    return data;
+  }
+
+  async function apiDeleteById(idVal) {
+    const r = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "delete",
+        id: idVal
+      })
+    });
+
+    if (!r.ok) {
+      throw new Error(`POST failed: ${r.status}`);
     }
 
-    function isAvailable(b) {
-      return String(b?.availability || "").toLowerCase() === "available";
+    const data = await r.json();
+    if (!data.ok) {
+      throw new Error(data.error || "Delete failed");
     }
 
-    function bookFromForm() {
-      const now = new Date().toISOString();
-      return {
-        id: norm(f.id.value),
-        title: norm(f.title.value),
-        author: norm(f.author.value),
-        programme: norm(f.programme.value),
-        subject: norm(f.subject.value),
-        year: norm(f.year.value),
-        condition: norm(f.condition.value),
-        newPrice: parsePrice(f.newPrice.value),
-        loopPrice: parsePrice(f.loopPrice.value),
-        availability: norm(f.availability.value) || "Available",
-        img: norm(f.img.value),
-        updatedAt: now,
-      };
+    return data;
+  }
+
+  async function apiSetAvailability(idVal) {
+    const r = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "reserve",
+        id: idVal
+      })
+    });
+
+    if (!r.ok) {
+      throw new Error(`POST failed: ${r.status}`);
     }
 
-    function fillForm(b) {
-      editingId = b?.id || null;
-      f.id.value = b?.id || "";
-      f.title.value = b?.title || "";
-      f.author.value = b?.author || "";
-      f.programme.value = b?.programme || "";
-      f.subject.value = b?.subject || "";
-      f.year.value = b?.year || "";
-      f.condition.value = b?.condition || "";
-      f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
-      f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
-      f.availability.value = b?.availability || "Available";
-      f.img.value = b?.img || "";
-
-      f.id.disabled = !!editingId;
-      btnDelete.classList.toggle("hidden", !editingId);
+    const data = await r.json();
+    if (!data.ok) {
+      throw new Error(data.error || "Reserve failed");
     }
 
-    function clearForm() {
-      editingId = null;
-      f.id.disabled = false;
-      form.reset();
-      f.availability.value = "Available";
-      btnDelete.classList.add("hidden");
-    }
+    return data;
+  }
 
-    function closeReserveModal() {
-      reserveOverlay.classList.remove("show");
-      reservingId = null;
-    }
+  /*************************************************************
+   * FILTERS
+   *************************************************************/
+  function applyFilters(list) {
+    const q = norm(elQ.value).toLowerCase();
 
-    /*************************************************************
-     * API
-     *************************************************************/
-    async function apiGetAll() {
-      const r = await fetch(API, { method: "GET", mode: "cors" });
-      if (!r.ok) throw new Error(`GET failed: ${r.status}`);
-      const data = await r.json();
-      if (!Array.isArray(data)) return [];
-      return data.map(x => ({
-        ...x,
-        newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
-        loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
-      }));
-    }
+    return list.filter(b => {
+      if (!q) return true;
+      const hay = `${b.title || ""} ${b.author || ""} ${b.subject || ""} ${b.programme || ""} ${b.id || ""}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }
 
-    async function apiUpsert(book) {
-      const id = encodeURIComponent(book.id);
-      const patchUrl = `${API}/id/${id}`;
+  /*************************************************************
+   * RENDER
+   *************************************************************/
+  function render() {
+    const list = applyFilters(books);
+    elMeta.textContent = `${list.length} / ${books.length} books`;
 
-      const r1 = await fetch(patchUrl, {
-        method: "PATCH",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(book)
-      });
+    elGrid.innerHTML = list.map(b => {
+      const av = b.availability || "Available";
+      const bc = badgeClass(av);
+      const img = norm(b.img);
+      const hasImg = !!img;
 
-      if (r1.ok) {
-        const d1 = await r1.json().catch(() => []);
-        if (Array.isArray(d1) && d1.length > 0) return { mode: "patch", updated: true };
-      } else {
-        const t = await r1.text().catch(() => "");
-        throw new Error(`PATCH failed (${r1.status}). ${t}`);
-      }
+      const np = formatPrice(b.newPrice);
+      const lp = formatPrice(b.loopPrice);
+      const reserveDisabled = !isAvailable(b);
 
-      const r2 = await fetch(API, {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(book)
-      });
+      return `
+        <div class="cardRow">
+          <div class="infoCol">
+            <div class="badge ${bc}">${esc(av)}</div>
 
-      if (!r2.ok) {
-        const t = await r2.text().catch(() => "");
-        throw new Error(`POST failed (${r2.status}). ${t}`);
-      }
+            <div class="title">${esc(b.title || "(Untitled)")}</div>
+            <div class="muted">${esc(b.author || "")}</div>
 
-      await r2.json().catch(() => null);
-      return { mode: "post", inserted: true };
-    }
-
-    async function apiDeleteById(idVal) {
-      const url = `${API}/id/${encodeURIComponent(idVal)}`;
-      const r = await fetch(url, { method: "DELETE", mode: "cors" });
-      if (!r.ok) {
-        const t = await r.text().catch(() => "");
-        throw new Error(`DELETE failed (${r.status}). ${t}`);
-      }
-      await r.json().catch(() => null);
-      return true;
-    }
-
-    async function apiSetAvailability(idVal, availability) {
-      const now = new Date().toISOString();
-      const url = `${API}/id/${encodeURIComponent(idVal)}`;
-      const r = await fetch(url, {
-        method: "PATCH",
-        mode: "cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ availability, updatedAt: now })
-      });
-
-      if (!r.ok) {
-        const t = await r.text().catch(() => "");
-        throw new Error(`Reserve PATCH failed (${r.status}). ${t}`);
-      }
-
-      const d = await r.json().catch(() => []);
-      if (Array.isArray(d) && d.length === 0) {
-        throw new Error("Reserve failed: book not found by id (check the 'id' column).");
-      }
-      return true;
-    }
-
-    /*************************************************************
-     * FILTERS
-     *************************************************************/
-    function applyFilters(list) {
-      const q = norm(elQ.value).toLowerCase();
-
-      return list.filter(b => {
-        if (!q) return true;
-        const hay = `${b.title || ""} ${b.author || ""} ${b.subject || ""} ${b.programme || ""} ${b.id || ""}`.toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    /*************************************************************
-     * RENDER
-     *************************************************************/
-    function render() {
-      const list = applyFilters(books);
-      elMeta.textContent = `${list.length} / ${books.length} books`;
-
-      elGrid.innerHTML = list.map(b => {
-        const av = b.availability || "Available";
-        const bc = badgeClass(av);
-        const img = norm(b.img);
-        const hasImg = !!img;
-
-        const np = formatPrice(b.newPrice);
-        const lp = formatPrice(b.loopPrice);
-        const reserveDisabled = !isAvailable(b);
-
-        return `
-          <div class="cardRow">
-            <div class="infoCol">
-              <div class="badge ${bc}">${esc(av)}</div>
-
-              <div class="title">${esc(b.title || "(Untitled)")}</div>
-              <div class="muted">${esc(b.author || "")}</div>
-
-              <div class="kv">
-                <div>Programme</div><div><b>${esc(b.programme || "-")}</b></div>
-                <div>Subject</div><div><b>${esc(b.subject || "-")}</b></div>
-                <div>Year</div><div><b>${esc(b.year || "-")}</b></div>
-                <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
-              </div>
-
-              <div class="cardActions">
-                <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
-                  ${reserveDisabled ? "Not available" : "Reserve"}
-                </button>
-
-                ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
-                ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
-                <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
-              </div>
-
-              <div class="muted" style="margin-top:4px;font-size:12px">
-                ID: <b>${esc(b.id || "-")}</b>
-              </div>
+            <div class="kv">
+              <div>Programme</div><div><b>${esc(b.programme || "-")}</b></div>
+              <div>Subject</div><div><b>${esc(b.subject || "-")}</b></div>
+              <div>Year</div><div><b>${esc(b.year || "-")}</b></div>
+              <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
             </div>
 
-            <div class="imgCol">
-              ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title || "")}" />` : `<div class="muted">No image</div>`}
+            <div class="cardActions">
+              <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
+                ${reserveDisabled ? "Not available" : "Reserve"}
+              </button>
+
+              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
+            </div>
+
+            <div class="muted" style="margin-top:4px;font-size:12px">
+              ID: <b>${esc(b.id || "-")}</b>
             </div>
           </div>
-        `;
-      }).join("");
 
-      elGrid.querySelectorAll("[data-copy]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-copy");
-          navigator.clipboard?.writeText(id).catch(() => {});
-          showToast(`Copied ID: ${id}`, "ok");
-        });
+          <div class="imgCol">
+            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title || "")}" />` : `<div class="muted">No image</div>`}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    elGrid.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-copy");
+        navigator.clipboard?.writeText(id).catch(() => {});
+        showToast(`Copied ID: ${id}`, "ok");
       });
+    });
 
-      elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.getAttribute("data-reserve");
+    elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-reserve");
+        const b = books.find(x => String(x.id) === String(id));
+        if (!b) return;
+
+        if (!isAvailable(b)) {
+          showToast("This book is no longer available.", "danger");
+          await refresh();
+          return;
+        }
+
+        reservingId = id;
+        reserveTitle.textContent = `Reserve: ${b.title || id}`;
+        reserveText.textContent =
+          "1) Book a pickup slot on Google Calendar.\n" +
+          "2) Come back here and click 'I booked it'.\n" +
+          "3) Only then will the book be marked as 'Reserved'.";
+        calLink.href = GOOGLE_CAL_BOOKING_URL;
+
+        reserveOverlay.classList.add("show");
+      });
+    });
+
+    if (admin) {
+      elGrid.querySelectorAll("[data-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-edit");
           const b = books.find(x => String(x.id) === String(id));
           if (!b) return;
-
-          if (!isAvailable(b)) {
-            showToast("This book is no longer available.", "danger");
-            await refresh();
-            return;
-          }
-
-          reservingId = id;
-          reserveTitle.textContent = `Reserve: ${b.title || id}`;
-          reserveText.textContent =
-            "1) Book a pickup slot on Google Calendar.\n" +
-            "2) Come back here and click 'I booked it'.\n" +
-            "3) Only then will the book be marked as 'Reserved'.";
-          calLink.href = GOOGLE_CAL_BOOKING_URL;
-
-          reserveOverlay.classList.add("show");
+          adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          fillForm(b);
+          showToast("Edit mode enabled.", "ok");
         });
       });
 
-      if (admin) {
-        elGrid.querySelectorAll("[data-edit]").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-edit");
-            const b = books.find(x => String(x.id) === String(id));
-            if (!b) return;
-            adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-            fillForm(b);
-            showToast("Edit mode enabled.", "ok");
-          });
-        });
+      elGrid.querySelectorAll("[data-del]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-del");
+          if (!confirm(`Delete the book with ID "${id}"?`)) return;
 
-        elGrid.querySelectorAll("[data-del]").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            const id = btn.getAttribute("data-del");
-            if (!confirm(`Delete the book with ID "${id}"?`)) return;
-            try {
-              setStatus("Deleting…", "working");
-              await apiDeleteById(id);
-              await refresh();
-              showToast("Book deleted.", "ok");
-            } catch (e) {
-              console.error(e);
-              showToast(`Delete error: ${e.message}`, "danger");
-              setStatus("Error", "error");
-            }
-          });
+          try {
+            setStatus("Deleting…", "working");
+            await apiDeleteById(id);
+            await refresh();
+            showToast("Book deleted.", "ok");
+          } catch (e) {
+            console.error(e);
+            showToast(`Delete error: ${e.message}`, "danger");
+            setStatus("Error", "error");
+          }
         });
-      }
+      });
     }
+  }
 
-    /*************************************************************
-     * FLOW
-     *************************************************************/
-    async function refresh() {
-      setStatus("Loading from Google Sheet…", "loading");
-      try {
-        const data = await apiGetAll();
+  /*************************************************************
+   * FLOW
+   *************************************************************/
+  async function refresh() {
+    setStatus("Loading from Google Sheet…", "loading");
 
-        const rank = (x) => {
-          const v = String(x.availability || "").toLowerCase();
-          if (v === "available") return 0;
-          if (v === "reserved") return 1;
-          if (v === "sold") return 2;
-          return 3;
-        };
+    try {
+      const data = await apiGetAll();
 
-        books = data.sort((a, b) => {
-          const d = rank(a) - rank(b);
-          if (d !== 0) return d;
-          return String(a.title || "").localeCompare(String(b.title || ""), "en");
-        });
+      const rank = (x) => {
+        const v = String(x.availability || "").toLowerCase();
+        if (v === "available") return 0;
+        if (v === "reserved") return 1;
+        if (v === "sold") return 2;
+        return 3;
+      };
 
-        setStatus("OK", "ready");
-        render();
-      } catch (e) {
-        console.error(e);
-        setStatus("Error loading data (check API/permissions).", "error");
-        showToast(`GET error: ${e.message}`, "danger");
-      }
-    }
+      books = data.sort((a, b) => {
+        const d = rank(a) - rank(b);
+        if (d !== 0) return d;
+        return String(a.title || "").localeCompare(String(b.title || ""), "en");
+      });
 
-    /*************************************************************
-     * EVENTS
-     *************************************************************/
-    btnRefresh.addEventListener("click", refresh);
-    elQ.addEventListener("input", render);
-
-    btnAdmin.addEventListener("click", () => {
-      if (admin) {
-        adminPanel.classList.toggle("hidden");
-        render();
-        return;
-      }
-
-      const pwd = prompt("Admin password:");
-      if (pwd == null) return;
-      if (pwd !== ADMIN_PASSWORD) {
-        alert("Wrong password.");
-        return;
-      }
-
-      admin = true;
-      adminPanel.classList.remove("hidden");
+      setStatus("OK", "ready");
       render();
-      showToast("Admin mode enabled.", "ok");
-    });
+    } catch (e) {
+      console.error(e);
+      setStatus("Error loading data (check API/permissions).", "error");
+      showToast(`GET error: ${e.message}`, "danger");
+    }
+  }
 
-    btnLogout.addEventListener("click", () => {
-      admin = false;
-      adminPanel.classList.add("hidden");
+  /*************************************************************
+   * EVENTS
+   *************************************************************/
+  btnRefresh.addEventListener("click", refresh);
+  elQ.addEventListener("input", render);
+
+  btnAdmin.addEventListener("click", () => {
+    if (admin) {
+      adminPanel.classList.toggle("hidden");
+      render();
+      return;
+    }
+
+    const pwd = prompt("Admin password:");
+    if (pwd == null) return;
+    if (pwd !== ADMIN_PASSWORD) {
+      alert("Wrong password.");
+      return;
+    }
+
+    admin = true;
+    adminPanel.classList.remove("hidden");
+    render();
+    showToast("Admin mode enabled.", "ok");
+  });
+
+  btnLogout.addEventListener("click", () => {
+    admin = false;
+    adminPanel.classList.add("hidden");
+    clearForm();
+    render();
+    showToast("Logged out.", "ok");
+  });
+
+  btnClear.addEventListener("click", clearForm);
+
+  btnDelete.addEventListener("click", async () => {
+    if (!editingId) return;
+    if (!confirm(`Delete the book with ID "${editingId}"?`)) return;
+
+    try {
+      setStatus("Deleting…", "working");
+      await apiDeleteById(editingId);
       clearForm();
-      render();
-      showToast("Logged out.", "ok");
-    });
+      await refresh();
+      showToast("Book deleted.", "ok");
+    } catch (e) {
+      console.error(e);
+      showToast(`Delete error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
 
-    btnClear.addEventListener("click", clearForm);
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
 
-    btnDelete.addEventListener("click", async () => {
-      if (!editingId) return;
-      if (!confirm(`Delete the book with ID "${editingId}"?`)) return;
+    if (!admin) {
+      alert("You must be logged in as admin.");
+      return;
+    }
 
-      try {
-        setStatus("Deleting…", "working");
-        await apiDeleteById(editingId);
-        clearForm();
-        await refresh();
-        showToast("Book deleted.", "ok");
-      } catch (e) {
-        console.error(e);
-        showToast(`Delete error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
-    });
+    const book = bookFromForm();
+    if (!book.id || !book.title) {
+      showToast("ID and Title are required.", "danger");
+      return;
+    }
 
-    form.addEventListener("submit", async (ev) => {
-      ev.preventDefault();
+    btnSave.disabled = true;
+    setStatus("Saving to Google Sheet…", "saving");
 
-      if (!admin) {
-        alert("You must be logged in as admin.");
-        return;
-      }
-
-      const book = bookFromForm();
-      if (!book.id || !book.title) {
-        showToast("ID and Title are required.", "danger");
-        return;
+    try {
+      if (editingId) {
+        await apiUpdateBook(book);
+        showToast("Book updated.", "ok");
+      } else {
+        await apiAddBook(book);
+        showToast("Book added.", "ok");
       }
 
-      btnSave.disabled = true;
-      setStatus("Saving to Google Sheet…", "saving");
+      clearForm();
+      await refresh();
+      setStatus("OK", "ready");
+    } catch (e) {
+      console.error(e);
+      showToast(`Save error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    } finally {
+      btnSave.disabled = false;
+    }
+  });
 
-      try {
-        const res = await apiUpsert(book);
-        await refresh();
-        showToast(res.mode === "post" ? "Book added (POST)." : "Book updated (PATCH).", "ok");
-        clearForm();
-        setStatus("OK", "ready");
-      } catch (e) {
-        console.error(e);
-        showToast(
-          `Save error: ${e.message}\n` +
-          `Check: (1) Sheet shared as Editor, (2) TAB "${TAB_NAME}", (3) "id" column exists.`,
-          "danger"
-        );
-        setStatus("Error", "error");
-      } finally {
-        btnSave.disabled = false;
-      }
-    });
+  reserveClose.addEventListener("click", closeReserveModal);
 
-    reserveClose.addEventListener("click", closeReserveModal);
+  reserveOverlay.addEventListener("click", (e) => {
+    if (e.target === reserveOverlay) closeReserveModal();
+  });
 
-    reserveOverlay.addEventListener("click", (e) => {
-      if (e.target === reserveOverlay) closeReserveModal();
-    });
+  reserveDone.addEventListener("click", async () => {
+    if (!reservingId) return;
 
-    reserveDone.addEventListener("click", async () => {
-      if (!reservingId) return;
+    const b = books.find(x => String(x.id) === String(reservingId));
+    if (!b) {
+      closeReserveModal();
+      showToast("Book not found. Please refresh and try again.", "danger");
+      return;
+    }
 
-      const b = books.find(x => String(x.id) === String(reservingId));
-      if (!b) {
-        closeReserveModal();
-        showToast("Book not found. Please refresh and try again.", "danger");
-        return;
-      }
+    if (!isAvailable(b)) {
+      closeReserveModal();
+      showToast("This book is no longer available.", "danger");
+      await refresh();
+      return;
+    }
 
-      if (!isAvailable(b)) {
-        closeReserveModal();
-        showToast("This book is no longer available.", "danger");
-        await refresh();
-        return;
-      }
+    try {
+      setStatus("Reserving…", "working");
+      await apiSetAvailability(reservingId);
+      await refresh();
+      closeReserveModal();
+      showToast("Great. The book is now marked as Reserved.", "ok");
+      setStatus("OK", "ready");
+    } catch (e) {
+      console.error(e);
+      showToast(`Reservation error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
 
-      try {
-        setStatus("Reserving…", "working");
-        await apiSetAvailability(reservingId, "Reserved");
-        await refresh();
-        closeReserveModal();
-        showToast("Great. The book is now marked as Reserved.", "ok");
-        setStatus("OK", "ready");
-      } catch (e) {
-        console.error(e);
-        showToast(`Reservation error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
-    });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && reserveOverlay.classList.contains("show")) {
+      closeReserveModal();
+    }
+  });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && reserveOverlay.classList.contains("show")) {
-        closeReserveModal();
-      }
-    });
-
-    /*************************************************************
-     * START
-     *************************************************************/
-    refresh();
-  </script>
+  /*************************************************************
+   * START
+   *************************************************************/
+  refresh();
+</script>
 </body>
 </html>
