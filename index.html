@@ -6,107 +6,53 @@
   <title>IB BookLoop</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --panel:#0f1a2e;
-      --text:#eaf0ff;
-      --muted:#a8b4d6;
-      --brand:#4f7cff;
-      --brand2:#2ed3b7;
-      --danger:#ff4d4d;
-      --ok:#2ed3b7;
-      --warn:#ffcc66;
+      --bg:#0b1220; --panel:#0f1a2e; --panel2:#12213a;
+      --text:#eaf0ff; --muted:#a8b4d6;
+      --brand:#4f7cff; --brand2:#2ed3b7;
+      --danger:#ff4d4d; --ok:#2ed3b7; --warn:#ffcc66;
       --border: rgba(255,255,255,.10);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
     }
-
-    * { box-sizing: border-box; }
-
+    *{box-sizing:border-box}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background: radial-gradient(1200px 800px at 20% 0%, #14254a 0%, var(--bg) 55%);
       color:var(--text);
     }
-
-    a{ color:inherit; }
-
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:20px;
-    }
-
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
     header{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 16px;
-      background: rgba(15,26,46,.75);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 10px;
-      z-index: 10;
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      padding:14px 16px; background: rgba(15,26,46,.75); border:1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(10px);
+      position: sticky; top: 10px; z-index: 10;
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
+    .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:42px;
-      height:42px;
-      border-radius:12px;
+      width:42px;height:42px;border-radius:12px;
       background: linear-gradient(135deg,var(--brand),var(--brand2));
-      display:grid;
-      place-items:center;
-      font-weight:800;
+      display:grid;place-items:center;font-weight:800;
       box-shadow: 0 8px 20px rgba(79,124,255,.25);
     }
-
-    h1{
-      font-size:18px;
-      margin:0;
-    }
-
-    .sub{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:2px;
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
+    h1{font-size:18px;margin:0}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pill{
       border:1px solid var(--border);
       background: rgba(255,255,255,.06);
-      padding:10px 12px;
-      border-radius:999px;
+      padding:10px 12px;border-radius:999px;
       color:var(--text);
       outline:none;
     }
-
-    .pill::placeholder{
-      color: rgba(234,240,255,.55);
-    }
-
+    .pill::placeholder{color: rgba(234,240,255,.55)}
+    select.pill{cursor:pointer}
     button, .linkButton{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
       color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
+      padding:10px 12px;border-radius:12px;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease, opacity .15s ease;
       text-decoration:none;
@@ -115,35 +61,25 @@
       justify-content:center;
       font: inherit;
     }
-
-    button:hover, .linkButton:hover{
-      background: rgba(255,255,255,.11);
-    }
-
-    button:active, .linkButton:active{
-      transform: translateY(1px);
-    }
-
-    button:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-    }
-
+    button:hover, .linkButton:hover{background: rgba(255,255,255,.11)}
+    button:active, .linkButton:active{transform: translateY(1px)}
+    button:disabled{opacity:.45;cursor:not-allowed}
     .primary{
       background: linear-gradient(135deg,var(--brand),#6a8bff);
       border-color: rgba(255,255,255,.15);
     }
-
     .danger{
       background: rgba(255,77,77,.12);
       border-color: rgba(255,77,77,.35);
     }
-
     .ok{
       background: rgba(46,211,183,.12);
       border-color: rgba(46,211,183,.35);
     }
-
+    .warn{
+      background: rgba(255,204,102,.12);
+      border-color: rgba(255,204,102,.35);
+    }
     .panel{
       margin-top:16px;
       background: rgba(15,26,46,.75);
@@ -153,54 +89,33 @@
       backdrop-filter: blur(10px);
       overflow:hidden;
     }
-
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
-
-    .panelHead .meta{
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .panelBody{
-      padding:16px;
-    }
-
-    .status{
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .status b{
-      color:var(--text);
-    }
-
+    .panelHead .meta{color:var(--muted);font-size:12px}
+    .panelBody{padding:16px}
+    .status{font-size:13px;color:var(--muted)}
+    .status b{color:var(--text)}
     .grid{
-      display:grid;
-      gap:12px;
+      display:grid;gap:12px;
       grid-template-columns: 1fr;
     }
 
+    /* Card layout: fixed left info + image area */
     .cardRow{
       display:grid;
       grid-template-columns: 340px 1fr;
       gap:0;
-      min-height:280px;
+      min-height: 280px;
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius: 18px;
       overflow:hidden;
       background: rgba(255,255,255,.04);
       box-shadow: var(--shadow);
     }
-
     .infoCol{
       padding:14px;
       border-right:1px solid var(--border);
@@ -209,7 +124,6 @@
       flex-direction:column;
       gap:10px;
     }
-
     .imgCol{
       background: rgba(0,0,0,.12);
       display:flex;
@@ -218,125 +132,48 @@
       overflow:hidden;
       padding:10px;
     }
-
     .imgCol img{
       width:100%;
       height:100%;
-      max-height:260px;
-      object-fit:contain;
+      max-height: 260px;
+      object-fit: contain;
       display:block;
-      border-radius:12px;
+      border-radius: 12px;
       background: rgba(255,255,255,.03);
     }
-
     @media (max-width: 860px){
-      .cardRow{
-        grid-template-columns: 1fr;
-        min-height: unset;
-      }
-      .infoCol{
-        border-right:0;
-        border-bottom:1px solid var(--border);
-      }
-      .imgCol img{
-        max-height:240px;
-      }
+      .cardRow{ grid-template-columns: 1fr; min-height: unset; }
+      .infoCol{ border-right:0; border-bottom:1px solid var(--border); }
+      .imgCol img{ max-height: 240px; }
     }
 
     .badge{
       align-self:flex-start;
       font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
+      padding:6px 10px;border-radius:999px;
       border:1px solid var(--border);
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
     }
+    .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
+    .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
+    .badge.danger{background: rgba(255,77,77,.18); border-color: rgba(255,77,77,.35)}
 
-    .badge.ok{
-      background: rgba(46,211,183,.18);
-      border-color: rgba(46,211,183,.35);
-    }
-
-    .badge.warn{
-      background: rgba(255,204,102,.18);
-      border-color: rgba(255,204,102,.35);
-    }
-
-    .badge.danger{
-      background: rgba(255,77,77,.18);
-      border-color: rgba(255,77,77,.35);
-    }
-
-    .title{
-      font-weight:800;
-      line-height:1.2;
-      font-size:16px;
-    }
-
-    .muted{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .kv{
-      display:grid;
-      grid-template-columns: 90px 1fr;
-      gap:6px 10px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .kv b{
-      color:var(--text);
-      font-weight:700;
-    }
-
-    .cardActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:auto;
-    }
-
-    .tiny{
-      padding:8px 10px;
-      border-radius:10px;
-      font-size:13px;
-    }
+    .title{font-weight:800;line-height:1.2;font-size:16px}
+    .muted{color:var(--muted);font-size:13px}
+    .kv{display:grid;grid-template-columns: 90px 1fr;gap:6px 10px;font-size:13px;color:var(--muted)}
+    .kv b{color:var(--text);font-weight:700}
+    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+    .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
 
     .footerNote{
-      margin-top:10px;
-      color:rgba(234,240,255,.55);
-      font-size:12px;
-      line-height:1.35;
+      margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35
     }
+    .hr{height:1px;background:var(--border);margin:14px 0}
+    .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
 
-    .hr{
-      height:1px;
-      background:var(--border);
-      margin:14px 0;
-    }
-
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-
-    @media (max-width: 860px){
-      .twoCol{
-        grid-template-columns: 1fr;
-      }
-    }
-
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:10px 0 6px;
-    }
-
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     input, textarea, select{
       width:100%;
       padding:10px 12px;
@@ -347,22 +184,9 @@
       outline:none;
       font: inherit;
     }
-
-    textarea{
-      min-height:90px;
-      resize:vertical;
-    }
-
-    .hint{
-      font-size:12px;
-      color:rgba(234,240,255,.55);
-      margin-top:6px;
-    }
-
-    .hidden{
-      display:none !important;
-    }
-
+    textarea{min-height:90px;resize:vertical}
+    .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
+    .hidden{display:none !important}
     .toast{
       margin-top:10px;
       padding:10px 12px;
@@ -373,59 +197,37 @@
       font-size:13px;
       white-space: pre-line;
     }
+    .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
+    .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
 
-    .toast.ok{
-      border-color: rgba(46,211,183,.35);
-      background: rgba(46,211,183,.10);
-    }
-
-    .toast.danger{
-      border-color: rgba(255,77,77,.35);
-      background: rgba(255,77,77,.10);
-    }
-
+    /* Modal */
     .modalOverlay{
-      position:fixed;
-      inset:0;
+      position:fixed; inset:0;
       background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:999;
+      z-index: 999;
     }
-
-    .modalOverlay.show{
-      display:flex;
-    }
-
+    .modalOverlay.show{display:flex}
     .modal{
-      width:min(720px, 100%);
+      width: min(720px, 100%);
       background: rgba(15,26,46,.92);
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius: 18px;
       box-shadow: var(--shadow);
       overflow:hidden;
       backdrop-filter: blur(12px);
     }
-
     .modalHead{
       padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
-
-    .modalBody{
-      padding:16px;
-    }
-
-    .modalTitle{
-      font-weight:800;
-    }
+    .modalBody{padding:16px}
+    .modalTitle{font-weight:800}
   </style>
 </head>
 
@@ -436,7 +238,7 @@
         <div class="logo">IB</div>
         <div>
           <h1>IB BookLoop</h1>
-          <div class="sub">Shared book catalog (Google Sheets)</div>
+          <div class="sub">Shared book catalog (Google Sheets via Sheet.best)</div>
         </div>
       </div>
 
@@ -455,7 +257,7 @@
       <div class="panelBody">
         <div id="grid" class="grid"></div>
         <div class="footerNote">
-          *Data comes from Google Sheets through Google Apps Script. If you do not see updates, press “Refresh” or reload the page.
+          *Data comes from Google Sheets through Sheet.best. If you do not see updates, press “Refresh” or reload the page.
         </div>
       </div>
     </section>
@@ -533,8 +335,8 @@
             <div class="hr"></div>
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
               <li>The catalog is shared: every change writes to Google Sheets.</li>
-              <li>“Reserve” opens the Google Calendar flow, but the book becomes <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
-              <li>For real security you would need a backend; this is a simple solution for a small group.</li>
+              <li>Reserve updates availability to <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
+              <li>This is a simple solution for a small group; it is not a secure backend.</li>
             </ul>
           </div>
         </div>
@@ -542,6 +344,7 @@
     </section>
   </div>
 
+  <!-- Reserve modal -->
   <div id="reserveOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-label="Reserve book">
     <div class="modal">
       <div class="modalHead">
@@ -564,559 +367,544 @@
     </div>
   </div>
 
-  <script>
-    /*************************************************************
-     * CONFIG
-     *************************************************************/
-    const API_URL = "https://script.google.com/macros/s/AKfycbxOOJkO7alBT-BeyhWboxYVwWk71z0PN11cY1AZe65WimhepPLJlRKfXaGKhcfVbs4c/exec";
-    const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
-    const ADMIN_PASSWORD = "mazz";
+<script>
+  /*************************************************************
+   * CONFIG (Sheet.best + Calendar)
+   *************************************************************/
+  // Put your Sheet.best sheet URL here (the one you get after subscribing).
+  // Example: https://api.sheetbest.com/sheets/<YOUR_UUID>
+  const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/YOUR_SHEETBEST_UUID_HERE";
 
-    /*************************************************************
-     * STATE
-     *************************************************************/
-    let books = [];
-    let admin = false;
-    let editingId = null;
-    let reservingId = null;
+  // If you have a tab, keep it. If your Sheet.best endpoint is not tab-specific, set TAB_NAME = "" and API = SHEETBEST_BASE.
+  const TAB_NAME = "Foglio1";
+  const API = TAB_NAME ? `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}` : SHEETBEST_BASE;
 
-    /*************************************************************
-     * DOM
-     *************************************************************/
-    const elGrid = document.getElementById("grid");
-    const elStatus = document.getElementById("status");
-    const elMeta = document.getElementById("meta");
-    const elQ = document.getElementById("q");
+  const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
 
-    const btnRefresh = document.getElementById("btnRefresh");
-    const btnAdmin = document.getElementById("btnAdmin");
-    const adminPanel = document.getElementById("adminPanel");
-    const btnLogout = document.getElementById("btnLogout");
+  // Client-side only (not real security)
+  const ADMIN_PASSWORD = "mazz";
 
-    const form = document.getElementById("bookForm");
-    const f = {
-      id: document.getElementById("id"),
-      title: document.getElementById("title"),
-      author: document.getElementById("author"),
-      programme: document.getElementById("programme"),
-      subject: document.getElementById("subject"),
-      year: document.getElementById("year"),
-      condition: document.getElementById("condition"),
-      newPrice: document.getElementById("newPrice"),
-      loopPrice: document.getElementById("loopPrice"),
-      availability: document.getElementById("availability"),
-      img: document.getElementById("img"),
+  /*************************************************************
+   * STATE
+   *************************************************************/
+  let books = [];
+  let admin = false;
+  let editingId = null;
+  let reservingId = null;
+
+  /*************************************************************
+   * DOM
+   *************************************************************/
+  const elGrid = document.getElementById("grid");
+  const elStatus = document.getElementById("status");
+  const elMeta = document.getElementById("meta");
+  const elQ = document.getElementById("q");
+
+  const btnRefresh = document.getElementById("btnRefresh");
+  const btnAdmin = document.getElementById("btnAdmin");
+
+  const adminPanel = document.getElementById("adminPanel");
+  const btnLogout = document.getElementById("btnLogout");
+
+  const form = document.getElementById("bookForm");
+  const f = {
+    id: document.getElementById("id"),
+    title: document.getElementById("title"),
+    author: document.getElementById("author"),
+    programme: document.getElementById("programme"),
+    subject: document.getElementById("subject"),
+    year: document.getElementById("year"),
+    condition: document.getElementById("condition"),
+    newPrice: document.getElementById("newPrice"),
+    loopPrice: document.getElementById("loopPrice"),
+    availability: document.getElementById("availability"),
+    img: document.getElementById("img"),
+  };
+
+  const btnSave = document.getElementById("btnSave");
+  const btnClear = document.getElementById("btnClear");
+  const btnDelete = document.getElementById("btnDelete");
+  const toast = document.getElementById("toast");
+
+  const reserveOverlay = document.getElementById("reserveOverlay");
+  const reserveTitle = document.getElementById("reserveTitle");
+  const reserveText = document.getElementById("reserveText");
+  const reserveClose = document.getElementById("reserveClose");
+  const reserveDone = document.getElementById("reserveDone");
+  const calLink = document.getElementById("calLink");
+
+  /*************************************************************
+   * HELPERS
+   *************************************************************/
+  function setStatus(text, strong = "") {
+    elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  }
+
+  function showToast(msg, type="ok") {
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    setTimeout(()=> toast.classList.add("hidden"), 3500);
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+  function norm(s){ return String(s ?? "").trim(); }
+
+  function badgeClass(av){
+    const v = String(av||"").toLowerCase();
+    if(v === "available") return "ok";
+    if(v === "reserved") return "warn";
+    if(v === "sold") return "danger";
+    return "";
+  }
+
+  function parsePrice(x){
+    const s = String(x ?? "").replace(",", ".").trim();
+    if(!s) return "";
+    const n = Number(s);
+    return Number.isFinite(n) ? n : "";
+  }
+
+  function formatPrice(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return `€ ${Number(n).toFixed(0)}`;
+  }
+
+  function isAvailable(b){
+    return String(b?.availability||"").toLowerCase() === "available";
+  }
+
+  function bookFromForm(){
+    const now = new Date().toISOString();
+    return {
+      id: norm(f.id.value),
+      title: norm(f.title.value),
+      author: norm(f.author.value),
+      programme: norm(f.programme.value),
+      subject: norm(f.subject.value),
+      year: norm(f.year.value),
+      condition: norm(f.condition.value),
+      newPrice: parsePrice(f.newPrice.value),
+      loopPrice: parsePrice(f.loopPrice.value),
+      availability: norm(f.availability.value) || "Available",
+      img: norm(f.img.value),
+      updatedAt: now,
     };
+  }
 
-    const btnSave = document.getElementById("btnSave");
-    const btnClear = document.getElementById("btnClear");
-    const btnDelete = document.getElementById("btnDelete");
-    const toast = document.getElementById("toast");
+  function fillForm(b){
+    editingId = b?.id || null;
+    f.id.value = b?.id || "";
+    f.title.value = b?.title || "";
+    f.author.value = b?.author || "";
+    f.programme.value = b?.programme || "";
+    f.subject.value = b?.subject || "";
+    f.year.value = b?.year || "";
+    f.condition.value = b?.condition || "";
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
+    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
+    f.availability.value = b?.availability || "Available";
+    f.img.value = b?.img || "";
 
-    const reserveOverlay = document.getElementById("reserveOverlay");
-    const reserveTitle = document.getElementById("reserveTitle");
-    const reserveText = document.getElementById("reserveText");
-    const reserveClose = document.getElementById("reserveClose");
-    const reserveDone = document.getElementById("reserveDone");
-    const calLink = document.getElementById("calLink");
+    f.id.disabled = !!editingId;
+    btnDelete.classList.toggle("hidden", !editingId);
+  }
 
-    /*************************************************************
-     * HELPERS
-     *************************************************************/
-    function setStatus(text, strong = "") {
-      elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  function clearForm(){
+    editingId = null;
+    f.id.disabled = false;
+    form.reset();
+    f.availability.value = "Available";
+    btnDelete.classList.add("hidden");
+  }
+
+  function closeReserveModal(){
+    reserveOverlay.classList.remove("show");
+    reservingId = null;
+  }
+
+  /*************************************************************
+   * API CALLS (Sheet.best)
+   *************************************************************/
+  async function apiGetAll(){
+    const r = await fetch(API, { method:"GET", mode:"cors" });
+    if(!r.ok) throw new Error(`GET failed: ${r.status}`);
+    const data = await r.json();
+    if(!Array.isArray(data)) return [];
+    return data.map(x => ({
+      ...x,
+      newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
+      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
+    }));
+  }
+
+  // Upsert: PATCH /id/<id> if exists, else POST
+  async function apiUpsert(book){
+    const id = encodeURIComponent(book.id);
+    const patchUrl = `${API}/id/${id}`;
+
+    const r1 = await fetch(patchUrl, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(book)
+    });
+
+    if(r1.ok){
+      const d1 = await r1.json().catch(()=>[]);
+      if(Array.isArray(d1) && d1.length > 0) return { mode:"patch" };
+      // If empty array (no match), fall through to POST
+    } else {
+      const t = await r1.text().catch(()=> "");
+      throw new Error(`PATCH failed (${r1.status}). ${t}`);
     }
 
-    function showToast(msg, type = "ok") {
-      toast.className = `toast ${type}`;
-      toast.textContent = msg;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 3500);
+    const r2 = await fetch(API, {
+      method:"POST",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(book)
+    });
+
+    if(!r2.ok){
+      const t = await r2.text().catch(()=> "");
+      throw new Error(`POST failed (${r2.status}). ${t}`);
     }
+    await r2.json().catch(()=>null);
+    return { mode:"post" };
+  }
 
-    function esc(s) {
-      return String(s ?? "").replace(/[&<>"']/g, m => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#39;"
-      }[m]));
+  async function apiDeleteById(idVal){
+    const url = `${API}/id/${encodeURIComponent(idVal)}`;
+    const r = await fetch(url, { method:"DELETE", mode:"cors" });
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`DELETE failed (${r.status}). ${t}`);
     }
+    await r.json().catch(()=>null);
+    return true;
+  }
 
-    function norm(s) {
-      return String(s ?? "").trim();
+  // Set availability to Reserved ONLY when user confirms "I booked it"
+  async function apiSetAvailability(idVal, availability){
+    const now = new Date().toISOString();
+    const url = `${API}/id/${encodeURIComponent(idVal)}`;
+    const r = await fetch(url, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ availability, updatedAt: now })
+    });
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`PATCH failed (${r.status}). ${t}`);
     }
-
-    function badgeClass(av) {
-      const v = String(av || "").toLowerCase();
-      if (v === "available") return "ok";
-      if (v === "reserved") return "warn";
-      if (v === "sold") return "danger";
-      return "";
+    const d = await r.json().catch(()=>[]);
+    if(Array.isArray(d) && d.length === 0){
+      throw new Error("Update failed: no row matched this id. Check the 'id' column.");
     }
+    return true;
+  }
 
-    function parsePrice(x) {
-      const s = String(x ?? "").replace(",", ".").trim();
-      if (!s) return "";
-      const n = Number(s);
-      return Number.isFinite(n) ? n : "";
-    }
+  /*************************************************************
+   * FILTERS + RENDER
+   *************************************************************/
+  function applyFilters(list){
+    const q = norm(elQ.value).toLowerCase();
+    return list.filter(b=>{
+      if(!q) return true;
+      const hay = `${b.title||""} ${b.author||""} ${b.subject||""} ${b.programme||""} ${b.id||""}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }
 
-    function formatPrice(n) {
-      if (n === "" || n == null || !Number.isFinite(Number(n))) return "";
-      return `€ ${Number(n).toFixed(0)}`;
-    }
+  function render(){
+    const list = applyFilters(books);
+    elMeta.textContent = `${list.length} / ${books.length} books`;
 
-    function isAvailable(b) {
-      return String(b?.availability || "").toLowerCase() === "available";
-    }
+    elGrid.innerHTML = list.map(b=>{
+      const av = b.availability || "Available";
+      const bc = badgeClass(av);
+      const img = norm(b.img);
+      const hasImg = !!img;
 
-    function bookFromForm() {
-      const now = new Date().toISOString();
-      return {
-        id: norm(f.id.value),
-        title: norm(f.title.value),
-        author: norm(f.author.value),
-        programme: norm(f.programme.value),
-        subject: norm(f.subject.value),
-        year: norm(f.year.value),
-        condition: norm(f.condition.value),
-        newPrice: parsePrice(f.newPrice.value),
-        loopPrice: parsePrice(f.loopPrice.value),
-        availability: norm(f.availability.value) || "Available",
-        img: norm(f.img.value),
-        updatedAt: now,
-      };
-    }
+      const np = formatPrice(b.newPrice);
+      const lp = formatPrice(b.loopPrice);
 
-    function fillForm(b) {
-      editingId = b?.id || null;
-      f.id.value = b?.id || "";
-      f.title.value = b?.title || "";
-      f.author.value = b?.author || "";
-      f.programme.value = b?.programme || "";
-      f.subject.value = b?.subject || "";
-      f.year.value = b?.year || "";
-      f.condition.value = b?.condition || "";
-      f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
-      f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
-      f.availability.value = b?.availability || "Available";
-      f.img.value = b?.img || "";
+      const reserveDisabled = !isAvailable(b);
 
-      f.id.disabled = !!editingId;
-      btnDelete.classList.toggle("hidden", !editingId);
-    }
+      return `
+        <div class="cardRow">
+          <div class="infoCol">
+            <div class="badge ${bc}">${esc(av)}</div>
 
-    function clearForm() {
-      editingId = null;
-      f.id.disabled = false;
-      form.reset();
-      f.availability.value = "Available";
-      btnDelete.classList.add("hidden");
-    }
+            <div class="title">${esc(b.title || "(Untitled)")}</div>
+            <div class="muted">${esc(b.author || "")}</div>
 
-    function closeReserveModal() {
-      reserveOverlay.classList.remove("show");
-      reservingId = null;
-    }
-
-    function parseResponseText(text) {
-      try {
-        return JSON.parse(text);
-      } catch {
-        const match = text.match(/\{[\s\S]*\}/);
-        if (match) {
-          try {
-            return JSON.parse(match[0]);
-          } catch {
-            return null;
-          }
-        }
-        return null;
-      }
-    }
-
-    async function postJson(payload) {
-      const r = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-
-      const text = await r.text();
-      const data = parseResponseText(text);
-
-      if (!r.ok) {
-        throw new Error(`HTTP ${r.status}`);
-      }
-
-      if (!data) {
-        throw new Error("Invalid JSON response from Apps Script");
-      }
-
-      if (!data.ok) {
-        throw new Error(data.error || "Unknown API error");
-      }
-
-      return data;
-    }
-
-    /*************************************************************
-     * API CALLS (Apps Script)
-     *************************************************************/
-    async function apiGetAll() {
-      const r = await fetch(API_URL, { method: "GET" });
-      const text = await r.text();
-      const data = parseResponseText(text);
-
-      if (!r.ok) {
-        throw new Error(`GET failed: ${r.status}`);
-      }
-
-      if (!data) {
-        throw new Error("Invalid JSON response from Apps Script");
-      }
-
-      if (!data.ok) {
-        throw new Error(data.error || "Unknown GET error");
-      }
-
-      return (data.books || []).map(x => ({
-        ...x,
-        newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
-        loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
-      }));
-    }
-
-    async function apiAddBook(book) {
-      return await postJson({
-        action: "add",
-        book
-      });
-    }
-
-    async function apiUpdateBook(book) {
-      return await postJson({
-        action: "update",
-        book
-      });
-    }
-
-    async function apiDeleteById(idVal) {
-      return await postJson({
-        action: "delete",
-        id: idVal
-      });
-    }
-
-    async function apiSetAvailability(idVal) {
-      return await postJson({
-        action: "reserve",
-        id: idVal
-      });
-    }
-
-    /*************************************************************
-     * FILTERS
-     *************************************************************/
-    function applyFilters(list) {
-      const q = norm(elQ.value).toLowerCase();
-
-      return list.filter(b => {
-        if (!q) return true;
-        const hay = `${b.title || ""} ${b.author || ""} ${b.subject || ""} ${b.programme || ""} ${b.id || ""}`.toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    /*************************************************************
-     * RENDER
-     *************************************************************/
-    function render() {
-      const list = applyFilters(books);
-      elMeta.textContent = `${list.length} / ${books.length} books`;
-
-      elGrid.innerHTML = list.map(b => {
-        const av = b.availability || "Available";
-        const bc = badgeClass(av);
-        const img = norm(b.img);
-        const hasImg = !!img;
-
-        const np = formatPrice(b.newPrice);
-        const lp = formatPrice(b.loopPrice);
-        const reserveDisabled = !isAvailable(b);
-
-        return `
-          <div class="cardRow">
-            <div class="infoCol">
-              <div class="badge ${bc}">${esc(av)}</div>
-
-              <div class="title">${esc(b.title || "(Untitled)")}</div>
-              <div class="muted">${esc(b.author || "")}</div>
-
-              <div class="kv">
-                <div>Programme</div><div><b>${esc(b.programme || "-")}</b></div>
-                <div>Subject</div><div><b>${esc(b.subject || "-")}</b></div>
-                <div>Year</div><div><b>${esc(b.year || "-")}</b></div>
-                <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
-              </div>
-
-              <div class="cardActions">
-                <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
-                  ${reserveDisabled ? "Not available" : "Reserve"}
-                </button>
-
-                ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
-                ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
-                <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
-              </div>
-
-              <div class="muted" style="margin-top:4px;font-size:12px">
-                ID: <b>${esc(b.id || "-")}</b>
-              </div>
+            <div class="kv">
+              <div>Programme</div><div><b>${esc(b.programme||"-")}</b></div>
+              <div>Subject</div><div><b>${esc(b.subject||"-")}</b></div>
+              <div>Year</div><div><b>${esc(b.year||"-")}</b></div>
+              <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
             </div>
 
-            <div class="imgCol">
-              ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title || "")}" />` : `<div class="muted">No image</div>`}
+            <div class="cardActions">
+              <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
+                ${reserveDisabled ? "Not available" : "Reserve"}
+              </button>
+
+              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
+            </div>
+
+            <div class="muted" style="margin-top:4px;font-size:12px">
+              ID: <b>${esc(b.id||"-")}</b>
             </div>
           </div>
-        `;
-      }).join("");
 
-      elGrid.querySelectorAll("[data-copy]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-copy");
-          navigator.clipboard?.writeText(id).catch(() => {});
-          showToast(`Copied ID: ${id}`, "ok");
-        });
+          <div class="imgCol">
+            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // Copy ID
+    elGrid.querySelectorAll("[data-copy]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-copy");
+        navigator.clipboard?.writeText(id).catch(()=>{});
+        showToast(`Copied ID: ${id}`, "ok");
       });
-
-      elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.getAttribute("data-reserve");
-          const b = books.find(x => String(x.id) === String(id));
-          if (!b) return;
-
-          if (!isAvailable(b)) {
-            showToast("This book is no longer available.", "danger");
-            await refresh();
-            return;
-          }
-
-          reservingId = id;
-          reserveTitle.textContent = `Reserve: ${b.title || id}`;
-          reserveText.textContent =
-            "1) Book a pickup slot on Google Calendar.\n" +
-            "2) Come back here and click 'I booked it'.\n" +
-            "3) Only then will the book be marked as 'Reserved'.";
-          calLink.href = GOOGLE_CAL_BOOKING_URL;
-
-          reserveOverlay.classList.add("show");
-        });
-      });
-
-      if (admin) {
-        elGrid.querySelectorAll("[data-edit]").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-edit");
-            const b = books.find(x => String(x.id) === String(id));
-            if (!b) return;
-            adminPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-            fillForm(b);
-            showToast("Edit mode enabled.", "ok");
-          });
-        });
-
-        elGrid.querySelectorAll("[data-del]").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            const id = btn.getAttribute("data-del");
-            if (!confirm(`Delete the book with ID "${id}"?`)) return;
-
-            try {
-              setStatus("Deleting…", "working");
-              await apiDeleteById(id);
-              await refresh();
-              showToast("Book deleted.", "ok");
-            } catch (e) {
-              console.error(e);
-              showToast(`Delete error: ${e.message}`, "danger");
-              setStatus("Error", "error");
-            }
-          });
-        });
-      }
-    }
-
-    /*************************************************************
-     * FLOW
-     *************************************************************/
-    async function refresh() {
-      setStatus("Loading from Google Sheet…", "loading");
-
-      try {
-        const data = await apiGetAll();
-
-        const rank = (x) => {
-          const v = String(x.availability || "").toLowerCase();
-          if (v === "available") return 0;
-          if (v === "reserved") return 1;
-          if (v === "sold") return 2;
-          return 3;
-        };
-
-        books = data.sort((a, b) => {
-          const d = rank(a) - rank(b);
-          if (d !== 0) return d;
-          return String(a.title || "").localeCompare(String(b.title || ""), "en");
-        });
-
-        setStatus("OK", "ready");
-        render();
-      } catch (e) {
-        console.error(e);
-        setStatus("Error loading data (check API/permissions).", "error");
-        showToast(`GET error: ${e.message}`, "danger");
-      }
-    }
-
-    /*************************************************************
-     * EVENTS
-     *************************************************************/
-    btnRefresh.addEventListener("click", refresh);
-    elQ.addEventListener("input", render);
-
-    btnAdmin.addEventListener("click", () => {
-      if (admin) {
-        adminPanel.classList.toggle("hidden");
-        render();
-        return;
-      }
-
-      const pwd = prompt("Admin password:");
-      if (pwd == null) return;
-      if (pwd !== ADMIN_PASSWORD) {
-        alert("Wrong password.");
-        return;
-      }
-
-      admin = true;
-      adminPanel.classList.remove("hidden");
-      render();
-      showToast("Admin mode enabled.", "ok");
     });
 
-    btnLogout.addEventListener("click", () => {
-      admin = false;
-      adminPanel.classList.add("hidden");
-      clearForm();
-      render();
-      showToast("Logged out.", "ok");
-    });
+    // Reserve opens modal, does NOT mark reserved yet
+    elGrid.querySelectorAll("[data-reserve]").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        const id = btn.getAttribute("data-reserve");
+        const b = books.find(x => String(x.id) === String(id));
+        if(!b) return;
 
-    btnClear.addEventListener("click", clearForm);
-
-    btnDelete.addEventListener("click", async () => {
-      if (!editingId) return;
-      if (!confirm(`Delete the book with ID "${editingId}"?`)) return;
-
-      try {
-        setStatus("Deleting…", "working");
-        await apiDeleteById(editingId);
-        clearForm();
-        await refresh();
-        showToast("Book deleted.", "ok");
-      } catch (e) {
-        console.error(e);
-        showToast(`Delete error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
-    });
-
-    form.addEventListener("submit", async (ev) => {
-      ev.preventDefault();
-
-      if (!admin) {
-        alert("You must be logged in as admin.");
-        return;
-      }
-
-      const book = bookFromForm();
-      if (!book.id || !book.title) {
-        showToast("ID and Title are required.", "danger");
-        return;
-      }
-
-      btnSave.disabled = true;
-      setStatus("Saving to Google Sheet…", "saving");
-
-      try {
-        if (editingId) {
-          await apiUpdateBook(book);
-          showToast("Book updated.", "ok");
-        } else {
-          await apiAddBook(book);
-          showToast("Book added.", "ok");
+        if(!isAvailable(b)){
+          showToast("This book is no longer available.", "danger");
+          await refresh();
+          return;
         }
 
-        clearForm();
-        await refresh();
-        setStatus("OK", "ready");
-      } catch (e) {
-        console.error(e);
-        showToast(`Save error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      } finally {
-        btnSave.disabled = false;
-      }
+        reservingId = id;
+        reserveTitle.textContent = `Reserve: ${b.title || id}`;
+        reserveText.textContent =
+          "1) Book a pickup slot on Google Calendar.\n" +
+          "2) Come back here and click 'I booked it'.\n" +
+          "3) Only then will the book be marked as 'Reserved'.";
+        calLink.href = GOOGLE_CAL_BOOKING_URL;
+
+        reserveOverlay.classList.add("show");
+      });
     });
 
-    reserveClose.addEventListener("click", closeReserveModal);
+    // Admin: Edit
+    if(admin){
+      elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.getAttribute("data-edit");
+          const b = books.find(x => String(x.id) === String(id));
+          if(!b) return;
+          adminPanel.scrollIntoView({behavior:"smooth", block:"start"});
+          fillForm(b);
+          showToast("Edit mode enabled.", "ok");
+        });
+      });
 
-    reserveOverlay.addEventListener("click", (e) => {
-      if (e.target === reserveOverlay) closeReserveModal();
-    });
+      // Admin: Delete
+      elGrid.querySelectorAll("[data-del]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-del");
+          if(!confirm(`Delete the book with ID "${id}"?`)) return;
+          try{
+            setStatus("Deleting…", "working");
+            await apiDeleteById(id);
+            await refresh();
+            showToast("Book deleted.", "ok");
+          }catch(e){
+            console.error(e);
+            showToast(`Delete error: ${e.message}`, "danger");
+            setStatus("Error", "error");
+          }
+        });
+      });
+    }
+  }
 
-    reserveDone.addEventListener("click", async () => {
-      if (!reservingId) return;
+  /*************************************************************
+   * FLOW
+   *************************************************************/
+  async function refresh(){
+    setStatus("Loading from Google Sheet…", "loading");
+    try{
+      const data = await apiGetAll();
 
-      const b = books.find(x => String(x.id) === String(reservingId));
-      if (!b) {
-        closeReserveModal();
-        showToast("Book not found. Please refresh and try again.", "danger");
-        return;
-      }
+      const rank = (x)=>{
+        const v = String(x.availability||"").toLowerCase();
+        if(v==="available") return 0;
+        if(v==="reserved") return 1;
+        if(v==="sold") return 2;
+        return 3;
+      };
 
-      if (!isAvailable(b)) {
-        closeReserveModal();
-        showToast("This book is no longer available.", "danger");
-        await refresh();
-        return;
-      }
+      books = data
+        .filter(x => x && String(x.id||"").trim() !== "")
+        .sort((a,b)=>{
+          const d = rank(a)-rank(b);
+          if(d!==0) return d;
+          return String(a.title||"").localeCompare(String(b.title||""), "en");
+        });
 
-      try {
-        setStatus("Reserving…", "working");
-        await apiSetAvailability(reservingId);
-        await refresh();
-        closeReserveModal();
-        showToast("Great. The book is now marked as Reserved.", "ok");
-        setStatus("OK", "ready");
-      } catch (e) {
-        console.error(e);
-        showToast(`Reservation error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
-    });
+      setStatus("OK", "ready");
+      render();
+    }catch(e){
+      console.error(e);
+      setStatus("Error loading data (check Sheet.best link/permissions).", "error");
+      showToast(`GET error: ${e.message}`, "danger");
+    }
+  }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && reserveOverlay.classList.contains("show")) {
-        closeReserveModal();
-      }
-    });
+  /*************************************************************
+   * EVENTS
+   *************************************************************/
+  btnRefresh.addEventListener("click", refresh);
+  elQ.addEventListener("input", render);
 
-    /*************************************************************
-     * START
-     *************************************************************/
-    refresh();
-  </script>
+  btnAdmin.addEventListener("click", ()=>{
+    if(admin){
+      adminPanel.classList.toggle("hidden");
+      render();
+      return;
+    }
+    const pwd = prompt("Admin password:");
+    if(pwd == null) return;
+    if(pwd !== ADMIN_PASSWORD){
+      alert("Wrong password.");
+      return;
+    }
+    admin = true;
+    adminPanel.classList.remove("hidden");
+    render();
+    showToast("Admin mode enabled.", "ok");
+  });
+
+  btnLogout.addEventListener("click", ()=>{
+    admin = false;
+    adminPanel.classList.add("hidden");
+    clearForm();
+    render();
+    showToast("Logged out.", "ok");
+  });
+
+  btnClear.addEventListener("click", clearForm);
+
+  btnDelete.addEventListener("click", async ()=>{
+    if(!editingId) return;
+    if(!confirm(`Delete the book with ID "${editingId}"?`)) return;
+
+    try{
+      setStatus("Deleting…", "working");
+      await apiDeleteById(editingId);
+      clearForm();
+      await refresh();
+      showToast("Book deleted.", "ok");
+    }catch(e){
+      console.error(e);
+      showToast(`Delete error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
+
+  form.addEventListener("submit", async (ev)=>{
+    ev.preventDefault();
+    if(!admin){
+      alert("You must be logged in as admin.");
+      return;
+    }
+
+    const book = bookFromForm();
+    if(!book.id || !book.title){
+      showToast("ID and Title are required.", "danger");
+      return;
+    }
+
+    btnSave.disabled = true;
+    setStatus("Saving to Google Sheet…", "saving");
+
+    try{
+      const res = await apiUpsert(book);
+      await refresh();
+      showToast(res.mode === "post" ? "Book added." : "Book updated.", "ok");
+      clearForm();
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      showToast(`Save error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }finally{
+      btnSave.disabled = false;
+    }
+  });
+
+  // Reserve modal events
+  reserveClose.addEventListener("click", closeReserveModal);
+  reserveOverlay.addEventListener("click", (e)=>{
+    if(e.target === reserveOverlay) closeReserveModal();
+  });
+
+  // Only here we mark Reserved
+  reserveDone.addEventListener("click", async ()=>{
+    if(!reservingId) return;
+
+    const b = books.find(x => String(x.id) === String(reservingId));
+    if(!b){
+      closeReserveModal();
+      showToast("Book not found. Please refresh and try again.", "danger");
+      return;
+    }
+
+    if(!isAvailable(b)){
+      closeReserveModal();
+      showToast("This book is no longer available.", "danger");
+      await refresh();
+      return;
+    }
+
+    try{
+      setStatus("Reserving…", "working");
+      await apiSetAvailability(reservingId, "Reserved");
+      await refresh();
+      closeReserveModal();
+      showToast("Great. The book is now marked as Reserved.", "ok");
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      showToast(`Reservation error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
+
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && reserveOverlay.classList.contains("show")){
+      closeReserveModal();
+    }
+  });
+
+  /*************************************************************
+   * START
+   *************************************************************/
+  // IMPORTANT: Update SHEETBEST_BASE first, then refresh will work.
+  refresh();
+</script>
 </body>
 </html>
