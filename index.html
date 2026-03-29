@@ -47,7 +47,6 @@
       outline:none;
     }
     .pill::placeholder{color: rgba(234,240,255,.55)}
-    select.pill{cursor:pointer}
     button, .linkButton{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
@@ -76,10 +75,7 @@
       background: rgba(46,211,183,.12);
       border-color: rgba(46,211,183,.35);
     }
-    .warn{
-      background: rgba(255,204,102,.12);
-      border-color: rgba(255,204,102,.35);
-    }
+
     .panel{
       margin-top:16px;
       background: rgba(15,26,46,.75);
@@ -99,12 +95,8 @@
     .panelBody{padding:16px}
     .status{font-size:13px;color:var(--muted)}
     .status b{color:var(--text)}
-    .grid{
-      display:grid;gap:12px;
-      grid-template-columns: 1fr;
-    }
+    .grid{display:grid;gap:12px;grid-template-columns:1fr}
 
-    /* Card layout: fixed left info + image area */
     .cardRow{
       display:grid;
       grid-template-columns: 340px 1fr;
@@ -166,9 +158,7 @@
     .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
     .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
 
-    .footerNote{
-      margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35
-    }
+    .footerNote{margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35}
     .hr{height:1px;background:var(--border);margin:14px 0}
     .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
     @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
@@ -200,7 +190,6 @@
     .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
     .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
 
-    /* Modal */
     .modalOverlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.55);
@@ -318,7 +307,6 @@
 
               <label>Image (URL)</label>
               <input id="img" placeholder="https://..." />
-              <div class="hint">Recommended: use a direct image URL (JPG/PNG).</div>
 
               <div class="row" style="margin-top:12px">
                 <button type="submit" class="primary" id="btnSave">Save</button>
@@ -336,7 +324,6 @@
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
               <li>The catalog is shared: every change writes to Google Sheets.</li>
               <li>Reserve updates availability to <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
-              <li>This is a simple solution for a small group; it is not a secure backend.</li>
             </ul>
           </div>
         </div>
@@ -344,7 +331,6 @@
     </section>
   </div>
 
-  <!-- Reserve modal -->
   <div id="reserveOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-label="Reserve book">
     <div class="modal">
       <div class="modalHead">
@@ -371,17 +357,9 @@
   /*************************************************************
    * CONFIG (Sheet.best + Calendar)
    *************************************************************/
-  // Put your Sheet.best sheet URL here (the one you get after subscribing).
-  // Example: https://api.sheetbest.com/sheets/<YOUR_UUID>
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
-
-  // If you have a tab, keep it. If your Sheet.best endpoint is not tab-specific, set TAB_NAME = "" and API = SHEETBEST_BASE.
-  const TAB_NAME = "Foglio1";
-  const API = TAB_NAME ? `${SHEETBEST_BASE}/tabs/${encodeURIComponent(TAB_NAME)}` : SHEETBEST_BASE;
-
+  const API = SHEETBEST_BASE; // IMPORTANT: no /tabs path
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
-
-  // Client-side only (not real security)
   const ADMIN_PASSWORD = "mazz";
 
   /*************************************************************
@@ -439,14 +417,12 @@
   function setStatus(text, strong = "") {
     elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
   }
-
   function showToast(msg, type="ok") {
     toast.className = `toast ${type}`;
     toast.textContent = msg;
     toast.classList.remove("hidden");
     setTimeout(()=> toast.classList.add("hidden"), 3500);
   }
-
   function esc(s){
     return String(s ?? "").replace(/[&<>"']/g, m => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
@@ -461,19 +437,16 @@
     if(v === "sold") return "danger";
     return "";
   }
-
   function parsePrice(x){
     const s = String(x ?? "").replace(",", ".").trim();
     if(!s) return "";
     const n = Number(s);
     return Number.isFinite(n) ? n : "";
   }
-
   function formatPrice(n){
     if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
     return `€ ${Number(n).toFixed(0)}`;
   }
-
   function isAvailable(b){
     return String(b?.availability||"").toLowerCase() === "available";
   }
@@ -542,44 +515,42 @@
     }));
   }
 
-  // Upsert: PATCH /id/<id> if exists, else POST
-  async function apiUpsert(book){
-    const id = encodeURIComponent(book.id);
-    const patchUrl = `${API}/id/${id}`;
-
-    const r1 = await fetch(patchUrl, {
-      method:"PATCH",
-      mode:"cors",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(book)
-    });
-
-    if(r1.ok){
-      const d1 = await r1.json().catch(()=>[]);
-      if(Array.isArray(d1) && d1.length > 0) return { mode:"patch" };
-      // If empty array (no match), fall through to POST
-    } else {
-      const t = await r1.text().catch(()=> "");
-      throw new Error(`PATCH failed (${r1.status}). ${t}`);
-    }
-
-    const r2 = await fetch(API, {
+  async function apiAdd(book){
+    const r = await fetch(API, {
       method:"POST",
       mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(book)
     });
-
-    if(!r2.ok){
-      const t = await r2.text().catch(()=> "");
-      throw new Error(`POST failed (${r2.status}). ${t}`);
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`POST failed (${r.status}). ${t}`);
     }
-    await r2.json().catch(()=>null);
-    return { mode:"post" };
+    await r.json().catch(()=>null);
+    return true;
+  }
+
+  async function apiPatchById(idVal, patchObj){
+    const url = `${API}?id=${encodeURIComponent(idVal)}`;
+    const r = await fetch(url, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(patchObj)
+    });
+    if(!r.ok){
+      const t = await r.text().catch(()=> "");
+      throw new Error(`PATCH failed (${r.status}). ${t}`);
+    }
+    const d = await r.json().catch(()=>[]);
+    if(Array.isArray(d) && d.length === 0){
+      throw new Error("PATCH did not match any row. Check that 'id' column is correct.");
+    }
+    return true;
   }
 
   async function apiDeleteById(idVal){
-    const url = `${API}/id/${encodeURIComponent(idVal)}`;
+    const url = `${API}?id=${encodeURIComponent(idVal)}`;
     const r = await fetch(url, { method:"DELETE", mode:"cors" });
     if(!r.ok){
       const t = await r.text().catch(()=> "");
@@ -589,24 +560,23 @@
     return true;
   }
 
-  // Set availability to Reserved ONLY when user confirms "I booked it"
+  // Upsert logic without relying on /id/ path:
+  // If id exists -> PATCH. Else -> POST.
+  async function apiUpsert(book){
+    // check existence locally (we already have books in memory)
+    const exists = books.some(x => String(x.id) === String(book.id));
+    if(exists){
+      await apiPatchById(book.id, book);
+      return { mode:"patch" };
+    } else {
+      await apiAdd(book);
+      return { mode:"post" };
+    }
+  }
+
   async function apiSetAvailability(idVal, availability){
     const now = new Date().toISOString();
-    const url = `${API}/id/${encodeURIComponent(idVal)}`;
-    const r = await fetch(url, {
-      method:"PATCH",
-      mode:"cors",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ availability, updatedAt: now })
-    });
-    if(!r.ok){
-      const t = await r.text().catch(()=> "");
-      throw new Error(`PATCH failed (${r.status}). ${t}`);
-    }
-    const d = await r.json().catch(()=>[]);
-    if(Array.isArray(d) && d.length === 0){
-      throw new Error("Update failed: no row matched this id. Check the 'id' column.");
-    }
+    await apiPatchById(idVal, { availability, updatedAt: now });
     return true;
   }
 
@@ -634,7 +604,6 @@
 
       const np = formatPrice(b.newPrice);
       const lp = formatPrice(b.loopPrice);
-
       const reserveDisabled = !isAvailable(b);
 
       return `
@@ -683,7 +652,7 @@
       });
     });
 
-    // Reserve opens modal, does NOT mark reserved yet
+    // Reserve opens modal (does NOT mark reserved yet)
     elGrid.querySelectorAll("[data-reserve]").forEach(btn=>{
       btn.addEventListener("click", async ()=>{
         const id = btn.getAttribute("data-reserve");
@@ -708,8 +677,8 @@
       });
     });
 
-    // Admin: Edit
     if(admin){
+      // Edit
       elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const id = btn.getAttribute("data-edit");
@@ -721,7 +690,7 @@
         });
       });
 
-      // Admin: Delete
+      // Delete
       elGrid.querySelectorAll("[data-del]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const id = btn.getAttribute("data-del");
@@ -769,7 +738,7 @@
       render();
     }catch(e){
       console.error(e);
-      setStatus("Error loading data (check Sheet.best link/permissions).", "error");
+      setStatus("Error loading data (check Sheet.best connection).", "error");
       showToast(`GET error: ${e.message}`, "danger");
     }
   }
@@ -856,7 +825,7 @@
     }
   });
 
-  // Reserve modal events
+  // Reserve modal
   reserveClose.addEventListener("click", closeReserveModal);
   reserveOverlay.addEventListener("click", (e)=>{
     if(e.target === reserveOverlay) closeReserveModal();
@@ -903,7 +872,6 @@
   /*************************************************************
    * START
    *************************************************************/
-  // IMPORTANT: Update SHEETBEST_BASE first, then refresh will work.
   refresh();
 </script>
 </body>
