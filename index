@@ -525,10 +525,10 @@
     return String(Number(n)).replace(".", ",");
   }
 
-  function formatPrice(n){
-    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
-    return `€ ${Number(n).toFixed(0)}`;
-  }
+function formatPrice(n){
+  if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+  return `€ ${Number(n).toFixed(0)}`;
+}
 
   function isAvailable(b){
     return String(b?.availability || "").toLowerCase() === "available";
@@ -543,13 +543,13 @@
     return null;
   }
 
-  function calculateLoopPrice(originalPrice, condition){
-    const price = parsePrice(originalPrice);
-    const multiplier = getConditionMultiplier(condition);
+function calculateLoopPrice(originalPrice, condition){
+  const price = parsePrice(originalPrice);
+  const multiplier = getConditionMultiplier(condition);
 
-    if(price === "" || multiplier == null) return "";
-    return Number((price * multiplier).toFixed(2));
-  }
+  if(price === "" || multiplier == null) return "";
+  return Math.round(price * multiplier);
+}
 
   function updateAutoLoopPrice(){
     const calculated = calculateLoopPrice(f.newPrice.value, f.condition.value);
