@@ -245,13 +245,13 @@
       </div>
       <div class="panelBody">
 
-  <div class="toast ok" style="margin-bottom:12px">
-    <b>Pickup location:</b> After booking a slot, meet at the <b>MYP Building – Reception</b> at your reserved time.
-  </div>
+        <div class="toast ok" style="margin-bottom:12px">
+          <b>Pickup location:</b> After booking a slot, meet at the <b>MYP Building – Reception</b> at your reserved time to receive and buy the books.
+        </div>
 
-  <div id="grid" class="grid"></div>
+        <div id="grid" class="grid"></div>
 
-  <div class="footerNote">
+        <div class="footerNote">
           *Data comes from Google Sheets through Sheet.best. If you do not see updates, press “Refresh” or reload the page.
         </div>
       </div>
@@ -330,6 +330,7 @@
             <ul class="muted" style="line-height:1.6;margin:0;padding-left:18px">
               <li>The catalog is shared: every change writes to Google Sheets.</li>
               <li>Reserve updates availability to <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
+              <li>Students must then go to the <b>MYP Building – Reception</b> at the booked time.</li>
             </ul>
           </div>
         </div>
@@ -352,13 +353,14 @@
           </a>
           <button id="reserveDone" class="ok" type="button">I booked it</button>
         </div>
-<div class="toast ok" style="margin-top:12px">
-  <b>Pickup location:</b> Meet at the <b>MYP Building – Reception</b> at your reserved time.
-</div>
 
-<div class="hint" style="margin-top:10px">
-  Note: the time slot is handled on Google Calendar. The book will become <b>Reserved</b> only after you click <b>I booked it</b>.
-</div>
+        <div class="toast ok" style="margin-top:12px">
+          <b>Pickup location:</b> Meet at the <b>MYP Building – Reception</b> at your reserved time to get the books.
+        </div>
+
+        <div class="hint" style="margin-top:10px">
+          Note: the time slot is handled on Google Calendar. The book will become <b>Reserved</b> only after you click <b>I booked it</b>.
+        </div>
       </div>
     </div>
   </div>
@@ -368,9 +370,10 @@
    * CONFIG (Sheet.best + Calendar)
    *************************************************************/
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
-  const API = SHEETBEST_BASE; // IMPORTANT: no /tabs path
+  const API = SHEETBEST_BASE;
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
   const ADMIN_PASSWORD = "mazz";
+  const PICKUP_LOCATION = "MYP Building – Reception";
 
   /*************************************************************
    * STATE
@@ -427,38 +430,46 @@
   function setStatus(text, strong = "") {
     elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
   }
+
   function showToast(msg, type="ok") {
     toast.className = `toast ${type}`;
     toast.textContent = msg;
     toast.classList.remove("hidden");
-    setTimeout(()=> toast.classList.add("hidden"), 3500);
+    setTimeout(() => toast.classList.add("hidden"), 3500);
   }
+
   function esc(s){
     return String(s ?? "").replace(/[&<>"']/g, m => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     }[m]));
   }
-  function norm(s){ return String(s ?? "").trim(); }
+
+  function norm(s){
+    return String(s ?? "").trim();
+  }
 
   function badgeClass(av){
-    const v = String(av||"").toLowerCase();
+    const v = String(av || "").toLowerCase();
     if(v === "available") return "ok";
     if(v === "reserved") return "warn";
     if(v === "sold") return "danger";
     return "";
   }
+
   function parsePrice(x){
     const s = String(x ?? "").replace(",", ".").trim();
     if(!s) return "";
     const n = Number(s);
     return Number.isFinite(n) ? n : "";
   }
+
   function formatPrice(n){
     if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
     return `€ ${Number(n).toFixed(0)}`;
   }
+
   function isAvailable(b){
-    return String(b?.availability||"").toLowerCase() === "available";
+    return String(b?.availability || "").toLowerCase() === "available";
   }
 
   function bookFromForm(){
@@ -508,13 +519,15 @@
   function closeReserveModal(){
     reserveOverlay.classList.remove("show");
     reservingId = null;
+    reserveDone.disabled = false;
+    reserveDone.textContent = "I booked it";
   }
 
   /*************************************************************
    * API CALLS (Sheet.best)
    *************************************************************/
   async function apiGetAll(){
-    const r = await fetch(API, { method:"GET", mode:"cors" });
+    const r = await fetch(API, { method:"GET" });
     if(!r.ok) throw new Error(`GET failed: ${r.status}`);
     const data = await r.json();
     if(!Array.isArray(data)) return [];
@@ -528,15 +541,15 @@
   async function apiAdd(book){
     const r = await fetch(API, {
       method:"POST",
-      mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(book)
     });
+
     if(!r.ok){
-      const t = await r.text().catch(()=> "");
+      const t = await r.text().catch(() => "");
       throw new Error(`POST failed (${r.status}). ${t}`);
     }
-    await r.json().catch(()=>null);
+
     return true;
   }
 
@@ -544,36 +557,39 @@
     const url = `${API}?id=${encodeURIComponent(idVal)}`;
     const r = await fetch(url, {
       method:"PATCH",
-      mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(patchObj)
     });
+
     if(!r.ok){
-      const t = await r.text().catch(()=> "");
+      const t = await r.text().catch(() => "");
       throw new Error(`PATCH failed (${r.status}). ${t}`);
     }
-    const d = await r.json().catch(()=>[]);
-    if(Array.isArray(d) && d.length === 0){
-      throw new Error("PATCH did not match any row. Check that 'id' column is correct.");
-    }
+
+    /*
+      IMPORTANT FIX:
+      Some Sheet.best PATCH responses can be empty or not return the updated rows.
+      The previous version treated an empty array as a failure.
+      That could make "I booked it" look broken even when the request was accepted.
+    */
+    await r.text().catch(() => "");
     return true;
   }
 
   async function apiDeleteById(idVal){
     const url = `${API}?id=${encodeURIComponent(idVal)}`;
-    const r = await fetch(url, { method:"DELETE", mode:"cors" });
+    const r = await fetch(url, { method:"DELETE" });
+
     if(!r.ok){
-      const t = await r.text().catch(()=> "");
+      const t = await r.text().catch(() => "");
       throw new Error(`DELETE failed (${r.status}). ${t}`);
     }
-    await r.json().catch(()=>null);
+
+    await r.text().catch(() => "");
     return true;
   }
 
-  // Upsert logic without relying on /id/ path:
-  // If id exists -> PATCH. Else -> POST.
   async function apiUpsert(book){
-    // check existence locally (we already have books in memory)
     const exists = books.some(x => String(x.id) === String(book.id));
     if(exists){
       await apiPatchById(book.id, book);
@@ -586,7 +602,16 @@
 
   async function apiSetAvailability(idVal, availability){
     const now = new Date().toISOString();
-    await apiPatchById(idVal, { availability, updatedAt: now });
+    const patch = {
+      availability,
+      updatedAt: now
+    };
+
+    if(String(availability).toLowerCase() === "reserved"){
+      patch.reservedAt = now;
+    }
+
+    await apiPatchById(idVal, patch);
     return true;
   }
 
@@ -595,7 +620,7 @@
    *************************************************************/
   function applyFilters(list){
     const q = norm(elQ.value).toLowerCase();
-    return list.filter(b=>{
+    return list.filter(b => {
       if(!q) return true;
       const hay = `${b.title||""} ${b.author||""} ${b.subject||""} ${b.programme||""} ${b.id||""}`.toLowerCase();
       return hay.includes(q);
@@ -606,7 +631,7 @@
     const list = applyFilters(books);
     elMeta.textContent = `${list.length} / ${books.length} books`;
 
-    elGrid.innerHTML = list.map(b=>{
+    elGrid.innerHTML = list.map(b => {
       const av = b.availability || "Available";
       const bc = badgeClass(av);
       const img = norm(b.img);
@@ -653,18 +678,16 @@
       `;
     }).join("");
 
-    // Copy ID
-    elGrid.querySelectorAll("[data-copy]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+    elGrid.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-copy");
-        navigator.clipboard?.writeText(id).catch(()=>{});
+        navigator.clipboard?.writeText(id).catch(() => {});
         showToast(`Copied ID: ${id}`, "ok");
       });
     });
 
-    // Reserve opens modal (does NOT mark reserved yet)
-    elGrid.querySelectorAll("[data-reserve]").forEach(btn=>{
-      btn.addEventListener("click", async ()=>{
+    elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
+      btn.addEventListener("click", async () => {
         const id = btn.getAttribute("data-reserve");
         const b = books.find(x => String(x.id) === String(id));
         if(!b) return;
@@ -680,17 +703,17 @@
         reserveText.textContent =
           "1) Book a pickup slot on Google Calendar.\n" +
           "2) Come back here and click 'I booked it'.\n" +
-          "3) Only then will the book be marked as 'Reserved'.";
-        calLink.href = GOOGLE_CAL_BOOKING_URL;
+          "3) Then go to the " + PICKUP_LOCATION + " at your booked time to receive and buy the books.\n" +
+          "4) Only then will the book be marked as 'Reserved'.";
 
+        calLink.href = GOOGLE_CAL_BOOKING_URL;
         reserveOverlay.classList.add("show");
       });
     });
 
     if(admin){
-      // Edit
-      elGrid.querySelectorAll("[data-edit]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
+      elGrid.querySelectorAll("[data-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
           const id = btn.getAttribute("data-edit");
           const b = books.find(x => String(x.id) === String(id));
           if(!b) return;
@@ -700,11 +723,11 @@
         });
       });
 
-      // Delete
-      elGrid.querySelectorAll("[data-del]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
+      elGrid.querySelectorAll("[data-del]").forEach(btn => {
+        btn.addEventListener("click", async () => {
           const id = btn.getAttribute("data-del");
           if(!confirm(`Delete the book with ID "${id}"?`)) return;
+
           try{
             setStatus("Deleting…", "working");
             await apiDeleteById(id);
@@ -725,23 +748,24 @@
    *************************************************************/
   async function refresh(){
     setStatus("Loading from Google Sheet…", "loading");
+
     try{
       const data = await apiGetAll();
 
-      const rank = (x)=>{
-        const v = String(x.availability||"").toLowerCase();
-        if(v==="available") return 0;
-        if(v==="reserved") return 1;
-        if(v==="sold") return 2;
+      const rank = (x) => {
+        const v = String(x.availability || "").toLowerCase();
+        if(v === "available") return 0;
+        if(v === "reserved") return 1;
+        if(v === "sold") return 2;
         return 3;
       };
 
       books = data
-        .filter(x => x && String(x.id||"").trim() !== "")
-        .sort((a,b)=>{
-          const d = rank(a)-rank(b);
-          if(d!==0) return d;
-          return String(a.title||"").localeCompare(String(b.title||""), "en");
+        .filter(x => x && String(x.id || "").trim() !== "")
+        .sort((a,b) => {
+          const d = rank(a) - rank(b);
+          if(d !== 0) return d;
+          return String(a.title || "").localeCompare(String(b.title || ""), "en");
         });
 
       setStatus("OK", "ready");
@@ -759,25 +783,28 @@
   btnRefresh.addEventListener("click", refresh);
   elQ.addEventListener("input", render);
 
-  btnAdmin.addEventListener("click", ()=>{
+  btnAdmin.addEventListener("click", () => {
     if(admin){
       adminPanel.classList.toggle("hidden");
       render();
       return;
     }
+
     const pwd = prompt("Admin password:");
     if(pwd == null) return;
+
     if(pwd !== ADMIN_PASSWORD){
       alert("Wrong password.");
       return;
     }
+
     admin = true;
     adminPanel.classList.remove("hidden");
     render();
     showToast("Admin mode enabled.", "ok");
   });
 
-  btnLogout.addEventListener("click", ()=>{
+  btnLogout.addEventListener("click", () => {
     admin = false;
     adminPanel.classList.add("hidden");
     clearForm();
@@ -787,7 +814,7 @@
 
   btnClear.addEventListener("click", clearForm);
 
-  btnDelete.addEventListener("click", async ()=>{
+  btnDelete.addEventListener("click", async () => {
     if(!editingId) return;
     if(!confirm(`Delete the book with ID "${editingId}"?`)) return;
 
@@ -804,8 +831,9 @@
     }
   });
 
-  form.addEventListener("submit", async (ev)=>{
+  form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
+
     if(!admin){
       alert("You must be logged in as admin.");
       return;
@@ -835,17 +863,18 @@
     }
   });
 
-  // Reserve modal
   reserveClose.addEventListener("click", closeReserveModal);
-  reserveOverlay.addEventListener("click", (e)=>{
+
+  reserveOverlay.addEventListener("click", (e) => {
     if(e.target === reserveOverlay) closeReserveModal();
   });
 
-  // Only here we mark Reserved
-  reserveDone.addEventListener("click", async ()=>{
+  reserveDone.addEventListener("click", async () => {
     if(!reservingId) return;
 
-    const b = books.find(x => String(x.id) === String(reservingId));
+    const currentId = reservingId;
+    const b = books.find(x => String(x.id) === String(currentId));
+
     if(!b){
       closeReserveModal();
       showToast("Book not found. Please refresh and try again.", "danger");
@@ -859,21 +888,32 @@
       return;
     }
 
+    reserveDone.disabled = true;
+    reserveDone.textContent = "Saving...";
+
     try{
       setStatus("Reserving…", "working");
-      await apiSetAvailability(reservingId, "Reserved");
+      await apiSetAvailability(currentId, "Reserved");
       await refresh();
+
+      const updated = books.find(x => String(x.id) === String(currentId));
+      if(!updated || String(updated.availability || "").toLowerCase() !== "reserved"){
+        throw new Error("The reservation was not confirmed by the sheet.");
+      }
+
       closeReserveModal();
       showToast("Great. The book is now marked as Reserved.", "ok");
       setStatus("OK", "ready");
     }catch(e){
       console.error(e);
+      reserveDone.disabled = false;
+      reserveDone.textContent = "I booked it";
       showToast(`Reservation error: ${e.message}`, "danger");
       setStatus("Error", "error");
     }
   });
 
-  document.addEventListener("keydown", (e)=>{
+  document.addEventListener("keydown", (e) => {
     if(e.key === "Escape" && reserveOverlay.classList.contains("show")){
       closeReserveModal();
     }
