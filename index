@@ -420,17 +420,28 @@
   </div>
 
 <script>
+  /*************************************************************
+   * CONFIG
+   *************************************************************/
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
   const API = SHEETBEST_BASE;
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
   const ADMIN_PASSWORD = "mazz";
+
+  // Must match the exact column header in your Google Sheet
   const SHEET_ID_COLUMN = "id";
 
+  /*************************************************************
+   * STATE
+   *************************************************************/
   let books = [];
   let admin = false;
   let editingId = null;
   let reservingId = null;
 
+  /*************************************************************
+   * DOM
+   *************************************************************/
   const elGrid = document.getElementById("grid");
   const elStatus = document.getElementById("status");
   const elMeta = document.getElementById("meta");
@@ -466,6 +477,9 @@
   const reserveDone = document.getElementById("reserveDone");
   const calLink = document.getElementById("calLink");
 
+  /*************************************************************
+   * HELPERS
+   *************************************************************/
   function setStatus(text, strong = "") {
     elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
   }
@@ -489,13 +503,6 @@
 
   function norm(s){
     return String(s ?? "").trim();
-  }
-
-  function normalizeSearchValue(value){
-    return String(value ?? "")
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, " ");
   }
 
   function badgeClass(av){
@@ -541,7 +548,7 @@
     const multiplier = getConditionMultiplier(condition);
 
     if(price === "" || multiplier == null) return "";
-    return Math.round(price * multiplier);
+    return Number((price * multiplier).toFixed(2));
   }
 
   function updateAutoLoopPrice(){
@@ -605,6 +612,9 @@
     return `${API}/${encodeURIComponent(columnName)}/${encodeURIComponent(String(value))}`;
   }
 
+  /*************************************************************
+   * API CALLS (Sheet.best)
+   *************************************************************/
   async function apiGetAll(){
     const r = await fetch(API, { method:"GET", mode:"cors" });
     if(!r.ok) throw new Error(`GET failed: ${r.status}`);
@@ -700,16 +710,15 @@
     return true;
   }
 
+  /*************************************************************
+   * FILTERS + RENDER
+   *************************************************************/
   function applyFilters(list){
-    const q = normalizeSearchValue(elQ.value);
+    const q = norm(elQ.value).toLowerCase();
 
     return list.filter(b => {
       if(!q) return true;
-
-      const hay = normalizeSearchValue(
-        `${b.title || ""} ${b.author || ""} ${b.condition || ""} ${b.id || ""}`
-      );
-
+      const hay = `${b.title||""} ${b.author||""} ${b.condition||""} ${b.id||""}`.toLowerCase();
       return hay.includes(q);
     });
   }
@@ -828,6 +837,9 @@
     }
   }
 
+  /*************************************************************
+   * FLOW
+   *************************************************************/
   async function refresh(){
     setStatus("Loading from Google Sheet…", "loading");
 
@@ -859,6 +871,9 @@
     }
   }
 
+  /*************************************************************
+   * EVENTS
+   *************************************************************/
   btnRefresh.addEventListener("click", refresh);
   elQ.addEventListener("input", render);
 
@@ -1017,6 +1032,9 @@
   f.newPrice.addEventListener("input", updateAutoLoopPrice);
   f.condition.addEventListener("change", updateAutoLoopPrice);
 
+  /*************************************************************
+   * START
+   *************************************************************/
   refresh();
 </script>
 </body>
