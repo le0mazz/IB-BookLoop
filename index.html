@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IB BookLoop</title>
-  <p>Meet at MYP Buuilding when Reserved</p>
   <style>
     :root{
       --bg:#0b1220; --panel:#0f1a2e; --panel2:#12213a;
@@ -245,8 +244,14 @@
         <div class="meta" id="meta"></div>
       </div>
       <div class="panelBody">
-        <div id="grid" class="grid"></div>
-        <div class="footerNote">
+
+  <div class="toast ok" style="margin-bottom:12px">
+    <b>Pickup location:</b> After booking a slot, meet at the <b>MYP Building – Reception</b> at your reserved time.
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+  <div class="footerNote">
           *Data comes from Google Sheets through Sheet.best. If you do not see updates, press “Refresh” or reload the page.
         </div>
       </div>
@@ -347,9 +352,13 @@
           </a>
           <button id="reserveDone" class="ok" type="button">I booked it</button>
         </div>
-        <div class="hint" style="margin-top:10px">
-          Note: the time slot is handled on Google Calendar. The book will become <b>Reserved</b> only after you click <b>I booked it</b>.
-        </div>
+<div class="toast ok" style="margin-top:12px">
+  <b>Pickup location:</b> Meet at the <b>MYP Building – Reception</b> at your reserved time.
+</div>
+
+<div class="hint" style="margin-top:10px">
+  Note: the time slot is handled on Google Calendar. The book will become <b>Reserved</b> only after you click <b>I booked it</b>.
+</div>
       </div>
     </div>
   </div>
