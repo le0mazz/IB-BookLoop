@@ -215,6 +215,11 @@
       font: inherit;
     }
 
+    input[readonly]{
+      opacity:.85;
+      cursor:not-allowed;
+    }
+
     textarea{min-height:90px;resize:vertical}
     .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
     .hidden{display:none !important}
@@ -279,7 +284,7 @@
       </div>
 
       <div class="row">
-        <input id="q" class="pill" style="min-width:260px" placeholder="Search title / author / subject..." />
+        <input id="q" class="pill" style="min-width:260px" placeholder="Search title / author / condition..." />
         <button id="btnRefresh">Refresh</button>
         <button id="btnAdmin" class="primary">Admin</button>
       </div>
@@ -328,27 +333,28 @@
               <label>Author</label>
               <input id="author" />
 
-              <label>Programme</label>
-              <input id="programme" placeholder="IBDP / MYP / ..." />
-
-              <label>Subject</label>
-              <input id="subject" placeholder="English A / Math AA / ..." />
-
-              <label>Year</label>
-              <input id="year" placeholder="2024 / 2025 / ..." />
-
               <label>Condition</label>
-              <input id="condition" placeholder="Like new / Good / ..." />
+              <select id="condition" required>
+                <option value="">Select condition</option>
+                <option value="new">new</option>
+                <option value="like new">like new</option>
+                <option value="good condition">good condition</option>
+                <option value="used">used</option>
+              </select>
 
               <div class="twoCol">
                 <div>
-                  <label>New price (€)</label>
+                  <label>Original price (€)</label>
                   <input id="newPrice" inputmode="decimal" placeholder="e.g. 45" />
                 </div>
                 <div>
                   <label>BookLoop price (€)</label>
-                  <input id="loopPrice" inputmode="decimal" placeholder="e.g. 20" />
+                  <input id="loopPrice" inputmode="decimal" readonly />
                 </div>
+              </div>
+
+              <div class="hint">
+                Automatic pricing: new = 90%, like new = 75%, good condition = 50%, used = 30%.
               </div>
 
               <label>Availability</label>
@@ -378,6 +384,7 @@
               <li>The catalog is shared: every change writes to Google Sheets.</li>
               <li>Reserve updates availability to <b>Reserved</b> only after clicking <b>“I booked it”</b>.</li>
               <li>Students must then go to the <b>MYP Building – Reception</b> at the booked time.</li>
+              <li>BookLoop price is calculated automatically from original price and condition.</li>
             </ul>
           </div>
         </div>
@@ -421,9 +428,7 @@
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
   const ADMIN_PASSWORD = "mazz";
 
-  // IMPORTANT:
-  // This must match the EXACT column header in your Google Sheet.
-  // If your sheet header is "ID" or "Book ID", change it here.
+  // Must match the exact column header in your Google Sheet
   const SHEET_ID_COLUMN = "id";
 
   /*************************************************************
@@ -453,9 +458,6 @@
     id: document.getElementById("id"),
     title: document.getElementById("title"),
     author: document.getElementById("author"),
-    programme: document.getElementById("programme"),
-    subject: document.getElementById("subject"),
-    year: document.getElementById("year"),
     condition: document.getElementById("condition"),
     newPrice: document.getElementById("newPrice"),
     loopPrice: document.getElementById("loopPrice"),
@@ -518,6 +520,11 @@
     return Number.isFinite(n) ? n : "";
   }
 
+  function displayPriceInput(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return String(Number(n)).replace(".", ",");
+  }
+
   function formatPrice(n){
     if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
     return `€ ${Number(n).toFixed(0)}`;
@@ -527,18 +534,42 @@
     return String(b?.availability || "").toLowerCase() === "available";
   }
 
+  function getConditionMultiplier(condition){
+    const c = String(condition || "").toLowerCase();
+    if(c === "new") return 0.90;
+    if(c === "like new") return 0.75;
+    if(c === "good condition") return 0.50;
+    if(c === "used") return 0.30;
+    return null;
+  }
+
+  function calculateLoopPrice(originalPrice, condition){
+    const price = parsePrice(originalPrice);
+    const multiplier = getConditionMultiplier(condition);
+
+    if(price === "" || multiplier == null) return "";
+    return Number((price * multiplier).toFixed(2));
+  }
+
+  function updateAutoLoopPrice(){
+    const calculated = calculateLoopPrice(f.newPrice.value, f.condition.value);
+    f.loopPrice.value = displayPriceInput(calculated);
+  }
+
   function bookFromForm(){
     const now = new Date().toISOString();
+    const calculatedLoopPrice = calculateLoopPrice(f.newPrice.value, f.condition.value);
+
     return {
       id: norm(f.id.value),
       title: norm(f.title.value),
       author: norm(f.author.value),
-      programme: norm(f.programme.value),
-      subject: norm(f.subject.value),
-      year: norm(f.year.value),
+      programme: "",
+      subject: "",
+      year: "",
       condition: norm(f.condition.value),
       newPrice: parsePrice(f.newPrice.value),
-      loopPrice: parsePrice(f.loopPrice.value),
+      loopPrice: calculatedLoopPrice,
       availability: norm(f.availability.value) || "Available",
       img: norm(f.img.value),
       updatedAt: now
@@ -550,14 +581,12 @@
     f.id.value = b?.id || "";
     f.title.value = b?.title || "";
     f.author.value = b?.author || "";
-    f.programme.value = b?.programme || "";
-    f.subject.value = b?.subject || "";
-    f.year.value = b?.year || "";
     f.condition.value = b?.condition || "";
-    f.newPrice.value = (b?.newPrice ?? "") !== "" ? String(b.newPrice).replace(".", ",") : "";
-    f.loopPrice.value = (b?.loopPrice ?? "") !== "" ? String(b.loopPrice).replace(".", ",") : "";
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? displayPriceInput(b.newPrice) : "";
     f.availability.value = b?.availability || "Available";
     f.img.value = b?.img || "";
+
+    updateAutoLoopPrice();
 
     f.id.disabled = !!editingId;
     btnDelete.classList.toggle("hidden", !editingId);
@@ -568,6 +597,7 @@
     f.id.disabled = false;
     form.reset();
     f.availability.value = "Available";
+    f.loopPrice.value = "";
     btnDelete.classList.add("hidden");
   }
 
@@ -688,7 +718,7 @@
 
     return list.filter(b => {
       if(!q) return true;
-      const hay = `${b.title||""} ${b.author||""} ${b.subject||""} ${b.programme||""} ${b.id||""}`.toLowerCase();
+      const hay = `${b.title||""} ${b.author||""} ${b.condition||""} ${b.id||""}`.toLowerCase();
       return hay.includes(q);
     });
   }
@@ -716,10 +746,8 @@
             <div class="muted">${esc(b.author || "")}</div>
 
             <div class="kv">
-              <div>Programme</div><div><b>${esc(b.programme||"-")}</b></div>
-              <div>Subject</div><div><b>${esc(b.subject||"-")}</b></div>
-              <div>Year</div><div><b>${esc(b.year||"-")}</b></div>
-              <div>Prices</div><div><b>${esc(lp || "-")}</b> <span class="muted">(new: ${esc(np || "-")})</span></div>
+              <div>Condition</div><div><b>${esc(b.condition || "-")}</b></div>
+              <div>Price</div><div><b>${esc(lp || "-")}</b> <span class="muted">(original: ${esc(np || "-")})</span></div>
             </div>
 
             <div class="cardActions">
@@ -906,8 +934,24 @@
     }
 
     const book = bookFromForm();
+
     if(!book.id || !book.title){
       showToast("ID and Title are required.", "danger");
+      return;
+    }
+
+    if(!book.condition){
+      showToast("Please select a condition.", "danger");
+      return;
+    }
+
+    if(book.newPrice === ""){
+      showToast("Please enter the original price.", "danger");
+      return;
+    }
+
+    if(book.loopPrice === ""){
+      showToast("BookLoop price could not be calculated.", "danger");
       return;
     }
 
@@ -984,6 +1028,9 @@
       closeReserveModal();
     }
   });
+
+  f.newPrice.addEventListener("input", updateAutoLoopPrice);
+  f.condition.addEventListener("change", updateAutoLoopPrice);
 
   /*************************************************************
    * START
