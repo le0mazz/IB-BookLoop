@@ -420,28 +420,17 @@
   </div>
 
 <script>
-  /*************************************************************
-   * CONFIG
-   *************************************************************/
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
   const API = SHEETBEST_BASE;
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
   const ADMIN_PASSWORD = "mazz";
-
-  // Must match the exact column header in your Google Sheet
   const SHEET_ID_COLUMN = "id";
 
-  /*************************************************************
-   * STATE
-   *************************************************************/
   let books = [];
   let admin = false;
   let editingId = null;
   let reservingId = null;
 
-  /*************************************************************
-   * DOM
-   *************************************************************/
   const elGrid = document.getElementById("grid");
   const elStatus = document.getElementById("status");
   const elMeta = document.getElementById("meta");
@@ -477,9 +466,6 @@
   const reserveDone = document.getElementById("reserveDone");
   const calLink = document.getElementById("calLink");
 
-  /*************************************************************
-   * HELPERS
-   *************************************************************/
   function setStatus(text, strong = "") {
     elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
   }
@@ -505,6 +491,13 @@
     return String(s ?? "").trim();
   }
 
+  function normalizeSearchValue(value){
+    return String(value ?? "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
   function badgeClass(av){
     const v = String(av || "").toLowerCase();
     if(v === "available") return "ok";
@@ -525,10 +518,10 @@
     return String(Number(n)).replace(".", ",");
   }
 
-function formatPrice(n){
-  if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
-  return `€ ${Number(n).toFixed(0)}`;
-}
+  function formatPrice(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return `€ ${Number(n).toFixed(0)}`;
+  }
 
   function isAvailable(b){
     return String(b?.availability || "").toLowerCase() === "available";
@@ -543,13 +536,13 @@ function formatPrice(n){
     return null;
   }
 
-function calculateLoopPrice(originalPrice, condition){
-  const price = parsePrice(originalPrice);
-  const multiplier = getConditionMultiplier(condition);
+  function calculateLoopPrice(originalPrice, condition){
+    const price = parsePrice(originalPrice);
+    const multiplier = getConditionMultiplier(condition);
 
-  if(price === "" || multiplier == null) return "";
-  return Math.round(price * multiplier);
-}
+    if(price === "" || multiplier == null) return "";
+    return Math.round(price * multiplier);
+  }
 
   function updateAutoLoopPrice(){
     const calculated = calculateLoopPrice(f.newPrice.value, f.condition.value);
@@ -612,9 +605,6 @@ function calculateLoopPrice(originalPrice, condition){
     return `${API}/${encodeURIComponent(columnName)}/${encodeURIComponent(String(value))}`;
   }
 
-  /*************************************************************
-   * API CALLS (Sheet.best)
-   *************************************************************/
   async function apiGetAll(){
     const r = await fetch(API, { method:"GET", mode:"cors" });
     if(!r.ok) throw new Error(`GET failed: ${r.status}`);
@@ -710,15 +700,16 @@ function calculateLoopPrice(originalPrice, condition){
     return true;
   }
 
-  /*************************************************************
-   * FILTERS + RENDER
-   *************************************************************/
   function applyFilters(list){
-    const q = norm(elQ.value).toLowerCase();
+    const q = normalizeSearchValue(elQ.value);
 
     return list.filter(b => {
       if(!q) return true;
-      const hay = `${b.title||""} ${b.author||""} ${b.condition||""} ${b.id||""}`.toLowerCase();
+
+      const hay = normalizeSearchValue(
+        `${b.title || ""} ${b.author || ""} ${b.condition || ""} ${b.id || ""}`
+      );
+
       return hay.includes(q);
     });
   }
@@ -837,9 +828,6 @@ function calculateLoopPrice(originalPrice, condition){
     }
   }
 
-  /*************************************************************
-   * FLOW
-   *************************************************************/
   async function refresh(){
     setStatus("Loading from Google Sheet…", "loading");
 
@@ -871,9 +859,6 @@ function calculateLoopPrice(originalPrice, condition){
     }
   }
 
-  /*************************************************************
-   * EVENTS
-   *************************************************************/
   btnRefresh.addEventListener("click", refresh);
   elQ.addEventListener("input", render);
 
@@ -1032,9 +1017,6 @@ function calculateLoopPrice(originalPrice, condition){
   f.newPrice.addEventListener("input", updateAutoLoopPrice);
   f.condition.addEventListener("change", updateAutoLoopPrice);
 
-  /*************************************************************
-   * START
-   *************************************************************/
   refresh();
 </script>
 </body>
