@@ -6,16 +6,10 @@
   <title>IB BookLoop</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --panel:#0f1a2e;
-      --panel2:#12213a;
-      --text:#eaf0ff;
-      --muted:#a8b4d6;
-      --brand:#4f7cff;
-      --brand2:#2ed3b7;
-      --danger:#ff4d4d;
-      --ok:#2ed3b7;
-      --warn:#ffcc66;
+      --bg:#0b1220; --panel:#0f1a2e; --panel2:#12213a;
+      --text:#eaf0ff; --muted:#a8b4d6;
+      --brand:#4f7cff; --brand2:#2ed3b7;
+      --danger:#ff4d4d; --ok:#2ed3b7; --warn:#ffcc66;
       --border: rgba(255,255,255,.10);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
@@ -34,76 +28,41 @@
     .wrap{max-width:1100px;margin:0 auto;padding:20px}
 
     header{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 16px;
-      background: rgba(15,26,46,.75);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 10px;
-      z-index: 10;
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      padding:14px 16px; background: rgba(15,26,46,.75); border:1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(10px);
+      position: sticky; top: 10px; z-index: 10;
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
+    .brand{display:flex;align-items:center;gap:12px}
 
     .logo{
-      width:42px;
-      height:42px;
-      border-radius:12px;
+      width:42px;height:42px;border-radius:12px;
       background: linear-gradient(135deg,var(--brand),var(--brand2));
-      display:grid;
-      place-items:center;
-      font-weight:800;
+      display:grid;place-items:center;font-weight:800;
       box-shadow: 0 8px 20px rgba(79,124,255,.25);
     }
 
-    h1{
-      font-size:18px;
-      margin:0;
-    }
+    h1{font-size:18px;margin:0}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
 
-    .sub{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:2px;
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 
     .pill{
       border:1px solid var(--border);
       background: rgba(255,255,255,.06);
-      padding:10px 12px;
-      border-radius:999px;
+      padding:10px 12px;border-radius:999px;
       color:var(--text);
       outline:none;
     }
 
-    .pill::placeholder{
-      color: rgba(234,240,255,.55);
-    }
+    .pill::placeholder{color: rgba(234,240,255,.55)}
 
-    button,
-    .linkButton{
+    button, .linkButton{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
       color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
+      padding:10px 12px;border-radius:12px;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease, opacity .15s ease;
       text-decoration:none;
@@ -113,20 +72,9 @@
       font: inherit;
     }
 
-    button:hover,
-    .linkButton:hover{
-      background: rgba(255,255,255,.11);
-    }
-
-    button:active,
-    .linkButton:active{
-      transform: translateY(1px);
-    }
-
-    button:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-    }
+    button:hover, .linkButton:hover{background: rgba(255,255,255,.11)}
+    button:active, .linkButton:active{transform: translateY(1px)}
+    button:disabled{opacity:.45;cursor:not-allowed}
 
     .primary{
       background: linear-gradient(135deg,var(--brand),#6a8bff);
@@ -156,37 +104,17 @@
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
 
-    .panelHead .meta{
-      color:var(--muted);
-      font-size:12px;
-    }
+    .panelHead .meta{color:var(--muted);font-size:12px}
+    .panelBody{padding:16px}
 
-    .panelBody{
-      padding:16px;
-    }
+    .status{font-size:13px;color:var(--muted)}
+    .status b{color:var(--text)}
 
-    .status{
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .status b{
-      color:var(--text);
-    }
-
-    .grid{
-      display:grid;
-      gap:12px;
-      grid-template-columns:1fr;
-    }
+    .grid{display:grid;gap:12px;grid-template-columns:1fr}
 
     .cardRow{
       display:grid;
@@ -229,56 +157,26 @@
     }
 
     @media (max-width: 860px){
-      .cardRow{
-        grid-template-columns: 1fr;
-        min-height: unset;
-      }
-
-      .infoCol{
-        border-right:0;
-        border-bottom:1px solid var(--border);
-      }
-
-      .imgCol img{
-        max-height: 240px;
-      }
+      .cardRow{ grid-template-columns: 1fr; min-height: unset; }
+      .infoCol{ border-right:0; border-bottom:1px solid var(--border); }
+      .imgCol img{ max-height: 240px; }
     }
 
     .badge{
       align-self:flex-start;
       font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
+      padding:6px 10px;border-radius:999px;
       border:1px solid var(--border);
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
     }
 
-    .badge.ok{
-      background: rgba(46,211,183,.18);
-      border-color: rgba(46,211,183,.35);
-    }
+    .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
+    .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
+    .badge.danger{background: rgba(255,77,77,.18); border-color: rgba(255,77,77,.35)}
 
-    .badge.warn{
-      background: rgba(255,204,102,.18);
-      border-color: rgba(255,204,102,.35);
-    }
-
-    .badge.danger{
-      background: rgba(255,77,77,.18);
-      border-color: rgba(255,77,77,.35);
-    }
-
-    .title{
-      font-weight:800;
-      line-height:1.2;
-      font-size:16px;
-    }
-
-    .muted{
-      color:var(--muted);
-      font-size:13px;
-    }
+    .title{font-weight:800;line-height:1.2;font-size:16px}
+    .muted{color:var(--muted);font-size:13px}
 
     .kv{
       display:grid;
@@ -288,23 +186,9 @@
       color:var(--muted);
     }
 
-    .kv b{
-      color:var(--text);
-      font-weight:700;
-    }
-
-    .cardActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:auto;
-    }
-
-    .tiny{
-      padding:8px 10px;
-      border-radius:10px;
-      font-size:13px;
-    }
+    .kv b{color:var(--text);font-weight:700}
+    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+    .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
 
     .footerNote{
       margin-top:10px;
@@ -313,34 +197,14 @@
       line-height:1.35;
     }
 
-    .hr{
-      height:1px;
-      background:var(--border);
-      margin:14px 0;
-    }
+    .hr{height:1px;background:var(--border);margin:14px 0}
 
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
+    .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
+    @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
 
-    @media (max-width: 860px){
-      .twoCol{
-        grid-template-columns: 1fr;
-      }
-    }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
 
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:10px 0 6px;
-    }
-
-    input,
-    textarea,
-    select{
+    input, textarea, select{
       width:100%;
       padding:10px 12px;
       border-radius:12px;
@@ -356,20 +220,9 @@
       cursor:not-allowed;
     }
 
-    textarea{
-      min-height:90px;
-      resize:vertical;
-    }
-
-    .hint{
-      font-size:12px;
-      color:rgba(234,240,255,.55);
-      margin-top:6px;
-    }
-
-    .hidden{
-      display:none !important;
-    }
+    textarea{min-height:90px;resize:vertical}
+    .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
+    .hidden{display:none !important}
 
     .toast{
       margin-top:10px;
@@ -382,19 +235,11 @@
       white-space: pre-line;
     }
 
-    .toast.ok{
-      border-color: rgba(46,211,183,.35);
-      background: rgba(46,211,183,.10);
-    }
-
-    .toast.danger{
-      border-color: rgba(255,77,77,.35);
-      background: rgba(255,77,77,.10);
-    }
+    .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
+    .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
 
     .modalOverlay{
-      position:fixed;
-      inset:0;
+      position:fixed; inset:0;
       background: rgba(0,0,0,.55);
       display:none;
       align-items:center;
@@ -403,9 +248,7 @@
       z-index: 999;
     }
 
-    .modalOverlay.show{
-      display:flex;
-    }
+    .modalOverlay.show{display:flex}
 
     .modal{
       width: min(720px, 100%);
@@ -419,21 +262,13 @@
 
     .modalHead{
       padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
 
-    .modalBody{
-      padding:16px;
-    }
-
-    .modalTitle{
-      font-weight:800;
-    }
+    .modalBody{padding:16px}
+    .modalTitle{font-weight:800}
   </style>
 </head>
 
@@ -584,623 +419,605 @@
     </div>
   </div>
 
-  <script>
-    /*************************************************************
-     * CONFIG
-     *************************************************************/
-    const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
-    const API = SHEETBEST_BASE;
-    const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
-    const ADMIN_PASSWORD = "mazz";
+<script>
+  const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
+  const API = SHEETBEST_BASE;
+  const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
+  const ADMIN_PASSWORD = "mazz";
+  const SHEET_ID_COLUMN = "id";
 
-    // Must match the exact column header in your Google Sheet
-    const SHEET_ID_COLUMN = "id";
+  let books = [];
+  let admin = false;
+  let editingId = null;
+  let reservingId = null;
 
-    /*************************************************************
-     * STATE
-     *************************************************************/
-    let books = [];
-    let admin = false;
-    let editingId = null;
-    let reservingId = null;
+  const elGrid = document.getElementById("grid");
+  const elStatus = document.getElementById("status");
+  const elMeta = document.getElementById("meta");
+  const elQ = document.getElementById("q");
 
-    /*************************************************************
-     * DOM
-     *************************************************************/
-    const elGrid = document.getElementById("grid");
-    const elStatus = document.getElementById("status");
-    const elMeta = document.getElementById("meta");
-    const elQ = document.getElementById("q");
+  const btnRefresh = document.getElementById("btnRefresh");
+  const btnAdmin = document.getElementById("btnAdmin");
 
-    const btnRefresh = document.getElementById("btnRefresh");
-    const btnAdmin = document.getElementById("btnAdmin");
+  const adminPanel = document.getElementById("adminPanel");
+  const btnLogout = document.getElementById("btnLogout");
 
-    const adminPanel = document.getElementById("adminPanel");
-    const btnLogout = document.getElementById("btnLogout");
+  const form = document.getElementById("bookForm");
+  const f = {
+    id: document.getElementById("id"),
+    title: document.getElementById("title"),
+    author: document.getElementById("author"),
+    condition: document.getElementById("condition"),
+    newPrice: document.getElementById("newPrice"),
+    loopPrice: document.getElementById("loopPrice"),
+    availability: document.getElementById("availability"),
+    img: document.getElementById("img"),
+  };
 
-    const form = document.getElementById("bookForm");
-    const f = {
-      id: document.getElementById("id"),
-      title: document.getElementById("title"),
-      author: document.getElementById("author"),
-      condition: document.getElementById("condition"),
-      newPrice: document.getElementById("newPrice"),
-      loopPrice: document.getElementById("loopPrice"),
-      availability: document.getElementById("availability"),
-      img: document.getElementById("img"),
+  const btnSave = document.getElementById("btnSave");
+  const btnClear = document.getElementById("btnClear");
+  const btnDelete = document.getElementById("btnDelete");
+  const toast = document.getElementById("toast");
+
+  const reserveOverlay = document.getElementById("reserveOverlay");
+  const reserveTitle = document.getElementById("reserveTitle");
+  const reserveText = document.getElementById("reserveText");
+  const reserveClose = document.getElementById("reserveClose");
+  const reserveDone = document.getElementById("reserveDone");
+  const calLink = document.getElementById("calLink");
+
+  function setStatus(text, strong = "") {
+    elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+  }
+
+  function showToast(msg, type = "ok") {
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    setTimeout(() => toast.classList.add("hidden"), 3500);
+  }
+
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[m]));
+  }
+
+  function norm(s){
+    return String(s ?? "").trim();
+  }
+
+  function normalizeSearchValue(value){
+    return String(value ?? "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  function badgeClass(av){
+    const v = String(av || "").toLowerCase();
+    if(v === "available") return "ok";
+    if(v === "reserved") return "warn";
+    if(v === "sold") return "danger";
+    return "";
+  }
+
+  function parsePrice(x){
+    const s = String(x ?? "").replace(",", ".").trim();
+    if(!s) return "";
+    const n = Number(s);
+    return Number.isFinite(n) ? n : "";
+  }
+
+  function displayPriceInput(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return String(Number(n)).replace(".", ",");
+  }
+
+  function formatPrice(n){
+    if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
+    return `€ ${Number(n).toFixed(0)}`;
+  }
+
+  function isAvailable(b){
+    return String(b?.availability || "").toLowerCase() === "available";
+  }
+
+  function getConditionMultiplier(condition){
+    const c = String(condition || "").toLowerCase();
+    if(c === "new") return 0.90;
+    if(c === "like new") return 0.75;
+    if(c === "good condition") return 0.50;
+    if(c === "used") return 0.30;
+    return null;
+  }
+
+  function calculateLoopPrice(originalPrice, condition){
+    const price = parsePrice(originalPrice);
+    const multiplier = getConditionMultiplier(condition);
+
+    if(price === "" || multiplier == null) return "";
+    return Math.round(price * multiplier);
+  }
+
+  function updateAutoLoopPrice(){
+    const calculated = calculateLoopPrice(f.newPrice.value, f.condition.value);
+    f.loopPrice.value = displayPriceInput(calculated);
+  }
+
+  function bookFromForm(){
+    const now = new Date().toISOString();
+    const calculatedLoopPrice = calculateLoopPrice(f.newPrice.value, f.condition.value);
+
+    return {
+      id: norm(f.id.value),
+      title: norm(f.title.value),
+      author: norm(f.author.value),
+      programme: "",
+      subject: "",
+      year: "",
+      condition: norm(f.condition.value),
+      newPrice: parsePrice(f.newPrice.value),
+      loopPrice: calculatedLoopPrice,
+      availability: norm(f.availability.value) || "Available",
+      img: norm(f.img.value),
+      updatedAt: now
+    };
+  }
+
+  function fillForm(b){
+    editingId = b?.id || null;
+    f.id.value = b?.id || "";
+    f.title.value = b?.title || "";
+    f.author.value = b?.author || "";
+    f.condition.value = b?.condition || "";
+    f.newPrice.value = (b?.newPrice ?? "") !== "" ? displayPriceInput(b.newPrice) : "";
+    f.availability.value = b?.availability || "Available";
+    f.img.value = b?.img || "";
+
+    updateAutoLoopPrice();
+
+    f.id.disabled = !!editingId;
+    btnDelete.classList.toggle("hidden", !editingId);
+  }
+
+  function clearForm(){
+    editingId = null;
+    f.id.disabled = false;
+    form.reset();
+    f.availability.value = "Available";
+    f.loopPrice.value = "";
+    btnDelete.classList.add("hidden");
+  }
+
+  function closeReserveModal(){
+    reserveOverlay.classList.remove("show");
+    reservingId = null;
+    reserveDone.disabled = false;
+    reserveDone.textContent = "I booked it";
+  }
+
+  function buildFilterUrl(columnName, value){
+    return `${API}/${encodeURIComponent(columnName)}/${encodeURIComponent(String(value))}`;
+  }
+
+  async function apiGetAll(){
+    const r = await fetch(API, { method:"GET", mode:"cors" });
+    if(!r.ok) throw new Error(`GET failed: ${r.status}`);
+
+    const data = await r.json();
+    if(!Array.isArray(data)) return [];
+
+    return data.map(x => ({
+      ...x,
+      newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
+      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", "."))
+    }));
+  }
+
+  async function apiAdd(book){
+    const r = await fetch(API, {
+      method:"POST",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(book)
+    });
+
+    if(!r.ok){
+      const t = await r.text().catch(() => "");
+      throw new Error(`POST failed (${r.status}). ${t}`);
+    }
+
+    await r.text().catch(() => "");
+    return true;
+  }
+
+  async function apiPatchById(idVal, patchObj){
+    const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
+
+    const r = await fetch(url, {
+      method:"PATCH",
+      mode:"cors",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(patchObj)
+    });
+
+    if(!r.ok){
+      const t = await r.text().catch(() => "");
+      throw new Error(`PATCH failed (${r.status}). ${t}`);
+    }
+
+    await r.text().catch(() => "");
+    return true;
+  }
+
+  async function apiDeleteById(idVal){
+    const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
+
+    const r = await fetch(url, {
+      method:"DELETE",
+      mode:"cors"
+    });
+
+    if(!r.ok){
+      const t = await r.text().catch(() => "");
+      throw new Error(`DELETE failed (${r.status}). ${t}`);
+    }
+
+    await r.text().catch(() => "");
+    return true;
+  }
+
+  async function apiUpsert(book){
+    const exists = books.some(x => String(x.id) === String(book.id));
+
+    if(exists){
+      await apiPatchById(book.id, book);
+      return { mode:"patch" };
+    } else {
+      await apiAdd(book);
+      return { mode:"post" };
+    }
+  }
+
+  async function apiSetAvailability(idVal, availability){
+    const now = new Date().toISOString();
+
+    const patch = {
+      availability,
+      updatedAt: now
     };
 
-    const btnSave = document.getElementById("btnSave");
-    const btnClear = document.getElementById("btnClear");
-    const btnDelete = document.getElementById("btnDelete");
-    const toast = document.getElementById("toast");
-
-    const reserveOverlay = document.getElementById("reserveOverlay");
-    const reserveTitle = document.getElementById("reserveTitle");
-    const reserveText = document.getElementById("reserveText");
-    const reserveClose = document.getElementById("reserveClose");
-    const reserveDone = document.getElementById("reserveDone");
-    const calLink = document.getElementById("calLink");
-
-    /*************************************************************
-     * HELPERS
-     *************************************************************/
-    function setStatus(text, strong = "") {
-      elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
+    if(String(availability).toLowerCase() === "reserved"){
+      patch.reservedAt = now;
     }
 
-    function showToast(msg, type = "ok") {
-      toast.className = `toast ${type}`;
-      toast.textContent = msg;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 3500);
-    }
+    await apiPatchById(idVal, patch);
+    return true;
+  }
 
-    function esc(s){
-      return String(s ?? "").replace(/[&<>"']/g, m => ({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#39;'
-      }[m]));
-    }
+  function applyFilters(list){
+    const q = normalizeSearchValue(elQ.value);
 
-    function norm(s){
-      return String(s ?? "").trim();
-    }
+    return list.filter(b => {
+      if(!q) return true;
 
-    function badgeClass(av){
-      const v = String(av || "").toLowerCase();
-      if(v === "available") return "ok";
-      if(v === "reserved") return "warn";
-      if(v === "sold") return "danger";
-      return "";
-    }
+      const hay = normalizeSearchValue(
+        `${b.title || ""} ${b.author || ""} ${b.condition || ""} ${b.id || ""}`
+      );
 
-    function parsePrice(x){
-      const s = String(x ?? "").replace(",", ".").trim();
-      if(!s) return "";
-      const n = Number(s);
-      return Number.isFinite(n) ? n : "";
-    }
+      return hay.includes(q);
+    });
+  }
 
-    function displayPriceInput(n){
-      if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
-      return String(Number(n)).replace(".", ",");
-    }
+  function render(){
+    const list = applyFilters(books);
+    elMeta.textContent = `${list.length} / ${books.length} books`;
 
-    function formatPrice(n){
-      if(n === "" || n == null || !Number.isFinite(Number(n))) return "";
-      return `€ ${Number(n).toFixed(0)}`;
-    }
+    elGrid.innerHTML = list.map(b => {
+      const av = b.availability || "Available";
+      const bc = badgeClass(av);
+      const img = norm(b.img);
+      const hasImg = !!img;
 
-    function isAvailable(b){
-      return String(b?.availability || "").toLowerCase() === "available";
-    }
+      const np = formatPrice(b.newPrice);
+      const lp = formatPrice(b.loopPrice);
+      const reserveDisabled = !isAvailable(b);
 
-    function getConditionMultiplier(condition){
-      const c = String(condition || "").toLowerCase();
-      if(c === "new") return 0.90;
-      if(c === "like new") return 0.75;
-      if(c === "good condition") return 0.50;
-      if(c === "used") return 0.30;
-      return null;
-    }
+      return `
+        <div class="cardRow">
+          <div class="infoCol">
+            <div class="badge ${bc}">${esc(av)}</div>
 
-    function calculateLoopPrice(originalPrice, condition){
-      const price = parsePrice(originalPrice);
-      const multiplier = getConditionMultiplier(condition);
+            <div class="title">${esc(b.title || "(Untitled)")}</div>
+            <div class="muted">${esc(b.author || "")}</div>
 
-      if(price === "" || multiplier == null) return "";
-      return Math.round(price * multiplier);
-    }
-
-    function updateAutoLoopPrice(){
-      const calculated = calculateLoopPrice(f.newPrice.value, f.condition.value);
-      f.loopPrice.value = displayPriceInput(calculated);
-    }
-
-    function bookFromForm(){
-      const now = new Date().toISOString();
-      const calculatedLoopPrice = calculateLoopPrice(f.newPrice.value, f.condition.value);
-
-      return {
-        id: norm(f.id.value),
-        title: norm(f.title.value),
-        author: norm(f.author.value),
-        programme: "",
-        subject: "",
-        year: "",
-        condition: norm(f.condition.value),
-        newPrice: parsePrice(f.newPrice.value),
-        loopPrice: calculatedLoopPrice,
-        availability: norm(f.availability.value) || "Available",
-        img: norm(f.img.value),
-        updatedAt: now
-      };
-    }
-
-    function fillForm(b){
-      editingId = b?.id || null;
-      f.id.value = b?.id || "";
-      f.title.value = b?.title || "";
-      f.author.value = b?.author || "";
-      f.condition.value = b?.condition || "";
-      f.newPrice.value = (b?.newPrice ?? "") !== "" ? displayPriceInput(b.newPrice) : "";
-      f.availability.value = b?.availability || "Available";
-      f.img.value = b?.img || "";
-
-      updateAutoLoopPrice();
-
-      f.id.disabled = !!editingId;
-      btnDelete.classList.toggle("hidden", !editingId);
-    }
-
-    function clearForm(){
-      editingId = null;
-      f.id.disabled = false;
-      form.reset();
-      f.availability.value = "Available";
-      f.loopPrice.value = "";
-      btnDelete.classList.add("hidden");
-    }
-
-    function closeReserveModal(){
-      reserveOverlay.classList.remove("show");
-      reservingId = null;
-      reserveDone.disabled = false;
-      reserveDone.textContent = "I booked it";
-    }
-
-    function buildFilterUrl(columnName, value){
-      return `${API}/${encodeURIComponent(columnName)}/${encodeURIComponent(String(value))}`;
-    }
-
-    /*************************************************************
-     * API CALLS (Sheet.best)
-     *************************************************************/
-    async function apiGetAll(){
-      const r = await fetch(API, { method:"GET", mode:"cors" });
-      if(!r.ok) throw new Error(`GET failed: ${r.status}`);
-
-      const data = await r.json();
-      if(!Array.isArray(data)) return [];
-
-      return data.map(x => ({
-        ...x,
-        newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
-        loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", "."))
-      }));
-    }
-
-    async function apiAdd(book){
-      const r = await fetch(API, {
-        method:"POST",
-        mode:"cors",
-        headers: { "Content-Type":"application/json" },
-        body: JSON.stringify(book)
-      });
-
-      if(!r.ok){
-        const t = await r.text().catch(() => "");
-        throw new Error(`POST failed (${r.status}). ${t}`);
-      }
-
-      await r.text().catch(() => "");
-      return true;
-    }
-
-    async function apiPatchById(idVal, patchObj){
-      const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
-
-      const r = await fetch(url, {
-        method:"PATCH",
-        mode:"cors",
-        headers: { "Content-Type":"application/json" },
-        body: JSON.stringify(patchObj)
-      });
-
-      if(!r.ok){
-        const t = await r.text().catch(() => "");
-        throw new Error(`PATCH failed (${r.status}). ${t}`);
-      }
-
-      await r.text().catch(() => "");
-      return true;
-    }
-
-    async function apiDeleteById(idVal){
-      const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
-
-      const r = await fetch(url, {
-        method:"DELETE",
-        mode:"cors"
-      });
-
-      if(!r.ok){
-        const t = await r.text().catch(() => "");
-        throw new Error(`DELETE failed (${r.status}). ${t}`);
-      }
-
-      await r.text().catch(() => "");
-      return true;
-    }
-
-    async function apiUpsert(book){
-      const exists = books.some(x => String(x.id) === String(book.id));
-
-      if(exists){
-        await apiPatchById(book.id, book);
-        return { mode:"patch" };
-      } else {
-        await apiAdd(book);
-        return { mode:"post" };
-      }
-    }
-
-    async function apiSetAvailability(idVal, availability){
-      const now = new Date().toISOString();
-
-      const patch = {
-        availability,
-        updatedAt: now
-      };
-
-      if(String(availability).toLowerCase() === "reserved"){
-        patch.reservedAt = now;
-      }
-
-      await apiPatchById(idVal, patch);
-      return true;
-    }
-
-    /*************************************************************
-     * FILTERS + RENDER
-     *************************************************************/
-    function applyFilters(list){
-      const q = norm(elQ.value).toLowerCase();
-
-      return list.filter(b => {
-        if(!q) return true;
-        const hay = `${b.title||""} ${b.author||""} ${b.condition||""} ${b.id||""}`.toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    function render(){
-      const list = applyFilters(books);
-      elMeta.textContent = `${list.length} / ${books.length} books`;
-
-      elGrid.innerHTML = list.map(b => {
-        const av = b.availability || "Available";
-        const bc = badgeClass(av);
-        const img = norm(b.img);
-        const hasImg = !!img;
-
-        const np = formatPrice(b.newPrice);
-        const lp = formatPrice(b.loopPrice);
-        const reserveDisabled = !isAvailable(b);
-
-        return `
-          <div class="cardRow">
-            <div class="infoCol">
-              <div class="badge ${bc}">${esc(av)}</div>
-
-              <div class="title">${esc(b.title || "(Untitled)")}</div>
-              <div class="muted">${esc(b.author || "")}</div>
-
-              <div class="kv">
-                <div>Condition</div><div><b>${esc(b.condition || "-")}</b></div>
-                <div>Price</div><div><b>${esc(lp || "-")}</b> <span class="muted">(original: ${esc(np || "-")})</span></div>
-              </div>
-
-              <div class="cardActions">
-                <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
-                  ${reserveDisabled ? "Not available" : "Reserve"}
-                </button>
-
-                ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
-                ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
-                <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
-              </div>
-
-              <div class="muted" style="margin-top:4px;font-size:12px">
-                ID: <b>${esc(b.id||"-")}</b>
-              </div>
+            <div class="kv">
+              <div>Condition</div><div><b>${esc(b.condition || "-")}</b></div>
+              <div>Price</div><div><b>${esc(lp || "-")}</b> <span class="muted">(original: ${esc(np || "-")})</span></div>
             </div>
 
-            <div class="imgCol">
-              ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+            <div class="cardActions">
+              <button class="tiny primary" data-reserve="${esc(b.id)}" ${reserveDisabled ? "disabled" : ""}>
+                ${reserveDisabled ? "Not available" : "Reserve"}
+              </button>
+
+              ${admin ? `<button class="tiny ok" data-edit="${esc(b.id)}">Edit</button>` : ``}
+              ${admin ? `<button class="tiny danger" data-del="${esc(b.id)}">Delete</button>` : ``}
+              <button class="tiny" data-copy="${esc(b.id)}">Copy ID</button>
+            </div>
+
+            <div class="muted" style="margin-top:4px;font-size:12px">
+              ID: <b>${esc(b.id||"-")}</b>
             </div>
           </div>
-        `;
-      }).join("");
 
-      elGrid.querySelectorAll("[data-copy]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.getAttribute("data-copy");
-          navigator.clipboard?.writeText(id).catch(() => {});
-          showToast(`Copied ID: ${id}`, "ok");
-        });
+          <div class="imgCol">
+            ${hasImg ? `<img src="${esc(img)}" alt="${esc(b.title||"")}" />` : `<div class="muted">No image</div>`}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    elGrid.querySelectorAll("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-copy");
+        navigator.clipboard?.writeText(id).catch(() => {});
+        showToast(`Copied ID: ${id}`, "ok");
       });
-
-      elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const id = btn.getAttribute("data-reserve");
-          const b = books.find(x => String(x.id) === String(id));
-          if(!b) return;
-
-          if(!isAvailable(b)){
-            showToast("This book is no longer available.", "danger");
-            await refresh();
-            return;
-          }
-
-          reservingId = id;
-          reserveTitle.textContent = `Reserve: ${b.title || id}`;
-          reserveText.textContent =
-            "1) Book a pickup slot on Google Calendar.\n" +
-            "2) Come back here and click 'I booked it'.\n" +
-            "3) Then go to the MYP Building – Reception at your booked time to receive and buy the books.\n" +
-            "4) Only then will the book be marked as 'Reserved'.";
-
-          calLink.href = GOOGLE_CAL_BOOKING_URL;
-          reserveOverlay.classList.add("show");
-        });
-      });
-
-      if(admin){
-        elGrid.querySelectorAll("[data-edit]").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-edit");
-            const b = books.find(x => String(x.id) === String(id));
-            if(!b) return;
-            adminPanel.scrollIntoView({behavior:"smooth", block:"start"});
-            fillForm(b);
-            showToast("Edit mode enabled.", "ok");
-          });
-        });
-
-        elGrid.querySelectorAll("[data-del]").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            const id = btn.getAttribute("data-del");
-            if(!confirm(`Delete the book with ID "${id}"?`)) return;
-
-            try{
-              setStatus("Deleting…", "working");
-              await apiDeleteById(id);
-              await refresh();
-              showToast("Book deleted.", "ok");
-            }catch(e){
-              console.error(e);
-              showToast(`Delete error: ${e.message}`, "danger");
-              setStatus("Error", "error");
-            }
-          });
-        });
-      }
-    }
-
-    /*************************************************************
-     * FLOW
-     *************************************************************/
-    async function refresh(){
-      setStatus("Loading from Google Sheet…", "loading");
-
-      try{
-        const data = await apiGetAll();
-
-        const rank = (x) => {
-          const v = String(x.availability || "").toLowerCase();
-          if(v === "available") return 0;
-          if(v === "reserved") return 1;
-          if(v === "sold") return 2;
-          return 3;
-        };
-
-        books = data
-          .filter(x => x && String(x.id || "").trim() !== "")
-          .sort((a,b) => {
-            const d = rank(a) - rank(b);
-            if(d !== 0) return d;
-            return String(a.title || "").localeCompare(String(b.title || ""), "en");
-          });
-
-        setStatus("OK", "ready");
-        render();
-      }catch(e){
-        console.error(e);
-        setStatus("Error loading data (check Sheet.best connection).", "error");
-        showToast(`GET error: ${e.message}`, "danger");
-      }
-    }
-
-    /*************************************************************
-     * EVENTS
-     *************************************************************/
-    btnRefresh.addEventListener("click", refresh);
-    elQ.addEventListener("input", render);
-
-    btnAdmin.addEventListener("click", () => {
-      if(admin){
-        adminPanel.classList.toggle("hidden");
-        render();
-        return;
-      }
-
-      const pwd = prompt("Admin password:");
-      if(pwd == null) return;
-
-      if(pwd !== ADMIN_PASSWORD){
-        alert("Wrong password.");
-        return;
-      }
-
-      admin = true;
-      adminPanel.classList.remove("hidden");
-      render();
-      showToast("Admin mode enabled.", "ok");
     });
 
-    btnLogout.addEventListener("click", () => {
-      admin = false;
-      adminPanel.classList.add("hidden");
-      clearForm();
-      render();
-      showToast("Logged out.", "ok");
-    });
+    elGrid.querySelectorAll("[data-reserve]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-reserve");
+        const b = books.find(x => String(x.id) === String(id));
+        if(!b) return;
 
-    btnClear.addEventListener("click", clearForm);
-
-    btnDelete.addEventListener("click", async () => {
-      if(!editingId) return;
-      if(!confirm(`Delete the book with ID "${editingId}"?`)) return;
-
-      try{
-        setStatus("Deleting…", "working");
-        await apiDeleteById(editingId);
-        clearForm();
-        await refresh();
-        showToast("Book deleted.", "ok");
-      }catch(e){
-        console.error(e);
-        showToast(`Delete error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
-    });
-
-    form.addEventListener("submit", async (ev) => {
-      ev.preventDefault();
-
-      if(!admin){
-        alert("You must be logged in as admin.");
-        return;
-      }
-
-      const book = bookFromForm();
-
-      if(!book.id || !book.title){
-        showToast("ID and Title are required.", "danger");
-        return;
-      }
-
-      if(!book.condition){
-        showToast("Please select a condition.", "danger");
-        return;
-      }
-
-      if(book.newPrice === ""){
-        showToast("Please enter the original price.", "danger");
-        return;
-      }
-
-      if(book.loopPrice === ""){
-        showToast("BookLoop price could not be calculated.", "danger");
-        return;
-      }
-
-      btnSave.disabled = true;
-      setStatus("Saving to Google Sheet…", "saving");
-
-      try{
-        const res = await apiUpsert(book);
-        await refresh();
-        showToast(res.mode === "post" ? "Book added." : "Book updated.", "ok");
-        clearForm();
-        setStatus("OK", "ready");
-      }catch(e){
-        console.error(e);
-        showToast(`Save error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }finally{
-        btnSave.disabled = false;
-      }
-    });
-
-    reserveClose.addEventListener("click", closeReserveModal);
-
-    reserveOverlay.addEventListener("click", (e) => {
-      if(e.target === reserveOverlay) closeReserveModal();
-    });
-
-    reserveDone.addEventListener("click", async () => {
-      if(!reservingId) return;
-
-      const currentId = reservingId;
-      const b = books.find(x => String(x.id) === String(currentId));
-
-      if(!b){
-        closeReserveModal();
-        showToast("Book not found. Please refresh and try again.", "danger");
-        return;
-      }
-
-      if(!isAvailable(b)){
-        closeReserveModal();
-        showToast("This book is no longer available.", "danger");
-        await refresh();
-        return;
-      }
-
-      reserveDone.disabled = true;
-      reserveDone.textContent = "Saving...";
-
-      try{
-        setStatus("Reserving…", "working");
-        await apiSetAvailability(currentId, "Reserved");
-        await refresh();
-
-        const updated = books.find(x => String(x.id) === String(currentId));
-        if(!updated || String(updated.availability || "").toLowerCase() !== "reserved"){
-          throw new Error("The reservation was not confirmed by the sheet. Check the ID column name in SHEET_ID_COLUMN.");
+        if(!isAvailable(b)){
+          showToast("This book is no longer available.", "danger");
+          await refresh();
+          return;
         }
 
-        closeReserveModal();
-        showToast("Great. The book is now marked as Reserved.", "ok");
-        setStatus("OK", "ready");
-      }catch(e){
-        console.error(e);
-        reserveDone.disabled = false;
-        reserveDone.textContent = "I booked it";
-        showToast(`Reservation error: ${e.message}`, "danger");
-        setStatus("Error", "error");
-      }
+        reservingId = id;
+        reserveTitle.textContent = `Reserve: ${b.title || id}`;
+        reserveText.textContent =
+          "1) Book a pickup slot on Google Calendar.\n" +
+          "2) Come back here and click 'I booked it'.\n" +
+          "3) Then go to the MYP Building – Reception at your booked time to receive and buy the books.\n" +
+          "4) Only then will the book be marked as 'Reserved'.";
+
+        calLink.href = GOOGLE_CAL_BOOKING_URL;
+        reserveOverlay.classList.add("show");
+      });
     });
 
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape" && reserveOverlay.classList.contains("show")){
-        closeReserveModal();
+    if(admin){
+      elGrid.querySelectorAll("[data-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-edit");
+          const b = books.find(x => String(x.id) === String(id));
+          if(!b) return;
+          adminPanel.scrollIntoView({behavior:"smooth", block:"start"});
+          fillForm(b);
+          showToast("Edit mode enabled.", "ok");
+        });
+      });
+
+      elGrid.querySelectorAll("[data-del]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.getAttribute("data-del");
+          if(!confirm(`Delete the book with ID "${id}"?`)) return;
+
+          try{
+            setStatus("Deleting…", "working");
+            await apiDeleteById(id);
+            await refresh();
+            showToast("Book deleted.", "ok");
+          }catch(e){
+            console.error(e);
+            showToast(`Delete error: ${e.message}`, "danger");
+            setStatus("Error", "error");
+          }
+        });
+      });
+    }
+  }
+
+  async function refresh(){
+    setStatus("Loading from Google Sheet…", "loading");
+
+    try{
+      const data = await apiGetAll();
+
+      const rank = (x) => {
+        const v = String(x.availability || "").toLowerCase();
+        if(v === "available") return 0;
+        if(v === "reserved") return 1;
+        if(v === "sold") return 2;
+        return 3;
+      };
+
+      books = data
+        .filter(x => x && String(x.id || "").trim() !== "")
+        .sort((a,b) => {
+          const d = rank(a) - rank(b);
+          if(d !== 0) return d;
+          return String(a.title || "").localeCompare(String(b.title || ""), "en");
+        });
+
+      setStatus("OK", "ready");
+      render();
+    }catch(e){
+      console.error(e);
+      setStatus("Error loading data (check Sheet.best connection).", "error");
+      showToast(`GET error: ${e.message}`, "danger");
+    }
+  }
+
+  btnRefresh.addEventListener("click", refresh);
+  elQ.addEventListener("input", render);
+
+  btnAdmin.addEventListener("click", () => {
+    if(admin){
+      adminPanel.classList.toggle("hidden");
+      render();
+      return;
+    }
+
+    const pwd = prompt("Admin password:");
+    if(pwd == null) return;
+
+    if(pwd !== ADMIN_PASSWORD){
+      alert("Wrong password.");
+      return;
+    }
+
+    admin = true;
+    adminPanel.classList.remove("hidden");
+    render();
+    showToast("Admin mode enabled.", "ok");
+  });
+
+  btnLogout.addEventListener("click", () => {
+    admin = false;
+    adminPanel.classList.add("hidden");
+    clearForm();
+    render();
+    showToast("Logged out.", "ok");
+  });
+
+  btnClear.addEventListener("click", clearForm);
+
+  btnDelete.addEventListener("click", async () => {
+    if(!editingId) return;
+    if(!confirm(`Delete the book with ID "${editingId}"?`)) return;
+
+    try{
+      setStatus("Deleting…", "working");
+      await apiDeleteById(editingId);
+      clearForm();
+      await refresh();
+      showToast("Book deleted.", "ok");
+    }catch(e){
+      console.error(e);
+      showToast(`Delete error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+
+    if(!admin){
+      alert("You must be logged in as admin.");
+      return;
+    }
+
+    const book = bookFromForm();
+
+    if(!book.id || !book.title){
+      showToast("ID and Title are required.", "danger");
+      return;
+    }
+
+    if(!book.condition){
+      showToast("Please select a condition.", "danger");
+      return;
+    }
+
+    if(book.newPrice === ""){
+      showToast("Please enter the original price.", "danger");
+      return;
+    }
+
+    if(book.loopPrice === ""){
+      showToast("BookLoop price could not be calculated.", "danger");
+      return;
+    }
+
+    btnSave.disabled = true;
+    setStatus("Saving to Google Sheet…", "saving");
+
+    try{
+      const res = await apiUpsert(book);
+      await refresh();
+      showToast(res.mode === "post" ? "Book added." : "Book updated.", "ok");
+      clearForm();
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      showToast(`Save error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }finally{
+      btnSave.disabled = false;
+    }
+  });
+
+  reserveClose.addEventListener("click", closeReserveModal);
+
+  reserveOverlay.addEventListener("click", (e) => {
+    if(e.target === reserveOverlay) closeReserveModal();
+  });
+
+  reserveDone.addEventListener("click", async () => {
+    if(!reservingId) return;
+
+    const currentId = reservingId;
+    const b = books.find(x => String(x.id) === String(currentId));
+
+    if(!b){
+      closeReserveModal();
+      showToast("Book not found. Please refresh and try again.", "danger");
+      return;
+    }
+
+    if(!isAvailable(b)){
+      closeReserveModal();
+      showToast("This book is no longer available.", "danger");
+      await refresh();
+      return;
+    }
+
+    reserveDone.disabled = true;
+    reserveDone.textContent = "Saving...";
+
+    try{
+      setStatus("Reserving…", "working");
+      await apiSetAvailability(currentId, "Reserved");
+      await refresh();
+
+      const updated = books.find(x => String(x.id) === String(currentId));
+      if(!updated || String(updated.availability || "").toLowerCase() !== "reserved"){
+        throw new Error("The reservation was not confirmed by the sheet. Check the ID column name in SHEET_ID_COLUMN.");
       }
-    });
 
-    f.newPrice.addEventListener("input", updateAutoLoopPrice);
-    f.condition.addEventListener("change", updateAutoLoopPrice);
+      closeReserveModal();
+      showToast("Great. The book is now marked as Reserved.", "ok");
+      setStatus("OK", "ready");
+    }catch(e){
+      console.error(e);
+      reserveDone.disabled = false;
+      reserveDone.textContent = "I booked it";
+      showToast(`Reservation error: ${e.message}`, "danger");
+      setStatus("Error", "error");
+    }
+  });
 
-    /*************************************************************
-     * START
-     *************************************************************/
-    refresh();
-  </script>
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && reserveOverlay.classList.contains("show")){
+      closeReserveModal();
+    }
+  });
+
+  f.newPrice.addEventListener("input", updateAutoLoopPrice);
+  f.condition.addEventListener("change", updateAutoLoopPrice);
+
+  refresh();
+</script>
 </body>
 </html>
