@@ -14,31 +14,40 @@
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background: radial-gradient(1200px 800px at 20% 0%, #14254a 0%, var(--bg) 55%);
       color:var(--text);
     }
+
     a{color:inherit}
     .wrap{max-width:1100px;margin:0 auto;padding:20px}
+
     header{
       display:flex;gap:14px;align-items:center;justify-content:space-between;
       padding:14px 16px; background: rgba(15,26,46,.75); border:1px solid var(--border);
       border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(10px);
       position: sticky; top: 10px; z-index: 10;
     }
+
     .brand{display:flex;align-items:center;gap:12px}
+
     .logo{
       width:42px;height:42px;border-radius:12px;
       background: linear-gradient(135deg,var(--brand),var(--brand2));
       display:grid;place-items:center;font-weight:800;
       box-shadow: 0 8px 20px rgba(79,124,255,.25);
     }
+
     h1{font-size:18px;margin:0}
     .sub{font-size:12px;color:var(--muted);margin-top:2px}
+
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
     .pill{
       border:1px solid var(--border);
       background: rgba(255,255,255,.06);
@@ -46,7 +55,9 @@
       color:var(--text);
       outline:none;
     }
+
     .pill::placeholder{color: rgba(234,240,255,.55)}
+
     button, .linkButton{
       border:1px solid var(--border);
       background: rgba(255,255,255,.07);
@@ -60,17 +71,21 @@
       justify-content:center;
       font: inherit;
     }
+
     button:hover, .linkButton:hover{background: rgba(255,255,255,.11)}
     button:active, .linkButton:active{transform: translateY(1px)}
     button:disabled{opacity:.45;cursor:not-allowed}
+
     .primary{
       background: linear-gradient(135deg,var(--brand),#6a8bff);
       border-color: rgba(255,255,255,.15);
     }
+
     .danger{
       background: rgba(255,77,77,.12);
       border-color: rgba(255,77,77,.35);
     }
+
     .ok{
       background: rgba(46,211,183,.12);
       border-color: rgba(46,211,183,.35);
@@ -85,16 +100,20 @@
       backdrop-filter: blur(10px);
       overflow:hidden;
     }
+
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid var(--border);
       display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
+
     .panelHead .meta{color:var(--muted);font-size:12px}
     .panelBody{padding:16px}
+
     .status{font-size:13px;color:var(--muted)}
     .status b{color:var(--text)}
+
     .grid{display:grid;gap:12px;grid-template-columns:1fr}
 
     .cardRow{
@@ -108,6 +127,7 @@
       background: rgba(255,255,255,.04);
       box-shadow: var(--shadow);
     }
+
     .infoCol{
       padding:14px;
       border-right:1px solid var(--border);
@@ -116,6 +136,7 @@
       flex-direction:column;
       gap:10px;
     }
+
     .imgCol{
       background: rgba(0,0,0,.12);
       display:flex;
@@ -124,6 +145,7 @@
       overflow:hidden;
       padding:10px;
     }
+
     .imgCol img{
       width:100%;
       height:100%;
@@ -133,6 +155,7 @@
       border-radius: 12px;
       background: rgba(255,255,255,.03);
     }
+
     @media (max-width: 860px){
       .cardRow{ grid-template-columns: 1fr; min-height: unset; }
       .infoCol{ border-right:0; border-bottom:1px solid var(--border); }
@@ -147,23 +170,40 @@
       background: rgba(0,0,0,.35);
       backdrop-filter: blur(6px);
     }
+
     .badge.ok{background: rgba(46,211,183,.18); border-color: rgba(46,211,183,.35)}
     .badge.warn{background: rgba(255,204,102,.18); border-color: rgba(255,204,102,.35)}
     .badge.danger{background: rgba(255,77,77,.18); border-color: rgba(255,77,77,.35)}
 
     .title{font-weight:800;line-height:1.2;font-size:16px}
     .muted{color:var(--muted);font-size:13px}
-    .kv{display:grid;grid-template-columns: 90px 1fr;gap:6px 10px;font-size:13px;color:var(--muted)}
+
+    .kv{
+      display:grid;
+      grid-template-columns: 90px 1fr;
+      gap:6px 10px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
     .kv b{color:var(--text);font-weight:700}
     .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
     .tiny{padding:8px 10px;border-radius:10px;font-size:13px}
 
-    .footerNote{margin-top:10px;color:rgba(234,240,255,.55);font-size:12px;line-height:1.35}
+    .footerNote{
+      margin-top:10px;
+      color:rgba(234,240,255,.55);
+      font-size:12px;
+      line-height:1.35;
+    }
+
     .hr{height:1px;background:var(--border);margin:14px 0}
+
     .twoCol{display:grid;grid-template-columns: 1fr 1fr;gap:12px}
     @media (max-width: 860px){ .twoCol{grid-template-columns: 1fr} }
 
     label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+
     input, textarea, select{
       width:100%;
       padding:10px 12px;
@@ -174,9 +214,11 @@
       outline:none;
       font: inherit;
     }
+
     textarea{min-height:90px;resize:vertical}
     .hint{font-size:12px;color:rgba(234,240,255,.55);margin-top:6px}
     .hidden{display:none !important}
+
     .toast{
       margin-top:10px;
       padding:10px 12px;
@@ -187,6 +229,7 @@
       font-size:13px;
       white-space: pre-line;
     }
+
     .toast.ok{border-color: rgba(46,211,183,.35); background: rgba(46,211,183,.10)}
     .toast.danger{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
 
@@ -199,7 +242,9 @@
       padding:16px;
       z-index: 999;
     }
+
     .modalOverlay.show{display:flex}
+
     .modal{
       width: min(720px, 100%);
       background: rgba(15,26,46,.92);
@@ -209,12 +254,14 @@
       overflow:hidden;
       backdrop-filter: blur(12px);
     }
+
     .modalHead{
       padding:14px 16px;
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
     }
+
     .modalBody{padding:16px}
     .modalTitle{font-weight:800}
   </style>
@@ -367,13 +414,17 @@
 
 <script>
   /*************************************************************
-   * CONFIG (Sheet.best + Calendar)
+   * CONFIG
    *************************************************************/
   const SHEETBEST_BASE = "https://api.sheetbest.com/sheets/21769496-e3dd-4ffc-a766-643d0fd79d9c";
   const API = SHEETBEST_BASE;
   const GOOGLE_CAL_BOOKING_URL = "https://calendar.app.google/f1faKPT65RskKMiU6";
   const ADMIN_PASSWORD = "mazz";
-  const PICKUP_LOCATION = "MYP Building – Reception";
+
+  // IMPORTANT:
+  // This must match the EXACT column header in your Google Sheet.
+  // If your sheet header is "ID" or "Book ID", change it here.
+  const SHEET_ID_COLUMN = "id";
 
   /*************************************************************
    * STATE
@@ -431,7 +482,7 @@
     elStatus.innerHTML = `Status: <b>${strong || text}</b>${strong ? ` <span class="muted">${text}</span>` : ""}`;
   }
 
-  function showToast(msg, type="ok") {
+  function showToast(msg, type = "ok") {
     toast.className = `toast ${type}`;
     toast.textContent = msg;
     toast.classList.remove("hidden");
@@ -440,7 +491,11 @@
 
   function esc(s){
     return String(s ?? "").replace(/[&<>"']/g, m => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
     }[m]));
   }
 
@@ -486,7 +541,7 @@
       loopPrice: parsePrice(f.loopPrice.value),
       availability: norm(f.availability.value) || "Available",
       img: norm(f.img.value),
-      updatedAt: now,
+      updatedAt: now
     };
   }
 
@@ -523,24 +578,31 @@
     reserveDone.textContent = "I booked it";
   }
 
+  function buildFilterUrl(columnName, value){
+    return `${API}/${encodeURIComponent(columnName)}/${encodeURIComponent(String(value))}`;
+  }
+
   /*************************************************************
    * API CALLS (Sheet.best)
    *************************************************************/
   async function apiGetAll(){
-    const r = await fetch(API, { method:"GET" });
+    const r = await fetch(API, { method:"GET", mode:"cors" });
     if(!r.ok) throw new Error(`GET failed: ${r.status}`);
+
     const data = await r.json();
     if(!Array.isArray(data)) return [];
+
     return data.map(x => ({
       ...x,
       newPrice: x.newPrice === "" || x.newPrice == null ? "" : Number(String(x.newPrice).replace(",", ".")),
-      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", ".")),
+      loopPrice: x.loopPrice === "" || x.loopPrice == null ? "" : Number(String(x.loopPrice).replace(",", "."))
     }));
   }
 
   async function apiAdd(book){
     const r = await fetch(API, {
       method:"POST",
+      mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(book)
     });
@@ -550,13 +612,16 @@
       throw new Error(`POST failed (${r.status}). ${t}`);
     }
 
+    await r.text().catch(() => "");
     return true;
   }
 
   async function apiPatchById(idVal, patchObj){
-    const url = `${API}?id=${encodeURIComponent(idVal)}`;
+    const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
+
     const r = await fetch(url, {
       method:"PATCH",
+      mode:"cors",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify(patchObj)
     });
@@ -566,19 +631,17 @@
       throw new Error(`PATCH failed (${r.status}). ${t}`);
     }
 
-    /*
-      IMPORTANT FIX:
-      Some Sheet.best PATCH responses can be empty or not return the updated rows.
-      The previous version treated an empty array as a failure.
-      That could make "I booked it" look broken even when the request was accepted.
-    */
     await r.text().catch(() => "");
     return true;
   }
 
   async function apiDeleteById(idVal){
-    const url = `${API}?id=${encodeURIComponent(idVal)}`;
-    const r = await fetch(url, { method:"DELETE" });
+    const url = buildFilterUrl(SHEET_ID_COLUMN, idVal);
+
+    const r = await fetch(url, {
+      method:"DELETE",
+      mode:"cors"
+    });
 
     if(!r.ok){
       const t = await r.text().catch(() => "");
@@ -591,6 +654,7 @@
 
   async function apiUpsert(book){
     const exists = books.some(x => String(x.id) === String(book.id));
+
     if(exists){
       await apiPatchById(book.id, book);
       return { mode:"patch" };
@@ -602,6 +666,7 @@
 
   async function apiSetAvailability(idVal, availability){
     const now = new Date().toISOString();
+
     const patch = {
       availability,
       updatedAt: now
@@ -620,6 +685,7 @@
    *************************************************************/
   function applyFilters(list){
     const q = norm(elQ.value).toLowerCase();
+
     return list.filter(b => {
       if(!q) return true;
       const hay = `${b.title||""} ${b.author||""} ${b.subject||""} ${b.programme||""} ${b.id||""}`.toLowerCase();
@@ -703,7 +769,7 @@
         reserveText.textContent =
           "1) Book a pickup slot on Google Calendar.\n" +
           "2) Come back here and click 'I booked it'.\n" +
-          "3) Then go to the " + PICKUP_LOCATION + " at your booked time to receive and buy the books.\n" +
+          "3) Then go to the MYP Building – Reception at your booked time to receive and buy the books.\n" +
           "4) Only then will the book be marked as 'Reserved'.";
 
         calLink.href = GOOGLE_CAL_BOOKING_URL;
@@ -898,7 +964,7 @@
 
       const updated = books.find(x => String(x.id) === String(currentId));
       if(!updated || String(updated.availability || "").toLowerCase() !== "reserved"){
-        throw new Error("The reservation was not confirmed by the sheet.");
+        throw new Error("The reservation was not confirmed by the sheet. Check the ID column name in SHEET_ID_COLUMN.");
       }
 
       closeReserveModal();
